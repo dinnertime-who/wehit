@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  # PostgreSQL 데이터베이스
+  db:
+    image: postgres:15
+    container_name: wehit-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "51001:5432"
+    volumes:
+      - ./database:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis (BullMQ)
+  redis:
+    image: redis:7-alpine
+    container_name: wehit-redis
+    ports:
+      - "51379:6379"
+    volumes:
+      - ./redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
