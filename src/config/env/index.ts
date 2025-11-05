@@ -28,4 +28,5 @@ export const serverEnv = serverEnvSchema.parse(process.env);
 export const publicEnv = publicEnvSchema.parse({
   NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL,
   NEXT_PUBLIC_IMAGE_HOST: process.env.NEXT_PUBLIC_IMAGE_HOST,
+  NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
 });
