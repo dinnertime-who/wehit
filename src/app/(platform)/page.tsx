@@ -4,6 +4,8 @@ import { makeQueryClient } from "@/config/react-query/query-client";
 import { bannerBySlugQueryOptions } from "@/hooks/apis/banners/use-banner-by-slug";
 import { MAIN_HERO_BANNER_SLUG } from "@/shared/constants/banner.constant";
 
+export const dynamic = "force-dynamic";
+
 export default async function PlatformHomePage() {
   const queryClient = makeQueryClient();
 

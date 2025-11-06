@@ -116,6 +116,134 @@ function ClientComponent() {
 - SEO-friendly with prerendered data
 - Automatic client hydration without refetch
 
+### TanStack React Form Pattern
+Headless form library for type-safe, performant forms with validation:
+
+**Key Concepts:**
+- `useForm()` - Form state management hook
+- `form.Field` - Individual field component with render prop
+- `validators` - Zod schema or custom validators
+- Real-time validation on onChange/onBlur
+- Framework-agnostic (works with any UI library)
+
+**Implementation Example:**
+```typescript
+// Schema definition with Zod
+const formSchema = z.object({
+  email: z.email("유효한 이메일을 입력해주세요"),
+  password: z.string().min(6, "최소 6자 이상"),
+});
+
+// Form component
+export const MyForm = () => {
+  const mutation = useSomeMutation();
+
+  const form = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    validators: {
+      onSubmit: formSchema, // Submit validation
+    },
+    onSubmit: async ({ value }) => {
+      const result = await mutation.mutateAsync(value);
+
+      if (result.error) {
+        toast.error(result.error.message);
+        return;
+      }
+
+      toast.success("성공했습니다");
+    },
+  });
+
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        form.handleSubmit();
+      }}
+      className="space-y-4"
+    >
+      <form.Field
+        name="email"
+        validators={{
+          onChange: formSchema.shape.email, // Real-time validation
+        }}
+      >
+        {(field) => (
+          <div className="space-y-2">
+            <Label htmlFor="email">이메일</Label>
+            <Input
+              id="email"
+              type="email"
+              value={field.state.value}
+              onChange={(e) => field.handleChange(e.target.value)}
+              onBlur={field.handleBlur}
+              disabled={mutation.isPending}
+            />
+            {field.state.meta.errors.length > 0 && (
+              <p className="text-sm text-red-500">
+                {field.state.meta.errors[0]?.message}
+              </p>
+            )}
+          </div>
+        )}
+      </form.Field>
+
+      <Button
+        type="submit"
+        disabled={mutation.isPending || !form.state.isFormValid}
+      >
+        {mutation.isPending && <Spinner className="mr-2 h-4 w-4" />}
+        {mutation.isPending ? "진행 중..." : "제출"}
+      </Button>
+    </form>
+  );
+};
+```
+
+**Validator Usage Patterns:**
+
+Form-level validation (onSubmit):
+```typescript
+const form = useForm({
+  validators: {
+    onSubmit: formSchema, // Validate entire form on submit
+  },
+  onSubmit: async ({ value }) => { /* ... */ },
+});
+```
+
+Field-level real-time validation (onChange):
+```typescript
+<form.Field
+  name="email"
+  validators={{
+    onChange: formSchema.shape.email, // Extract field validator from schema
+  }}
+>
+  {(field) => (
+    // field.state.value, field.handleChange(), field.handleBlur()
+  )}
+</form.Field>
+```
+
+**Validator Rules:**
+- `onSubmit: formSchema` - Full form validation triggered on form submission
+- `onChange: formSchema.shape.fieldName` - Real-time field validation as user types
+- Use Zod schema `.shape` property to extract individual field validators
+- Both can be combined for UX: onChange for feedback, onSubmit for final validation
+- Errors accessed via `field.state.meta.errors` (array of error messages)
+
+**Best Practices:**
+- Always combine both `onChange` + `onSubmit` validators
+- Use `!form.state.isFormValid` to disable submit button
+- Use `mutation.isPending` to disable all inputs during submission
+- Wrap form components in Client Component ("use client")
+- Keep form logic in separate component from layout
+
 ### Environment Configuration
 Located in `/src/config/env/index.ts` with Zod validation:
 
@@ -295,3 +423,53 @@ pnpm install              # Install tsx dependency
 pnpm build                # Generate Drizzle migrations
 pnpm db:seed              # Initialize banner seed data
 ```
+
+### Admin Sign-In Feature
+Email/password authentication form for admin dashboard access.
+
+#### Components
+- **SignInForm** (`/src/components/reusable/admin/sign-in-form.tsx`)
+  - Client component ("use client") using TanStack Form
+  - Zod schema validation for email and password
+  - Both `onChange` (real-time) and `onSubmit` validators
+  - Integrated with `useAuth().emailPassword` mutation
+  - Toast notifications for success/error feedback
+  - Redirects to `/admin` on successful login
+  - Loading state management with `mutation.isPending`
+
+#### Page
+- **Admin Sign-In Page** (`/src/app/admin/sign-in/page.tsx`)
+  - Server component (no "use client") for routing
+  - Full-height centered layout with gradient background
+  - Imports and renders `SignInForm` component
+  - Added `export const dynamic = "force-dynamic"` to platform page
+
+#### UI Components Used
+- `Card`, `CardHeader`, `CardTitle`, `CardContent` from Radix UI
+- `Input`, `Label`, `Button` from UI library
+- `Spinner` for loading indicator
+- `Toaster` from Sonner for notifications
+
+#### Authentication Flow
+1. User enters email/password on sign-in form
+2. Form validates with Zod schema on change and submit
+3. On submit, calls `emailPassword.mutateAsync(value)` from Better-auth
+4. Success: Toast notification + redirect to `/admin`
+5. Error: Toast notification with error message
+6. Loading: Inputs disabled, button shows spinner
+
+#### Key Patterns
+- Form component fully separated from page component
+- Validation split: `onChange` for UX, `onSubmit` for final check
+- Mutation error handling: Check `result.error` before redirecting
+- Router usage: `useRouter()` from `next/navigation` for Client Component
+
+#### Root Layout Update
+- Added `<Toaster />` component to `/src/app/layout.tsx`
+- Enables Sonner toast notifications globally
+- Placed after `<DialogService />` component
+
+#### Platform Page Update
+- Added `export const dynamic = "force-dynamic"` to `/src/app/(platform)/page.tsx`
+- Ensures fresh data fetch for main hero banner on each request
+- Prevents stale cache issues with dynamic banner content

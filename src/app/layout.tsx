@@ -3,6 +3,7 @@ import { pretendard } from "@/config/font";
 import "./globals.css";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { ViewTransition } from "react";
+import { Toaster } from "sonner";
 import { DialogService } from "@/components/reusable/dialog-service";
 import { publicEnv } from "@/config/env/public";
 import { ReactQueryProvider } from "@/config/react-query/provider";
@@ -23,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body
-        className={`${pretendard.className} ${pretendard.variable} antialiased`}
+        className={`${pretendard.className} ${pretendard.variable} antialiased `}
       >
         <ViewTransition>
           <ReactQueryProvider>
@@ -32,6 +33,7 @@ export default function RootLayout({
         </ViewTransition>
 
         <DialogService />
+        <Toaster />
       </body>
     </html>
   );

@@ -5,7 +5,7 @@ import { BannerService } from "@/features/banner/services/banner.service";
 // TODO: 권한 검증 추가 (admin only)
 export async function GET(
   _request: NextRequest,
-  { params }: RouteContext<"/api/banners/[id]">
+  { params }: RouteContext<"/api/banners/[id]">,
 ) {
   try {
     const { id } = await params;
@@ -21,7 +21,7 @@ export async function GET(
     console.error("Failed to fetch banner:", error);
     return NextResponse.json(
       { error: "Failed to fetch banner" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -29,7 +29,7 @@ export async function GET(
 // TODO: 권한 검증 추가 (admin only)
 export async function PUT(
   request: NextRequest,
-  { params }: RouteContext<"/api/banners/[id]">
+  { params }: RouteContext<"/api/banners/[id]">,
 ) {
   try {
     const { id } = await params;
@@ -45,12 +45,12 @@ export async function PUT(
     if (error instanceof Error && error.message.includes("validation")) {
       return NextResponse.json(
         { error: "Validation failed", details: error.message },
-        { status: 400 }
+        { status: 400 },
       );
     }
     return NextResponse.json(
       { error: "Failed to update banner" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -58,7 +58,7 @@ export async function PUT(
 // TODO: 권한 검증 추가 (admin only)
 export async function DELETE(
   _request: NextRequest,
-  { params }: RouteContext<"/api/banners/[id]">
+  { params }: RouteContext<"/api/banners/[id]">,
 ) {
   try {
     const { id } = await params;
@@ -76,7 +76,7 @@ export async function DELETE(
     console.error("Failed to delete banner:", error);
     return NextResponse.json(
       { error: "Failed to delete banner" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

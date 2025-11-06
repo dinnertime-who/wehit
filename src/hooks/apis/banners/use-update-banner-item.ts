@@ -10,7 +10,9 @@ export const useUpdateBannerItem = (itemId: string, bannerId?: string) => {
 
   return useMutation<BannerItem, Error, UpdateBannerItemInput>({
     mutationFn: async (data) => {
-      return kyClient.put(`banners/items/${itemId}`, { json: data }).json<BannerItem>();
+      return kyClient
+        .put(`banners/items/${itemId}`, { json: data })
+        .json<BannerItem>();
     },
     onSuccess: () => {
       if (bannerId) {
