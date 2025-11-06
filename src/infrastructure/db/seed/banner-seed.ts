@@ -1,4 +1,4 @@
-import { publicEnv } from "@/config/env/public";
+import { eq } from "drizzle-orm";
 import { db } from "@/infrastructure/db/drizzle";
 import { banner, bannerItem } from "@/infrastructure/db/schema";
 import { MAIN_HERO_BANNER_SLUG } from "@/shared/constants/banner.constant";
@@ -18,7 +18,7 @@ export async function seedBanner() {
     console.log("🌱 Seeding banner data...");
 
     // 1. Delete existing banner (cascade delete banner_items)
-    await db.delete(banner).where({ slug: MAIN_HERO_BANNER_SLUG });
+    await db.delete(banner).where(eq(banner.slug, MAIN_HERO_BANNER_SLUG));
     console.log("✓ Cleared existing banner data");
 
     // 2. Create main hero banner
@@ -38,7 +38,7 @@ export async function seedBanner() {
     const bannerItemsToInsert = bannerImages.map((imageUrl, index) => ({
       bannerId: createdBanner.id,
       imageUrl,
-      linkUrl: publicEnv.NEXT_PUBLIC_URL,
+      linkUrl: "/",
       order: index,
     }));
 

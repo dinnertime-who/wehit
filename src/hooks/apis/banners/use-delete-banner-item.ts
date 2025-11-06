@@ -6,7 +6,7 @@ export const useDeleteBannerItem = (itemId: string, bannerId?: string) => {
 
   return useMutation<void, Error>({
     mutationFn: async () => {
-      await kyClient.delete(`api/banners/items/${itemId}`);
+      await kyClient.delete(`banners/items/${itemId}`);
     },
     onSuccess: () => {
       if (bannerId) {

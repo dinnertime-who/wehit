@@ -5,7 +5,7 @@ import type { Banner } from "@/shared/types/banner.type";
 export const bannersQueryOptions = queryOptions({
   queryKey: ["banners"] as const,
   queryFn: async () => {
-    return kyClient.get("api/banners").json<Banner[]>();
+    return kyClient.get("banners").json<Banner[]>();
   },
 });
 

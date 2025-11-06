@@ -6,7 +6,7 @@ export const useDeleteBanner = (id: string) => {
 
   return useMutation<void, Error>({
     mutationFn: async () => {
-      await kyClient.delete(`api/banners/${id}`);
+      await kyClient.delete(`banners/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["banner", id] });

@@ -7,7 +7,7 @@ export const useCreateBanner = () => {
 
   return useMutation<Banner, Error, CreateBannerInput>({
     mutationFn: async (data) => {
-      return kyClient.post("api/banners", { json: data }).json<Banner>();
+      return kyClient.post("banners", { json: data }).json<Banner>();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["banners"] });

@@ -6,7 +6,7 @@ export const bannerBySlugQueryOptions = (slug: string) =>
   queryOptions({
     queryKey: ["banner", "slug", slug] as const,
     queryFn: async () => {
-      return kyClient.get(`api/banners/slug/${slug}`).json<BannerWithItems>();
+      return kyClient.get(`banners/slug/${slug}`).json<BannerWithItems>();
     },
   });
 

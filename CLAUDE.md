@@ -62,6 +62,60 @@ The project is a **Next.js 16 full-stack application** with a layered architectu
 - **Cache**: Redis for session and secondary storage
 - **API Fetching**: Ky HTTP client with environment-based URL (`publicEnv.NEXT_PUBLIC_API_URL`)
 
+### Server-Side Rendering (SSR) Pattern
+React Query integration with Next.js Server Components for optimal performance:
+
+**Architecture Pattern:**
+1. Export `queryOptions` from hook files with queryKey and queryFn
+2. Create QueryClient on server using `makeQueryClient()`
+3. Prefetch data on server using `queryClient.ensureQueryData(queryOptions())`
+4. Dehydrate QueryClient state with `dehydrate(queryClient)`
+5. Hydrate on client using `<HydrationBoundary state={dehydrate(queryClient)}>`
+
+**Key Components:**
+- `/src/config/react-query/query-client.ts` - `makeQueryClient()` factory (staleTime: 60s)
+- React Query `queryOptions()` - Separates queryKey/queryFn for reuse
+- `HydrationBoundary` from @tanstack/react-query - Bridges server/client state
+
+**Implementation Example:**
+```typescript
+// Hook file exports queryOptions for server usage
+export const bannerBySlugQueryOptions = (slug: string) =>
+  queryOptions({
+    queryKey: ["banner", "slug", slug] as const,
+    queryFn: async () => {
+      return kyClient.get(`banners/slug/${slug}`).json<BannerWithItems>();
+    },
+  });
+
+// Server Component prefetches data
+export default async function Page() {
+  const queryClient = makeQueryClient();
+
+  await queryClient.ensureQueryData(
+    bannerBySlugQueryOptions("main-hero-banner")
+  );
+
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <ClientComponent />
+    </HydrationBoundary>
+  );
+}
+
+// Client Component uses same hook without refetch
+function ClientComponent() {
+  const { data } = useBannerBySlug("main-hero-banner");
+  // Data is already cached from server prefetch
+}
+```
+
+**Benefits:**
+- Zero waterfall: Data fetched during Server Component render
+- Reduced client-side loading states
+- SEO-friendly with prerendered data
+- Automatic client hydration without refetch
+
 ### Environment Configuration
 Located in `/src/config/env/index.ts` with Zod validation:
 
@@ -210,5 +264,34 @@ const { data: banner, isLoading } = useBannerBySlug('hero-banner');
 - All route handlers use Next.js 15+ typed routes with `RouteContext`
 - Params are handled as `Promise` types (await params before destructuring)
 - HTTP client uses `kyClient` from `/src/lib/fetch/client` with prefixed URLs
+  - **IMPORTANT**: kyClient is configured with `NEXT_PUBLIC_API_URL` as `prefixUrl`
+  - Do NOT include "api/" prefix in requests
+  - ✅ Correct: `kyClient.get("banners")`, `kyClient.post("banners", { json: data })`
+  - ❌ Incorrect: `kyClient.get("api/banners")`, `kyClient.post("api/banners", { json: data })`
+  - All return types use `.json<Type>()` for generic typing
 - All mutations include React Query cache invalidation on success
 - Banner items are automatically filtered by `viewStartDate` and `viewEndDate` in `getActiveBannerItems()`
+
+#### Seed Data
+Located in `/src/infrastructure/db/seed/`:
+- **banner-seed.ts** - Banner seed logic with MAIN_HERO_BANNER initialization
+- **index.ts** - Main seed execution file
+
+**Seed Command:**
+```bash
+pnpm db:seed
+```
+
+**Initial Data (MAIN_HERO_BANNER):**
+- Banner: 1920x400, displayDevice: "all", slug: "main-hero-banner"
+- Banner Items: 6 items with Unsplash 1920x400 images
+  - All items link to `NEXT_PUBLIC_URL` (main page)
+  - Always active (no date restrictions)
+  - Ordered 0-5 for carousel display
+
+**Setup Steps:**
+```bash
+pnpm install              # Install tsx dependency
+pnpm build                # Generate Drizzle migrations
+pnpm db:seed              # Initialize banner seed data
+```
