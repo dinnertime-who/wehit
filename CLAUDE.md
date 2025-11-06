@@ -563,3 +563,82 @@ Uses reusable form component architecture:
   - OAuth buttons first (quick login)
   - Email/password as alternative
   - Standard UX pattern for modern apps
+
+### Admin Dashboard Layout
+Complete admin dashboard with sidebar navigation and header.
+
+#### Components
+
+**AdminSidebar** (`/src/components/reusable/admin/sidebar.tsx`)
+- Client Component ("use client")
+- SidebarProvider wrapper with dynamic navigation
+- Menu structure (4 groups):
+  - **개요 (Overview)**: Dashboard
+  - **사용자 (Users)**: User Management
+  - **컨텐츠 관리 (Contents)**: Services, Reviews, Banners, Notices
+  - **시스템 (System)**: Settings
+- Active state detection using `usePathname()` comparison
+- Sidebar Footer with user dropdown menu:
+  - Avatar with user initials
+  - User name + email
+  - Dropdown items: Settings, Logout
+- Icon integration using lucide-react
+
+**AdminHeader** (`/src/components/reusable/admin/header.tsx`)
+- Client Component ("use client")
+- Sticky header (top-0, z-40) with fixed height (h-16)
+- Elements:
+  - SidebarTrigger (hamburger menu)
+  - Breadcrumb: "Admin > [Page Icon] [Page Name]"
+  - Dynamic page mapping via pathConfig
+- Shows appropriate page icon and label based on current route
+
+#### Layout Implementation
+
+**Admin Dashboard Layout** (`/src/app/admin/(dashboard)/layout.tsx`)
+- Server Component for session prefetch
+- **TODO**: Session check and admin role validation
+- Session data prefetch using `sessionQueryOptions`
+- HydrationBoundary for client-side session access
+- SidebarProvider wrapping entire layout
+- Main content area: SidebarInset + AdminHeader + children
+- Responsive: sidebar collapses to sheet on mobile
+
+#### Dashboard Home Page
+Placeholder metrics grid:
+- Active Users
+- Total Services
+- Total Reviews
+- Total Notices
+
+#### Navigation Structure
+```
+/admin/(dashboard)/
+├── page.tsx             # Dashboard home with metrics
+├── users/page.tsx       # User management
+├── services/page.tsx    # Service management
+├── reviews/page.tsx     # Review management
+├── banners/page.tsx     # Banner management
+├── notices/page.tsx     # Notice management
+└── settings/page.tsx    # Admin settings
+```
+
+#### Keyboard Shortcut
+- **Cmd/Ctrl + B**: Toggle sidebar (open/collapse)
+
+#### Menu Icons
+- LayoutDashboard: Dashboard
+- Users: User Management
+- Briefcase: Services
+- Star: Reviews
+- Image: Banners
+- Megaphone: Notices
+- Settings: Settings
+
+#### Key Features
+- Active menu highlighting based on current pathname
+- User avatar with fallback initials
+- Responsive design: sidebar drawer on mobile
+- Session data pre-fetched from server
+- User logout via Better-auth mutation
+- Breadcrumb navigation with page context
