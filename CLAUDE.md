@@ -654,3 +654,80 @@ Placeholder metrics grid:
 - User logout via Better-auth mutation
 - Clean header with sidebar toggle
 - Expandable to include breadcrumb/page title navigation
+
+### Admin Banners Page
+배너 관리 페이지로 배너 목록을 테이블 형태로 표시.
+
+#### Files Structure
+```
+/src/app/admin/(dashboard)/banners/
+├── page.tsx                    # 메인 페이지 (h1 + 테이블)
+├── columns.tsx                 # TanStack Table 컬럼 정의
+├── banner-row-actions.tsx     # 행별 액션 버튼 (Popover)
+└── banners-data-table.tsx     # 테이블 컴포넌트
+```
+
+#### Components
+
+**BannersDataTable** (`banners-data-table.tsx`)
+- Client Component ("use client")
+- TanStack Table 통합
+- Columns: 배너 이름(slug), 비율(widthRatio × heightRatio), 노출 기기(displayDevice), 생성일, Actions
+- Pagination: 페이지당 10개 배너
+- 로딩 상태: "배너 목록을 로드 중입니다..."
+- 빈 상태: "배너가 없습니다"
+- 페이지네이션 컨트롤: 이전/다음 버튼 + 페이지 정보
+
+**BannerRowActions** (`banner-row-actions.tsx`)
+- 각 행 우측 액션 버튼 (MoreVertical 아이콘)
+- Popover 내부 메뉴:
+  - **수정**: Link to "#" (Edit 아이콘) - 향후 수정 페이지로 이동
+  - **Separator**
+  - **삭제**: 클릭 시 `useDialogService().confirm()` 호출
+- 삭제 플로우:
+  - Confirm 다이얼로그: "정말 이 배너를 삭제하시겠습니까?"
+  - 확인 시 `useDeleteBanner().mutateAsync()` 호출
+  - 성공: toast notification + Popover 닫음
+  - 실패: toast error
+- 로딩 상태: 삭제 중에 버튼 disabled + "삭제 중..." 텍스트
+
+**Table Columns** (`columns.tsx`)
+- **배너 이름** (slug): font-medium 스타일
+- **비율**: "widthRatio × heightRatio" 포맷
+- **노출 기기**: mobile/desktop/all → 모바일/데스크톱/전체로 변환
+- **생성일**: YYYY-MM-DD 포맷 (date-fns format 사용)
+- **Actions**: BannerRowActions 컴포넌트 렌더링
+
+**AdminBannersPage** (`page.tsx`)
+- Server Component (기본값)
+- h1 제목: "배너 관리"
+- 설명: "배너 목록을 보고 관리할 수 있습니다"
+- BannersDataTable 컴포넌트 임베드
+
+#### Hooks Integration
+- `useBanners()`: Banner[] 데이터 fetch
+- `useDeleteBanner(id)`: 배너 삭제 mutation
+- `useDialogService().confirm()`: asyncConfirm 역할
+
+#### UI Libraries Used
+- **TanStack Table**:
+  - `useReactTable`, `ColumnDef`, `flexRender`
+  - `getCoreRowModel`, `getPaginationRowModel`
+- **UI Components**: Table, Button, Popover, Separator
+- **Icons**: MoreVertical, Edit, Trash, ChevronLeft, ChevronRight (lucide-react)
+- **Notifications**: sonner (toast)
+- **Date**: date-fns (format 함수, ko locale)
+
+#### Key Features
+- **TanStack Table**: Server-side state와 independent pagination 구현
+- **Row Actions**: Popover 패턴으로 수정/삭제 메뉴 구현
+- **Delete Flow**: Confirm 다이얼로그로 사용자 확인 후 삭제
+- **Loading States**: 삭제 중 버튼 disabled 처리
+- **Error Handling**: API 오류 시 toast error 표시
+- **Date Formatting**: 생성일을 사용자 친화적 포맷으로 표시
+- **Responsive**: 모바일 환경에서도 테이블 scrollable
+
+#### Excluded Features (As Requested)
+❌ 필터 기능
+❌ Metric UI (통계 카드)
+❌ Breadcrumb 네비게이션

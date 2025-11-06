@@ -1,4 +1,4 @@
-import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { AdminHeader } from "@/components/reusable/admin/header";
 import { AdminSidebar } from "@/components/reusable/admin/sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
@@ -20,7 +20,7 @@ export default async function AdminDashboardLayout({
         <AdminSidebar />
         <SidebarInset>
           <AdminHeader />
-          <main className="flex flex-1 flex-col gap-4 overflow-auto p-4">
+          <main className="flex flex-1 flex-col gap-4 overflow-auto p-8">
             {children}
           </main>
         </SidebarInset>
