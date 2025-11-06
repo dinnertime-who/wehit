@@ -7,9 +7,9 @@ import { MAIN_HERO_BANNER_SLUG } from "@/shared/constants/banner.constant";
 const bannerImages = [
   "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=400&fit=crop",
   "https://images.unsplash.com/photo-1506157786151-b8491531f063?w=1920&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1460925895917-aeb19be489c7?w=1920&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1762255421012-9fd499621e7e?w=1920&h=400&fit=crop",
   "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1920&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1495849962214-055e5deac45a?w=1920&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=1920&h=400&fit=crop",
   "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1920&h=400&fit=crop",
 ];
 
