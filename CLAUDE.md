@@ -571,27 +571,30 @@ Complete admin dashboard with sidebar navigation and header.
 
 **AdminSidebar** (`/src/components/reusable/admin/sidebar.tsx`)
 - Client Component ("use client")
-- SidebarProvider wrapper with dynamic navigation
+- Sidebar structure with organized menu groups
+- SidebarHeader: Logo only (WeHit branding)
 - Menu structure (4 groups):
   - **개요 (Overview)**: Dashboard
   - **사용자 (Users)**: User Management
   - **컨텐츠 관리 (Contents)**: Services, Reviews, Banners, Notices
   - **시스템 (System)**: Settings
 - Active state detection using `usePathname()` comparison
+  - Compares current path against menu href
+  - Highlights matching route
 - Sidebar Footer with user dropdown menu:
-  - Avatar with user initials
-  - User name + email
-  - Dropdown items: Settings, Logout
-- Icon integration using lucide-react
+  - Avatar with user initials (fallback from session)
+  - User name + email from session data
+  - Dropdown items: Settings link, Logout action
+  - Uses `useAuth().signOut.mutateAsync()` for logout
+- Icon integration using lucide-react (LayoutDashboard, Users, Briefcase, Star, Image, Megaphone, Settings)
 
 **AdminHeader** (`/src/components/reusable/admin/header.tsx`)
 - Client Component ("use client")
-- Sticky header (top-0, z-40) with fixed height (h-16)
-- Elements:
-  - SidebarTrigger (hamburger menu)
-  - Breadcrumb: "Admin > [Page Icon] [Page Name]"
-  - Dynamic page mapping via pathConfig
-- Shows appropriate page icon and label based on current route
+- Sticky header (top-0, z-40, h-16) with border-b
+- Currently renders:
+  - SidebarTrigger with -ml-1 offset (hamburger menu for sidebar toggle)
+- pathConfig preserved for future breadcrumb implementation
+- Expandable for breadcrumb or page title navigation
 
 #### Layout Implementation
 
@@ -635,10 +638,19 @@ Placeholder metrics grid:
 - Megaphone: Notices
 - Settings: Settings
 
+#### Sidebar Configuration
+- Width (desktop): 14rem (224px)
+- Width (mobile): 18rem (288px)
+- Icon-only width (collapsed): 3rem (48px)
+- Keyboard shortcut: Cmd/Ctrl + B to toggle
+- Responsive: Sheet drawer on mobile devices
+- Cookie persistence: Remembers sidebar state (7-day max age)
+
 #### Key Features
 - Active menu highlighting based on current pathname
 - User avatar with fallback initials
 - Responsive design: sidebar drawer on mobile
 - Session data pre-fetched from server
 - User logout via Better-auth mutation
-- Breadcrumb navigation with page context
+- Clean header with sidebar toggle
+- Expandable to include breadcrumb/page title navigation

@@ -103,12 +103,8 @@ export const AdminSidebar = () => {
   return (
     <Sidebar>
       {/* Header */}
-      <SidebarHeader className="flex items-center gap-2">
+      <SidebarHeader className="flex items-center gap-2 my-2">
         <Logo />
-        <div className="flex flex-col">
-          <span className="text-sm font-semibold">WeHit</span>
-          <span className="text-xs text-muted-foreground">Admin</span>
-        </div>
       </SidebarHeader>
 
       {/* Content */}

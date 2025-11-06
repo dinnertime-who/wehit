@@ -1,6 +1,5 @@
 "use client";
 
-import { ChevronRight } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
@@ -28,23 +27,6 @@ export const AdminHeader = () => {
     <header className="sticky top-0 z-40 flex h-16 items-center gap-4 border-b bg-white px-4">
       {/* Sidebar Trigger */}
       <SidebarTrigger className="-ml-1" />
-
-      {/* Divider */}
-      <div className="h-6 w-px bg-border" />
-
-      {/* Breadcrumb */}
-      <nav className="flex items-center gap-2">
-        <span className="text-sm font-medium text-muted-foreground">
-          관리자
-        </span>
-        <ChevronRight className="h-4 w-4 text-muted-foreground" />
-        <div className="flex items-center gap-2">
-          <span className="text-xl">{currentPage?.icon || "📋"}</span>
-          <h1 className="text-sm font-semibold">
-            {currentPage?.label || "페이지"}
-          </h1>
-        </div>
-      </nav>
     </header>
   );
 };
