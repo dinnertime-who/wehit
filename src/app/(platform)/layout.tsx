@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Header } from "@/components/reusable/platform/header";
 
 export default function PlatformLayout({
@@ -7,7 +8,9 @@ export default function PlatformLayout({
 }) {
   return (
     <div>
-      <Header />
+      <Suspense>
+        <Header />
+      </Suspense>
       <main>{children}</main>
     </div>
   );

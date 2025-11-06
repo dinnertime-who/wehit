@@ -128,3 +128,87 @@ Located in `/src/config/env/index.ts` with Zod validation:
 - **Add authentication to a route**: Use Better-auth session via hooks in `/src/hooks/apis/auth/`
 - **Add a database table**: Define schema in `/src/infrastructure/db/schema/`, then run `pnpm build`
 - **Add a new environment variable**: Add to schema in `/src/config/env/index.ts`
+
+## Implemented Features
+
+### Banner Feature
+A comprehensive banner management system for displaying promotional content with date-based activation.
+
+#### Database Schema (`/src/infrastructure/db/schema/banner.schema.ts`)
+- **banner** table:
+  - `id`: CUID primary key
+  - `slug`: Unique identifier for banner queries
+  - `widthRatio`: Aspect ratio width
+  - `heightRatio`: Aspect ratio height
+  - `displayDevice`: Enum - "mobile", "desktop", "all"
+  - `createdAt`, `updatedAt`: Timestamps
+
+- **banner_item** table:
+  - `id`: CUID primary key
+  - `bannerId`: Foreign key to banner (cascade delete)
+  - `imageUrl`: Banner image URL
+  - `linkUrl`: Click destination URL
+  - `order`: Display order
+  - `viewStartDate`: Optional activation start date
+  - `viewEndDate`: Optional activation end date
+  - `createdAt`, `updatedAt`: Timestamps
+
+#### API Endpoints
+All endpoints include `TODO: 권한 검증 추가 (admin only)` comments for permission implementation.
+
+**Banner Management:**
+- `GET /api/banners` - List all banners
+- `POST /api/banners` - Create banner
+- `GET /api/banners/[id]` - Get specific banner
+- `PUT /api/banners/[id]` - Update banner
+- `DELETE /api/banners/[id]` - Delete banner
+- `GET /api/banners/slug/[slug]` - Get banner with active items by slug (date-filtered)
+
+**Banner Item Management:**
+- `GET /api/banners/[id]/items` - List items for banner
+- `POST /api/banners/[id]/items` - Create banner item
+- `GET /api/banners/items/[itemId]` - Get specific item
+- `PUT /api/banners/items/[itemId]` - Update item
+- `DELETE /api/banners/items/[itemId]` - Delete item
+
+#### Clean Architecture Layers
+Located in `/src/features/banner/`:
+- **interfaces/** - `IBannerRepository`, `IBannerService` abstractions
+- **repositories/** - `BannerRepository` - Database access layer
+- **services/** - `BannerService` - Business logic (date-based filtering, etc.)
+- **schemas/** - Zod validation schemas for DTOs
+
+#### React Query Hooks (`/src/hooks/apis/banners/`)
+- `useBanners()` - Fetch all banners
+- `useBanner(id)` - Fetch specific banner
+- `useBannerBySlug(slug)` - Fetch banner with active items by slug
+- `useCreateBanner()` - Mutation: create banner
+- `useUpdateBanner(id)` - Mutation: update banner
+- `useDeleteBanner(id)` - Mutation: delete banner
+- `useCreateBannerItem(bannerId)` - Mutation: create item
+- `useUpdateBannerItem(itemId)` - Mutation: update item
+- `useDeleteBannerItem(itemId)` - Mutation: delete item
+
+**Usage Example:**
+```typescript
+import { useBannerBySlug } from '@/hooks/apis/banners/use-banner-by-slug';
+
+// In component
+const { data: banner, isLoading } = useBannerBySlug('hero-banner');
+// banner includes: banner data + active items (filtered by date)
+```
+
+#### Key Features
+- ✅ Automatic date-based item activation filtering in service layer
+- ✅ Proper sorting by `order` field in repository
+- ✅ Typed routes using `RouteContext<"/api/banners/[id]">` pattern
+- ✅ Ky HTTP client for API calls with generic return types
+- ✅ Proper cascade deletion via Drizzle ORM
+- ✅ Full CRUD operations for both banners and items
+
+#### Implementation Notes
+- All route handlers use Next.js 15+ typed routes with `RouteContext`
+- Params are handled as `Promise` types (await params before destructuring)
+- HTTP client uses `kyClient` from `/src/lib/fetch/client` with prefixed URLs
+- All mutations include React Query cache invalidation on success
+- Banner items are automatically filtered by `viewStartDate` and `viewEndDate` in `getActiveBannerItems()`

@@ -3,7 +3,7 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
 import { admin } from "better-auth/plugins";
-import { serverEnv } from "@/config/env";
+import { serverEnv } from "@/config/env/server";
 import { db } from "@/infrastructure/db/drizzle";
 import { getRedis } from "@/infrastructure/db/redis";
 import * as schema from "@/infrastructure/db/schema";

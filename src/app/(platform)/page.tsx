@@ -1,3 +1,9 @@
+import { MainHeroBanner } from "@/components/reusable/platform/main-hero-banner";
+
 export default function PlatformHomePage() {
-  return <div>PlatformHomePage</div>;
+  return (
+    <div>
+      <MainHeroBanner />
+    </div>
+  );
 }

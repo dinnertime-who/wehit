@@ -1,5 +1,5 @@
 import { Redis } from "ioredis";
-import { serverEnv } from "@/config/env";
+import { serverEnv } from "@/config/env/server";
 
 export type GlobalWithRedis = typeof globalThis & {
   redis: Redis | null;
