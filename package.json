@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write",
-    "auth:generate": "npx @better-auth/cli@latest generate --config ./src/lib/auth/auth.ts --output ./src/infrastructure/db/schema/auth.schema.ts"
+    "auth:generate": "npx @better-auth/cli@latest generate --config ./src/lib/auth/auth.ts --output ./src/infrastructure/db/schema/auth.schema.ts",
+    "db:seed": "tsx src/infrastructure/db/seed/index.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.922.0",
@@ -89,6 +90,7 @@
     "drizzle-kit": "^0.31.6",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.4.0",
+    "tsx": "^4.17.0",
     "typescript": "^5"
   }
 }
