@@ -473,3 +473,93 @@ Email/password authentication form for admin dashboard access.
 - Added `export const dynamic = "force-dynamic"` to `/src/app/(platform)/page.tsx`
 - Ensures fresh data fetch for main hero banner on each request
 - Prevents stale cache issues with dynamic banner content
+
+### Platform Sign-In Feature
+Public-facing sign-in page with OAuth and email/password authentication.
+
+#### Architecture Pattern
+Uses reusable form component architecture:
+- **SignInAppForm** (`/src/components/reusable/forms/sign-in-form.tsx`) - Core logic
+  - Shared between Platform and Admin routes
+  - Props: `redirectTo` (redirect path), `onSuccess` (callback)
+  - Encapsulates all TanStack Form logic and mutations
+
+- **SignInForm** (`/src/components/reusable/platform/sign-in-form.tsx`) - Wrapper
+  - Thin wrapper for platform route
+  - Passes `redirectTo="/"` to SignInAppForm
+  - Platform-specific configuration
+
+- **Admin SignInForm** (`/src/components/reusable/admin/sign-in-form.tsx`) - Wrapper
+  - Thin wrapper for admin route
+  - Passes `redirectTo="/admin"` to SignInAppForm
+  - Admin-specific styling (Card component)
+
+#### Components
+
+**OAuthButtons** (`/src/components/reusable/platform/oauth-buttons.tsx`)
+- Three OAuth provider buttons: Google, Kakao, Naver
+- Uses `react-icons` library (`FaGoogle`, `RiKakaoTalkFill`, `SiNaver`)
+- Calls `useAuth().oauth.mutateAsync(provider)` with provider name
+- Custom styling for each provider (Google outline, Kakao yellow, Naver green)
+- Disabled during oauth pending state
+
+**SignInAppForm** Core Features:
+- Email/password validation with Zod
+- TanStack Form with `onChange` + `onSubmit` validators
+- Optional redirect after successful login
+- Optional onSuccess callback hook
+- Loading state with spinner
+- Error toast notifications
+
+#### Pages
+
+**Platform Sign-In Page** (`/src/app/(platform)/sign-in/page.tsx`)
+- Full-height centered layout
+- Header with title and subtitle
+- White card container with shadow
+- OAuth buttons section
+- Divider line ("또는")
+- Email/password form (SignInAppForm)
+- Sign-up link in footer
+- Responsive design with mobile padding
+
+#### Layout Updates
+
+**Platform Layout** (`/src/app/(platform)/layout.tsx`)
+- Changed from Suspense to Server Component with HydrationBoundary
+- Server-side session prefetch using `sessionQueryOptions`
+- Query client dehydration with React Query
+- Session data available to Header on initial load
+
+#### Header Component Updates (`/src/components/reusable/platform/header.tsx`)
+- Changed to Client Component ("use client")
+- Uses `useSession()` hook to check authentication state
+- Conditional rendering:
+  - Not authenticated: "로그인" link
+  - Authenticated: "마이페이지" link + Logout button (LogOut icon from lucide-react)
+- Uses `useAuth().signOut.mutateAsync()` for logout
+- Session prefetch from layout prevents data waterfall
+
+#### Dependencies
+- Added `react-icons@^5.5.0` for OAuth provider icons
+- Uses existing: Sonner (toasts), TanStack Form, Zod
+
+#### Key Patterns
+- **Reusable Form Component**: SignInAppForm is DRY (Don't Repeat Yourself)
+  - Admin and Platform both wrap it with their own configuration
+  - Easy to add new auth routes
+
+- **Session State Management**:
+  - Platform layout prefetches session on server
+  - Client components use `useSession()` hook for authentication state
+  - Prevents waterfall data loading
+
+- **OAuth Integration**:
+  - Centralized in OAuthButtons component
+  - Uses `useAuth().oauth.mutateAsync(provider)` mutation
+  - Provider names: "google" | "kakao" | "naver"
+
+- **Two-Step Auth Layout**:
+  - OAuth buttons first (quick login)
+  - Email/password as alternative
+  - Standard UX pattern for modern apps

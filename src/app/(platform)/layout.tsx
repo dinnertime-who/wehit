@@ -1,16 +1,21 @@
-import { Suspense } from "react";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Header } from "@/components/reusable/platform/header";
+import { makeQueryClient } from "@/config/react-query/query-client";
+import { sessionQueryOptions } from "@/hooks/apis/auth/use-session";
 
-export default function PlatformLayout({
+export default async function PlatformLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const queryClient = makeQueryClient();
+  await queryClient.prefetchQuery(sessionQueryOptions);
+
   return (
     <div>
-      <Suspense>
+      <HydrationBoundary state={dehydrate(queryClient)}>
         <Header />
-      </Suspense>
+      </HydrationBoundary>
       <main>{children}</main>
     </div>
   );
