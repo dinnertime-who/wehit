@@ -1,13 +1,13 @@
 "use client";
 
-import { useId, useState, useEffect } from "react";
+import { Upload, X } from "lucide-react";
 import Image from "next/image";
+import { useEffect, useId, useState } from "react";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useFieldContext } from "../app-form";
-import { Upload, X } from "lucide-react";
 
 type Props = Omit<
   React.ComponentProps<"input">,
@@ -17,6 +17,7 @@ type Props = Omit<
   accept?: string;
   maxSizeMB?: number;
   aspectRatio?: string;
+  defaultPreview?: string;
 };
 
 export const ImageField = ({
@@ -24,11 +25,12 @@ export const ImageField = ({
   accept = "image/jpeg,image/png,image/webp",
   maxSizeMB = 5,
   aspectRatio,
+  defaultPreview,
   ...props
 }: Props) => {
   const id = useId();
   const field = useFieldContext<File | null>();
-  const [preview, setPreview] = useState<string | null>(null);
+  const [preview, setPreview] = useState<string | null>(defaultPreview || null);
 
   const isInvalid =
     field.state.meta.isTouched &&
@@ -43,9 +45,9 @@ export const ImageField = ({
       setPreview(url);
       return () => URL.revokeObjectURL(url);
     } else {
-      setPreview(null);
+      setPreview(defaultPreview || null);
     }
-  }, [field.state.value]);
+  }, [field.state.value, defaultPreview]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

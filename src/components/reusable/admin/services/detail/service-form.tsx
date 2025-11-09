@@ -244,6 +244,7 @@ export const ServiceForm = ({ mode, service }: Props) => {
                         aspectRatio="16/9"
                         required
                         disabled={isLoading}
+                        defaultPreview={service?.coverImageUrl}
                       />
                     )}
                   </form.AppField>
@@ -253,6 +254,7 @@ export const ServiceForm = ({ mode, service }: Props) => {
                       <field.VideoField
                         label="커버 영상 (선택)"
                         disabled={isLoading}
+                        defaultPreview={service?.coverVideoUrl || undefined}
                       />
                     )}
                   </form.AppField>

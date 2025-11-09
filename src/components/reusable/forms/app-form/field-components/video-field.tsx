@@ -1,12 +1,12 @@
 "use client";
 
-import { useId, useState, useEffect } from "react";
+import { Upload, X } from "lucide-react";
+import { useEffect, useId, useState } from "react";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useFieldContext } from "../app-form";
-import { Upload, X } from "lucide-react";
 
 type Props = Omit<
   React.ComponentProps<"input">,
@@ -15,17 +15,19 @@ type Props = Omit<
   label?: string;
   accept?: string;
   maxSizeMB?: number;
+  defaultPreview?: string;
 };
 
 export const VideoField = ({
   className,
   accept = "video/mp4,video/webm,video/quicktime",
   maxSizeMB = 100,
+  defaultPreview,
   ...props
 }: Props) => {
   const id = useId();
   const field = useFieldContext<File | null>();
-  const [preview, setPreview] = useState<string | null>(null);
+  const [preview, setPreview] = useState<string | null>(defaultPreview || null);
 
   const isInvalid =
     field.state.meta.isTouched &&
@@ -40,9 +42,9 @@ export const VideoField = ({
       setPreview(url);
       return () => URL.revokeObjectURL(url);
     } else {
-      setPreview(null);
+      setPreview(defaultPreview || null);
     }
-  }, [field.state.value]);
+  }, [field.state.value, defaultPreview]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -81,7 +83,9 @@ export const VideoField = ({
         // 영상 선택 후
         <div className="space-y-3">
           <div className="relative w-full max-w-md rounded-lg border border-input overflow-hidden bg-black">
-            <video src={preview} controls className="w-full h-auto max-h-80" />
+            <video src={preview} controls className="w-full h-auto max-h-80">
+              <track kind="captions" />
+            </video>
           </div>
           <div className="flex gap-2">
             <Label
