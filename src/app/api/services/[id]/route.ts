@@ -1,10 +1,10 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { updateServiceSchema } from "@/features/service/schemas/service.schema";
 import { ServiceRepository } from "@/features/service/repositories/service.repository";
+import { updateServiceSchema } from "@/features/service/schemas/service.schema";
 
 export async function GET(
   _request: NextRequest,
-  context: any,
+  context: RouteContext<"/api/services/[id]">,
 ) {
   try {
     const { id } = await context.params;
@@ -20,17 +20,11 @@ export async function GET(
     return NextResponse.json(service);
   } catch (error) {
     console.error("Service fetch error:", error);
-    return NextResponse.json(
-      { error: "서비스 조회 실패" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "서비스 조회 실패" }, { status: 500 });
   }
 }
 
-export async function PUT(
-  request: NextRequest,
-  context: any,
-) {
+export async function PUT(request: NextRequest, context: any) {
   try {
     const { id } = await context.params;
     const body = await request.json();
@@ -54,10 +48,7 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  _request: NextRequest,
-  context: any,
-) {
+export async function DELETE(_request: NextRequest, context: any) {
   try {
     const { id } = await context.params;
     const success = await ServiceRepository.delete(id);
@@ -72,9 +63,6 @@ export async function DELETE(
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Service delete error:", error);
-    return NextResponse.json(
-      { error: "서비스 삭제 실패" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "서비스 삭제 실패" }, { status: 500 });
   }
 }

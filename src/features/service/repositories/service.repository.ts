@@ -3,14 +3,15 @@ import "server-only";
 import { and, eq } from "drizzle-orm";
 import { db } from "@/infrastructure/db/drizzle";
 import { service } from "@/infrastructure/db/schema";
-import type { CreateServiceDTO, UpdateServiceDTO, Service } from "@/shared/types/service.type";
+import type {
+  CreateServiceDTO,
+  UpdateServiceDTO,
+  Service,
+} from "@/shared/types/service.type";
 
 export class ServiceRepository {
   static async create(data: CreateServiceDTO): Promise<Service> {
-    const [result] = await db
-      .insert(service)
-      .values(data)
-      .returning();
+    const [result] = await db.insert(service).values(data).returning();
     return result as Service;
   }
 
@@ -26,7 +27,10 @@ export class ServiceRepository {
     return results as Service[];
   }
 
-  static async update(id: string, data: UpdateServiceDTO): Promise<Service | null> {
+  static async update(
+    id: string,
+    data: UpdateServiceDTO,
+  ): Promise<Service | null> {
     const [result] = await db
       .update(service)
       .set(data)
@@ -36,9 +40,7 @@ export class ServiceRepository {
   }
 
   static async delete(id: string): Promise<boolean> {
-    const result = await db
-      .delete(service)
-      .where(eq(service.id, id));
+    const result = await db.delete(service).where(eq(service.id, id));
     return (result.rowCount ?? 0) > 0;
   }
 }

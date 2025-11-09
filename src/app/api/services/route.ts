@@ -23,9 +23,6 @@ export async function GET() {
     return NextResponse.json(services);
   } catch (error) {
     console.error("Services fetch error:", error);
-    return NextResponse.json(
-      { error: "서비스 조회 실패" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "서비스 조회 실패" }, { status: 500 });
   }
 }

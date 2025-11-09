@@ -7,7 +7,9 @@ export const useCreateReview = (serviceId: string) => {
 
   return useMutation<Review, Error, Omit<CreateReviewDTO, "serviceId">>({
     mutationFn: async (data) => {
-      return kyClient.post(`services/${serviceId}/reviews`, { json: data }).json<Review>();
+      return kyClient
+        .post(`services/${serviceId}/reviews`, { json: data })
+        .json<Review>();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["reviews", serviceId] });

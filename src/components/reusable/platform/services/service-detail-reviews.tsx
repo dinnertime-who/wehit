@@ -55,10 +55,7 @@ export const ServiceDetailReviews = ({ reviews }: Props) => {
       {/* Reviews List */}
       <div className="space-y-4">
         {reviews.map((review) => (
-          <div
-            key={review.id}
-            className="border rounded-lg p-4 space-y-3"
-          >
+          <div key={review.id} className="border rounded-lg p-4 space-y-3">
             <div className="flex items-start justify-between">
               <div>
                 <h3 className="font-medium">{review.writerName}</h3>

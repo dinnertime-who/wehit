@@ -10,12 +10,16 @@ export const columns: ColumnDef<Service>[] = [
   {
     accessorKey: "title",
     header: "제목",
-    cell: ({ row }) => <div className="font-medium">{row.getValue("title")}</div>,
+    cell: ({ row }) => (
+      <div className="font-medium">{row.getValue("title")}</div>
+    ),
   },
   {
     accessorKey: "category",
     header: "카테고리",
-    cell: ({ row }) => <div className="text-sm">{row.getValue("category")}</div>,
+    cell: ({ row }) => (
+      <div className="text-sm">{row.getValue("category")}</div>
+    ),
   },
   {
     accessorKey: "price",

@@ -16,18 +16,14 @@ export default async function ServiceDetailPage({ params }: PageProps) {
   const queryClient = makeQueryClient();
 
   // Prefetch service data
-  const service = await queryClient.ensureQueryData(
-    serviceQueryOptions(id)
-  );
+  const service = await queryClient.ensureQueryData(serviceQueryOptions(id));
 
   if (!service) {
     notFound();
   }
 
   // Prefetch reviews data
-  await queryClient.ensureQueryData(
-    reviewsQueryOptions(id)
-  );
+  await queryClient.ensureQueryData(reviewsQueryOptions(id));
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

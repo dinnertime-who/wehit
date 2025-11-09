@@ -1,12 +1,12 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { updateSiteSettingSchema } from "@/features/site-setting/schemas/site-setting.schema";
 import { SiteSettingRepository } from "@/features/site-setting/repositories/site-setting.repository";
+import { updateSiteSettingSchema } from "@/features/site-setting/schemas/site-setting.schema";
 
 const DEFAULT_ACCOUNT = "0000-0000-0000";
 
 export async function GET(
   _request: NextRequest,
-  context: any,
+  context: RouteContext<"/api/site-settings/[key]">,
 ) {
   try {
     const { key } = await context.params;
@@ -32,17 +32,11 @@ export async function GET(
     return NextResponse.json(setting);
   } catch (error) {
     console.error("Site setting fetch error:", error);
-    return NextResponse.json(
-      { error: "설정 조회 실패" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "설정 조회 실패" }, { status: 500 });
   }
 }
 
-export async function PUT(
-  request: NextRequest,
-  context: any,
-) {
+export async function PUT(request: NextRequest, context: any) {
   try {
     const { key } = await context.params;
     const body = await request.json();

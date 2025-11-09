@@ -52,7 +52,11 @@ export const ServiceRowActions = ({ service }: Props) => {
       <PopoverContent align="end" className="w-40">
         <div className="flex flex-col gap-2">
           <Link href={`/admin/services/${service.id}`}>
-            <Button variant="ghost" size="sm" className="w-full justify-start gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="w-full justify-start gap-2"
+            >
               <Edit className="w-4 h-4" />
               수정
             </Button>

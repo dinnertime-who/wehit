@@ -71,7 +71,9 @@ export const TiptapEditor = ({
       editor?.commands.setImage({ src: data.imageUrl });
       toast.success("이미지가 삽입되었습니다");
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "이미지 업로드 실패");
+      toast.error(
+        error instanceof Error ? error.message : "이미지 업로드 실패",
+      );
     }
   };
 
@@ -113,7 +115,9 @@ export const TiptapEditor = ({
           size="sm"
           variant="ghost"
           onClick={() => editor?.commands.toggleHeading({ level: 2 })}
-          className={editor?.isActive("heading", { level: 2 }) ? "bg-accent" : ""}
+          className={
+            editor?.isActive("heading", { level: 2 }) ? "bg-accent" : ""
+          }
         >
           H2
         </Button>

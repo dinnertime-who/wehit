@@ -1,10 +1,10 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { createReviewSchema } from "@/features/review/schemas/review.schema";
 import { ReviewRepository } from "@/features/review/repositories/review.repository";
+import { createReviewSchema } from "@/features/review/schemas/review.schema";
 
 export async function GET(
   _request: NextRequest,
-  context: any,
+  context: RouteContext<"/api/services/[id]/reviews">,
 ) {
   try {
     const { id } = await context.params;
@@ -12,17 +12,11 @@ export async function GET(
     return NextResponse.json(reviews);
   } catch (error) {
     console.error("Reviews fetch error:", error);
-    return NextResponse.json(
-      { error: "리뷰 조회 실패" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "리뷰 조회 실패" }, { status: 500 });
   }
 }
 
-export async function POST(
-  request: NextRequest,
-  context: any,
-) {
+export async function POST(request: NextRequest, context: any) {
   try {
     const { id } = await context.params;
     const body = await request.json();

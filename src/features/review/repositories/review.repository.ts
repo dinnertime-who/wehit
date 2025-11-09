@@ -3,14 +3,15 @@ import "server-only";
 import { eq } from "drizzle-orm";
 import { db } from "@/infrastructure/db/drizzle";
 import { review } from "@/infrastructure/db/schema";
-import type { CreateReviewDTO, UpdateReviewDTO, Review } from "@/shared/types/review.type";
+import type {
+  CreateReviewDTO,
+  UpdateReviewDTO,
+  Review,
+} from "@/shared/types/review.type";
 
 export class ReviewRepository {
   static async create(data: CreateReviewDTO): Promise<Review> {
-    const [result] = await db
-      .insert(review)
-      .values(data)
-      .returning();
+    const [result] = await db.insert(review).values(data).returning();
     return result as Review;
   }
 
@@ -28,7 +29,10 @@ export class ReviewRepository {
     return results as Review[];
   }
 
-  static async update(id: string, data: UpdateReviewDTO): Promise<Review | null> {
+  static async update(
+    id: string,
+    data: UpdateReviewDTO,
+  ): Promise<Review | null> {
     const [result] = await db
       .update(review)
       .set(data)
@@ -38,9 +42,7 @@ export class ReviewRepository {
   }
 
   static async delete(id: string): Promise<boolean> {
-    const result = await db
-      .delete(review)
-      .where(eq(review.id, id));
+    const result = await db.delete(review).where(eq(review.id, id));
     return (result.rowCount ?? 0) > 0;
   }
 }

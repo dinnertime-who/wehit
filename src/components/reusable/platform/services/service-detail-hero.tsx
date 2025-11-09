@@ -42,11 +42,7 @@ export const ServiceDetailHero = ({ service, onPaymentClick }: Props) => {
             </button>
           </>
         ) : isVideoOpen && service.coverVideoUrl ? (
-          <video
-            autoPlay
-            controls
-            className="w-full h-full object-cover"
-          >
+          <video autoPlay controls className="w-full h-full object-cover">
             <source src={service.coverVideoUrl} type="video/mp4" />
             브라우저가 비디오를 지원하지 않습니다.
           </video>
@@ -67,7 +63,9 @@ export const ServiceDetailHero = ({ service, onPaymentClick }: Props) => {
             <div className="inline-block px-3 py-1 bg-blue-50 text-blue-700 text-sm font-medium rounded-full">
               {service.category}
             </div>
-            <h1 className="text-4xl font-bold tracking-tight">{service.title}</h1>
+            <h1 className="text-4xl font-bold tracking-tight">
+              {service.title}
+            </h1>
             <p className="text-lg text-muted-foreground">{service.subtitle}</p>
           </div>
 
@@ -86,7 +84,9 @@ export const ServiceDetailHero = ({ service, onPaymentClick }: Props) => {
               <div className="space-y-2">
                 {originalPrice && (
                   <div className="flex items-center gap-2">
-                    <span className="text-lg font-bold">{displayPrice.toLocaleString()}원</span>
+                    <span className="text-lg font-bold">
+                      {displayPrice.toLocaleString()}원
+                    </span>
                     <span className="text-sm text-muted-foreground line-through">
                       {originalPrice.toLocaleString()}원
                     </span>
@@ -105,11 +105,7 @@ export const ServiceDetailHero = ({ service, onPaymentClick }: Props) => {
               </div>
             </div>
 
-            <Button
-              size="lg"
-              onClick={onPaymentClick}
-              className="w-full"
-            >
+            <Button size="lg" onClick={onPaymentClick} className="w-full">
               수강 신청하기
             </Button>
 

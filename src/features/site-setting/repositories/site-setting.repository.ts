@@ -3,14 +3,15 @@ import "server-only";
 import { eq } from "drizzle-orm";
 import { db } from "@/infrastructure/db/drizzle";
 import { siteSetting } from "@/infrastructure/db/schema";
-import type { CreateSiteSettingDTO, UpdateSiteSettingDTO, SiteSetting } from "@/shared/types/site-setting.type";
+import type {
+  CreateSiteSettingDTO,
+  UpdateSiteSettingDTO,
+  SiteSetting,
+} from "@/shared/types/site-setting.type";
 
 export class SiteSettingRepository {
   static async create(data: CreateSiteSettingDTO): Promise<SiteSetting> {
-    const [result] = await db
-      .insert(siteSetting)
-      .values(data)
-      .returning();
+    const [result] = await db.insert(siteSetting).values(data).returning();
     return result as SiteSetting;
   }
 
@@ -26,7 +27,10 @@ export class SiteSettingRepository {
     return results as SiteSetting[];
   }
 
-  static async update(key: string, data: UpdateSiteSettingDTO): Promise<SiteSetting | null> {
+  static async update(
+    key: string,
+    data: UpdateSiteSettingDTO,
+  ): Promise<SiteSetting | null> {
     const [result] = await db
       .update(siteSetting)
       .set(data)
@@ -36,9 +40,7 @@ export class SiteSettingRepository {
   }
 
   static async delete(key: string): Promise<boolean> {
-    const result = await db
-      .delete(siteSetting)
-      .where(eq(siteSetting.key, key));
+    const result = await db.delete(siteSetting).where(eq(siteSetting.key, key));
     return (result.rowCount ?? 0) > 0;
   }
 }

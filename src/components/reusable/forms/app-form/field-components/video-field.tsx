@@ -81,11 +81,7 @@ export const VideoField = ({
         // 영상 선택 후
         <div className="space-y-3">
           <div className="relative w-full max-w-md rounded-lg border border-input overflow-hidden bg-black">
-            <video
-              src={preview}
-              controls
-              className="w-full h-auto max-h-80"
-            />
+            <video src={preview} controls className="w-full h-auto max-h-80" />
           </div>
           <div className="flex gap-2">
             <Label
