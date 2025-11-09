@@ -4,9 +4,11 @@ import { publicEnv } from "@/config/env/public";
 import { serverEnv } from "@/config/env/server";
 import { s3 } from "@/infrastructure/storage";
 
-const ALLOWED_MIME_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const ALLOWED_VIDEO_TYPES = ["video/mp4", "video/webm", "video/quicktime"];
+const ALLOWED_MIME_TYPES = [...ALLOWED_IMAGE_TYPES, ...ALLOWED_VIDEO_TYPES];
 
-const MAX_FILE_SIZE = 15 * 1024 * 1024; // 5MB
+const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,14 +25,14 @@ export async function POST(request: NextRequest) {
 
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
-        { error: "파일 크기는 5MB 이하여야 합니다" },
+        { error: "파일 크기는 100MB 이하여야 합니다" },
         { status: 400 },
       );
     }
 
     if (!ALLOWED_MIME_TYPES.includes(file.type)) {
       return NextResponse.json(
-        { error: "JPEG, PNG, WEBP 형식만 지원됩니다" },
+        { error: "JPEG, PNG, WEBP 또는 MP4, WEBM 형식만 지원됩니다" },
         { status: 400 },
       );
     }
@@ -51,10 +53,10 @@ export async function POST(request: NextRequest) {
       }),
     );
 
-    // 업로드된 이미지 URL 반환
-    const imageUrl = `${publicEnv.NEXT_PUBLIC_IMAGE_HOST}/${key}`;
+    // 업로드된 파일 URL 반환
+    const fileUrl = `${publicEnv.NEXT_PUBLIC_IMAGE_HOST}/${key}`;
 
-    return NextResponse.json({ imageUrl });
+    return NextResponse.json({ imageUrl: fileUrl });
   } catch (error) {
     console.error("Upload error:", error);
     return NextResponse.json(

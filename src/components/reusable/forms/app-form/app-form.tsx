@@ -5,6 +5,8 @@ import { NumberField } from "./field-components/number-field";
 import { PasswordField } from "./field-components/password-field";
 import { SelectField } from "./field-components/select-field";
 import { TextField } from "./field-components/text-field";
+import { TiptapField } from "./field-components/tiptap-field";
+import { VideoField } from "./field-components/video-field";
 import { Fieldset } from "./form-components/fieldset";
 import { SubmitButton } from "./form-components/submit-button";
 
@@ -21,6 +23,8 @@ const { useAppForm, withForm, withFieldGroup } = createFormHook({
     SelectField,
     DateField,
     ImageField,
+    TiptapField,
+    VideoField,
   },
   formComponents: {
     SubmitButton,
