@@ -1,6 +1,7 @@
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
 import { BannerIdProvider } from "@/components/reusable/admin/banners/detail/banner-id-provider";
+import { BannerItemsSection } from "@/components/reusable/admin/banners/detail/banner-items-section";
 import { BannerUpdateForm } from "@/components/reusable/admin/banners/detail/banner-metadata.form";
 import { BannersPageHeader } from "@/components/reusable/admin/banners/detail/banners-page-header";
 import { makeQueryClient } from "@/config/react-query/query-client";
@@ -27,6 +28,7 @@ export default async function Page({
         <section>
           <BannersPageHeader />
           <BannerUpdateForm />
+          <BannerItemsSection />
         </section>
       </BannerIdProvider>
     </HydrationBoundary>

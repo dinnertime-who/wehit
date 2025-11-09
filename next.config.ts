@@ -20,7 +20,8 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: process.env.NEXT_PUBLIC_IMAGE_HOST ?? "",
+        hostname:
+          process.env.NEXT_PUBLIC_IMAGE_HOST?.replace("https://", "") ?? "",
       },
     ],
   },

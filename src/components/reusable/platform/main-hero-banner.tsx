@@ -46,6 +46,7 @@ export const MainHeroBanner = () => {
               className="w-full h-full object-cover object-center"
               style={{
                 minHeight: `${banner.heightRatio}px`,
+                maxHeight: `${banner.heightRatio}px`,
               }}
             />
           </SwiperSlide>

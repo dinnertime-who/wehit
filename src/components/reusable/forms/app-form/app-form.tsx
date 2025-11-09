@@ -1,4 +1,5 @@
 import { createFormHook, createFormHookContexts } from "@tanstack/react-form";
+import { DateField } from "./field-components/date-field";
 import { ImageField } from "./field-components/image-field";
 import { NumberField } from "./field-components/number-field";
 import { PasswordField } from "./field-components/password-field";
@@ -18,6 +19,7 @@ const { useAppForm, withForm, withFieldGroup } = createFormHook({
     NumberField,
     PasswordField,
     SelectField,
+    DateField,
     ImageField,
   },
   formComponents: {

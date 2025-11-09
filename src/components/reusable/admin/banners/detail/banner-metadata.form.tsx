@@ -132,9 +132,7 @@ export const BannerUpdateForm = () => {
           </CardContent>
 
           <CardFooter className="border-t bg-muted/30 justify-end gap-3">
-            <form.SubmitButton>
-              {updateMutation.isPending ? "저장 중..." : "저장"}
-            </form.SubmitButton>
+            <form.SubmitButton>저장</form.SubmitButton>
           </CardFooter>
         </Card>
       </form.AppForm>

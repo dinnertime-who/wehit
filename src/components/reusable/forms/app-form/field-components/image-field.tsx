@@ -16,12 +16,14 @@ type Props = Omit<
   label?: string;
   accept?: string;
   maxSizeMB?: number;
+  aspectRatio?: string;
 };
 
 export const ImageField = ({
   className,
   accept = "image/jpeg,image/png,image/webp",
   maxSizeMB = 5,
+  aspectRatio,
   ...props
 }: Props) => {
   const id = useId();
@@ -82,12 +84,15 @@ export const ImageField = ({
       {preview ? (
         // 이미지 선택 후
         <div className="space-y-3">
-          <div className="relative w-full aspect-square max-w-xs">
+          <div
+            className="relative w-full max-w-md rounded-lg border border-input overflow-hidden"
+            style={{ aspectRatio: aspectRatio || "1" }}
+          >
             <Image
               src={preview}
               alt="Preview"
               fill
-              className="object-contain rounded-lg border border-input"
+              className="object-contain"
             />
           </div>
           <div className="flex gap-2">
