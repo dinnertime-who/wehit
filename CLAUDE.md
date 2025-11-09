@@ -731,3 +731,252 @@ Placeholder metrics grid:
 ❌ 필터 기능
 ❌ Metric UI (통계 카드)
 ❌ Breadcrumb 네비게이션
+
+### Service Feature
+Comprehensive service management system with CRUD operations, media uploads, and tutor-led service offerings.
+
+#### Database Schema (`/src/infrastructure/db/schema/service.schema.ts`)
+- **service** table:
+  - `id`: CUID primary key
+  - `title`: Service name
+  - `subtitle`: Optional subtitle
+  - `category`: Service category (programming, design, marketing, business, etc)
+  - `tutorInfo`: Tutor information/description
+  - `coverImageUrl`: Cover image URL (required)
+  - `coverVideoUrl`: Optional cover video URL
+  - `description`: Detailed description (rich HTML from Tiptap)
+  - `price`: Regular price (integer, positive)
+  - `salePrice`: Optional discounted price
+  - `createdAt`, `updatedAt`: Timestamps
+
+- **review** table:
+  - `id`: CUID primary key
+  - `serviceId`: Foreign key to service (cascade delete)
+  - `rating`: Review rating (1-5)
+  - `comment`: Review text
+  - `createdAt`, `updatedAt`: Timestamps
+
+- **site_setting** table:
+  - `id`: CUID primary key
+  - `key`: Setting key (unique)
+  - `value`: JSON setting value
+  - `createdAt`, `updatedAt`: Timestamps
+
+#### File Upload Pattern
+
+**Upload Hooks** (`/src/hooks/apis/upload/`)
+- **useUploadImage**: Mutation hook for image uploads
+  - Accepts: `File` object
+  - Returns: `{ imageUrl: string }`
+  - Uses: `kyClient.post("upload", { body: formData })`
+  - Returns: `.json<UploadImageResponse>()`
+
+- **useUploadVideo**: Mutation hook for video uploads
+  - Accepts: `File` object
+  - Returns: `{ videoUrl: string }`
+  - Uses: `kyClient.post("upload", { body: formData })`
+  - Maps API response: `imageUrl` → `videoUrl` field
+  - Pattern:
+    ```typescript
+    const response = await kyClient
+      .post("upload", { body: formData })
+      .json<{ imageUrl: string }>();
+    return { videoUrl: response.imageUrl };
+    ```
+
+**Key Pattern**: Single upload endpoint returns `{ imageUrl }` field. Upload hooks normalize response to match their purpose (`imageUrl` for images, `videoUrl` for videos).
+
+#### Unified Create/Edit Form Pattern
+
+**ServiceForm Component** (`/src/components/reusable/admin/services/detail/service-form.tsx`)
+- Client Component ("use client")
+- Props: `mode: "create" | "edit"`, `service?: Service`
+- Single component handles both creation and editing via `mode` discrimination
+- Zod schema validation with file size and format constraints:
+  - Image: 10MB max, JPEG/PNG/WEBP formats
+  - Video: 100MB max, MP4/WebM formats
+- Form sections: Basic Info, Tutor Info, Media, Description, Pricing
+
+**Key Patterns**:
+
+1. **Conditional Default Values**:
+   ```typescript
+   defaultValues: {
+     title: service?.title || "",
+     subtitle: service?.subtitle || "",
+     // ... other fields
+   } as ServiceFormValues
+   ```
+
+2. **Upload Hook Usage**:
+   ```typescript
+   const uploadImageMutation = useUploadImage();
+   const uploadVideoMutation = useUploadVideo();
+
+   // In onSubmit
+   if (value.coverImage) {
+     const uploadResult = await uploadImageMutation.mutateAsync(value.coverImage);
+     coverImageUrl = uploadResult.imageUrl;
+   }
+   if (value.coverVideo) {
+     const uploadResult = await uploadVideoMutation.mutateAsync(value.coverVideo);
+     coverVideoUrl = uploadResult.videoUrl;
+   }
+   ```
+
+3. **Integrated Loading State**:
+   ```typescript
+   const isLoading =
+     createMutation.isPending ||
+     updateMutation.isPending ||
+     uploadImageMutation.isPending ||
+     uploadVideoMutation.isPending;
+   ```
+
+4. **Conditional API Calls**:
+   ```typescript
+   if (mode === "create") {
+     const payload: CreateServiceDTO = { /* ... */ };
+     await createMutation.mutateAsync(payload);
+     toast.success("서비스가 생성되었습니다");
+   } else {
+     const payload: UpdateServiceDTO = { /* ... */ };
+     await updateMutation.mutateAsync(payload);
+     toast.success("서비스가 수정되었습니다");
+   }
+   ```
+
+#### Default Preview Pattern
+
+**ImageField & VideoField Enhancement**
+- Added `defaultPreview?: string` prop
+- Enables showing existing media in edit mode:
+  ```typescript
+  <form.AppField name="coverImage">
+    {(field) => (
+      <field.ImageField
+        label="커버 이미지"
+        aspectRatio="16/9"
+        defaultPreview={service?.coverImageUrl}
+      />
+    )}
+  </form.AppField>
+  ```
+
+- Implementation details:
+  - State initialization: `useState<string | null>(defaultPreview || null)`
+  - Effect dependency: Include `defaultPreview` in dependency array
+  - Fallback logic: Set preview to `defaultPreview` when no file selected
+
+#### AppForm Field Components Integration
+
+ServiceForm uses complete AppForm field component suite:
+
+1. **TextField**: `ServiceForm` uses for title, subtitle, tutorInfo
+2. **SelectField**: Category dropdown with predefined options
+3. **ImageField**: Cover image upload with 16/9 aspect ratio
+4. **VideoField**: Optional cover video upload
+5. **TiptapField**: Rich text editor for detailed description
+6. **NumberField**: Price and sale price inputs
+
+All fields:
+- Support `disabled` state during mutation loading
+- Include `required` indicators where needed
+- Handle `defaultPreview` for file fields (ImageField, VideoField)
+- Integrated with TanStack Form validation
+
+#### Admin Pages Structure
+
+**Services List Page** (`/src/app/admin/(dashboard)/services/page.tsx`)
+- Server Component
+- Header: "서비스 관리" title and description
+- ServiceDataTable component with:
+  - TanStack Table with columns: title, category, price, salePrice, createdAt, actions
+  - Pagination: 10 services per page
+  - Row actions: Edit link, Delete button with confirm dialog
+  - "서비스 생성" button (+Plus icon) linking to create page
+
+**Create Page** (`/src/app/admin/(dashboard)/services/create/page.tsx`)
+- Server Component
+- Renders `<ServiceForm mode="create" />`
+- Header: "서비스 생성" with description
+
+**Edit Page** (`/src/app/admin/(dashboard)/services/[id]/page.tsx`)
+- Server Component with HydrationBoundary pattern
+- Uses `ServiceIdProvider` context for ID communication
+- Renders `<ServicePageHeader />` and `<ServiceForm mode="edit" service={data} />`
+- Header: "서비스 수정"
+
+**Key Pattern - ID Communication via Context**:
+```typescript
+// src/components/reusable/admin/services/detail/service-id-provider.tsx
+export const ServiceIdProvider = ({ serviceId, children }: Props) => {
+  return (
+    <ServiceIdContext.Provider value={serviceId}>
+      {children}
+    </ServiceIdContext.Provider>
+  );
+};
+
+export const useServiceId = () => useContext(ServiceIdContext);
+```
+
+Avoids prop drilling when service ID needed across multiple nested components.
+
+#### React Query Hooks (`/src/hooks/apis/services/`)
+
+**Query Hooks**:
+- `useServices()` - Fetch all services with pagination
+- `useService(id)` - Fetch single service
+- `useServiceBySlug(slug)` - Fetch service with reviews (public detail)
+
+**Mutation Hooks**:
+- `useCreateService()` - Create new service
+- `useUpdateService(id)` - Update existing service
+- `useDeleteService(id)` - Delete service
+- `useCreateReview(serviceId)` - Add service review
+- `useDeleteReview(reviewId)` - Delete review
+
+All mutations include automatic cache invalidation on success.
+
+#### API Endpoints
+
+**Service Management:**
+- `GET /api/services` - List all services (paginated)
+- `POST /api/services` - Create service
+- `GET /api/services/[id]` - Get specific service
+- `PUT /api/services/[id]` - Update service
+- `DELETE /api/services/[id]` - Delete service
+- `GET /api/services/slug/[slug]` - Get service by slug (public detail)
+
+**Review Management:**
+- `POST /api/services/[id]/reviews` - Create review for service
+- `DELETE /api/reviews/[reviewId]` - Delete review
+
+#### Key Patterns Summary
+
+1. **Unified Create/Edit Form**: Single component with `mode` prop handles both operations
+2. **Upload Hooks Pattern**: Reusable mutation hooks with normalized responses
+3. **Integrated Loading State**: Combines all mutation states into single `isLoading` flag
+4. **Default Preview for Edits**: Shows existing media before uploading replacements
+5. **Context for ID Communication**: Avoids prop drilling across component hierarchy
+6. **AppForm Integration**: Leverages full field component suite for consistency
+7. **Server Prefetch Pattern**: Admin pages use HydrationBoundary for SSR optimization
+8. **Conditional Mutations**: Single form dispatches to create/update based on mode
+
+#### Code Pattern: Why Mode Discrimination
+
+Using mode discrimination instead of separate components reduces duplication:
+- ✅ Single form component for both create/edit logic
+- ✅ Shared validation schema and field definitions
+- ✅ Same UI layout regardless of mode
+- ✅ Easier to maintain consistency between create/edit workflows
+- ❌ Alternative (separate components) creates code duplication and maintenance burden
+
+#### Implementation Notes
+- All route handlers use Next.js 15+ typed routes with `RouteContext`
+- Params are handled as `Promise` types (await params before destructuring)
+- HTTP client uses `kyClient` with `NEXT_PUBLIC_API_URL` as `prefixUrl`
+- All upload mutations must be awaited before constructing API payloads
+- File validation happens in Zod schema at form level
+- Service ID provider used to avoid prop drilling in admin detail pages
