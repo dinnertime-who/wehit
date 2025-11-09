@@ -5,6 +5,7 @@ import {
   ChevronUp,
   Image,
   LayoutDashboard,
+  LayoutGrid,
   LogOut,
   Megaphone,
   Settings,
@@ -70,6 +71,11 @@ const navItems = [
         label: "리뷰",
         href: "/admin/reviews",
         icon: Star,
+      },
+      {
+        label: "디스플레이",
+        href: "/admin/displays",
+        icon: LayoutGrid,
       },
       {
         label: "배너",
