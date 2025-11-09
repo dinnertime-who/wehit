@@ -980,3 +980,145 @@ Using mode discrimination instead of separate components reduces duplication:
 - All upload mutations must be awaited before constructing API payloads
 - File validation happens in Zod schema at form level
 - Service ID provider used to avoid prop drilling in admin detail pages
+
+### Display Feature
+Display management system with Display-Service N:M relationship for managing content placement across multiple displays.
+
+#### Database Schema (`/src/infrastructure/db/schema/display.schema.ts`)
+- **display** table:
+  - `id`: CUID primary key
+  - `title`: Display name (required)
+  - `slug`: Unique identifier for display queries (required, unique)
+  - `createdAt`, `updatedAt`: Timestamps
+
+- **display_service** (join table):
+  - `id`: CUID primary key
+  - `displayId`: Foreign key to display (cascade delete)
+  - `serviceId`: Foreign key to service (cascade delete)
+  - `order`: Display sequence (integer, non-negative)
+  - `createdAt`: Timestamp
+
+**Key Difference from Banner**:
+✅ No separate item table (display_item)
+✅ Direct N:M relationship with Service via join table
+✅ No date-based filtering (Service is always available when connected)
+✅ Order field manages display sequence
+
+#### React Query Hooks (`/src/hooks/apis/displays/`)
+- `useDisplays()` - Fetch all displays
+- `useDisplay(id)` - Fetch display with connected services
+- `useCreateDisplay()` - Create mutation
+- `useUpdateDisplay(id)` - Update mutation
+- `useDeleteDisplay(id)` - Delete mutation
+- `useAddDisplayService(displayId)` - Add service to display
+- `useRemoveDisplayService(displayId)` - Remove service from display
+
+#### API Endpoints
+
+**Display CRUD:**
+- `GET /api/displays` - List all displays
+- `POST /api/displays` - Create display
+- `GET /api/displays/[id]` - Get display with services
+- `PUT /api/displays/[id]` - Update display metadata
+- `DELETE /api/displays/[id]` - Delete display (cascade)
+
+**Display-Service Management:**
+- `GET /api/displays/[id]/services` - List display's services
+- `POST /api/displays/[id]/services` - Add service to display
+- `DELETE /api/displays/[id]/services/[serviceId]` - Remove service from display
+
+#### Admin Pages Structure
+
+**List Page** (`/src/app/admin/(dashboard)/displays/page.tsx`)
+- Server Component with HydrationBoundary pattern
+- Server prefetch of all displays
+- DisplaysDataTable component with:
+  - TanStack Table integration
+  - Columns: title, slug, createdAt, actions
+  - Row actions: Edit, Delete with confirmation
+  - Create button linking to `/admin/displays/create`
+
+**Create Page** (`/src/app/admin/(dashboard)/displays/create/page.tsx`)
+- DisplayCreateForm component
+- Input fields: title, slug
+- Validation: slug regex pattern (lowercase, numbers, hyphens only)
+
+**Edit/Detail Page** (`/src/app/admin/(dashboard)/displays/[id]/page.tsx`)
+- Server Component with HydrationBoundary pattern
+- DisplayMetadataForm: Edit title and slug
+- DisplayServicesSection: Manage connected services
+
+#### UI Components
+
+**DisplaysDataTable** (`displays-data-table.tsx`)
+- Client Component with TanStack Table
+- Columns defined in columns.tsx
+- DisplayRowActions for each row
+- Create button with Plus icon
+
+**DisplayRowActions** (`display-row-actions.tsx`)
+- Edit link to detail page
+- Delete button with confirmation dialog
+- Uses useDialogService for user confirmation
+
+**DisplayMetadataForm** (`display-metadata-form.tsx`)
+- Client Component using AppForm pattern
+- Edit title and slug
+- Cancel and Submit buttons
+- Loading state management
+
+**DisplayServicesSection** (`display-services-section.tsx`)
+- Display connected services grid
+- Add Service button triggering dialog
+- Sorted by order field
+- Empty state message
+
+**ServiceSearchDialog** (`service-search-dialog.tsx`)
+- **Key Component**: Search and add services
+- Features:
+  - Search services by title (real-time filter)
+  - Select from filtered results dropdown
+  - Input order field (0 or higher)
+  - Uses AppForm pattern for validation
+  - Modal dialog with cancel/add buttons
+
+**DisplayServiceCard** (`display-service-card.tsx`)
+- Shows connected service info
+- Displays order number
+- Remove button for quick deletion
+- Trash icon with confirmation
+
+#### Key Patterns
+
+**1. Display-Service N:M Relationship**
+- Uses join table (display_service) instead of one-to-many
+- Enables same service in multiple displays
+- Each connection has independent order
+
+**2. Service Search Dialog**
+- Real-time filtering by title
+- Inline validation for service selection and order
+- Seamless integration with display management
+
+**3. Server Prefetch with Hydration**
+- List page prefetches all displays on server
+- Detail page prefetches display with services
+- No waterfall loading on client
+
+**4. Error Handling**
+- Delete confirmation prevents accidental removal
+- Toast notifications for success/error
+- Form validation with error messages
+
+#### Navigation
+- Added "디스플레이" menu item to AdminSidebar
+- Icon: LayoutGrid (Lucide React)
+- Positioned after "리뷰" in Contents section
+
+#### Implementation Notes
+- Display title and slug are the only editable metadata (immutable after creation)
+- Service order determines display sequence (starts at 0)
+- Deleting display cascades delete to all display_service records
+- Deleting service cascades delete to all display_service records (but not the display itself)
+- Service selection is case-insensitive search
+- All admin pages use server-side prefetch for optimal performance
