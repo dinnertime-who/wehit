@@ -1,10 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { z } from "zod";
 import { useAppForm } from "@/components/reusable/forms/app-form/app-form";
-import { useCreateService } from "@/hooks/apis/services/use-create-service";
-import { useUpdateService } from "@/hooks/apis/services/use-update-service";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -13,11 +13,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+import { useCreateService } from "@/hooks/apis/services/use-create-service";
+import { useUpdateService } from "@/hooks/apis/services/use-update-service";
+import { useUploadImage } from "@/hooks/apis/upload/use-upload-image";
+import { useUploadVideo } from "@/hooks/apis/upload/use-upload-video";
 import type {
-  Service,
   CreateServiceDTO,
+  Service,
   UpdateServiceDTO,
 } from "@/shared/types/service.type";
 
@@ -72,23 +74,23 @@ type Props = {
 
 export const ServiceForm = ({ mode, service }: Props) => {
   const router = useRouter();
+  const uploadImageMutation = useUploadImage();
+  const uploadVideoMutation = useUploadVideo();
   const createMutation = useCreateService();
   const updateMutation = useUpdateService(service?.id || "");
 
-  const defaultValues: ServiceFormValues = {
-    title: service?.title || "",
-    subtitle: service?.subtitle || "",
-    category: service?.category || "",
-    tutorInfo: service?.tutorInfo || "",
-    coverImage: null,
-    coverVideo: null,
-    description: service?.description || "",
-    price: service?.price || 0,
-    salePrice: service?.salePrice || undefined,
-  };
-
   const form = useAppForm({
-    defaultValues,
+    defaultValues: {
+      title: service?.title || "",
+      subtitle: service?.subtitle || "",
+      category: service?.category || "",
+      tutorInfo: service?.tutorInfo || "",
+      coverImage: null,
+      coverVideo: null,
+      description: service?.description || "",
+      price: service?.price || 0,
+      salePrice: service?.salePrice || undefined,
+    } as ServiceFormValues,
     validators: {
       onSubmit: serviceFormSchema,
     },
@@ -97,29 +99,19 @@ export const ServiceForm = ({ mode, service }: Props) => {
         // Upload image if provided
         let coverImageUrl = service?.coverImageUrl || "";
         if (value.coverImage) {
-          const imageFormData = new FormData();
-          imageFormData.append("file", value.coverImage);
-          const uploadRes = await fetch("/api/upload", {
-            method: "POST",
-            body: imageFormData,
-          });
-          const uploadData = (await uploadRes.json()) as { url?: string };
-          if (!uploadData.url) throw new Error("이미지 업로드 실패");
-          coverImageUrl = uploadData.url;
+          const uploadResult = await uploadImageMutation.mutateAsync(
+            value.coverImage,
+          );
+          coverImageUrl = uploadResult.imageUrl;
         }
 
         // Upload video if provided
         let coverVideoUrl = service?.coverVideoUrl || "";
         if (value.coverVideo) {
-          const videoFormData = new FormData();
-          videoFormData.append("file", value.coverVideo);
-          const uploadRes = await fetch("/api/upload", {
-            method: "POST",
-            body: videoFormData,
-          });
-          const uploadData = (await uploadRes.json()) as { url?: string };
-          if (!uploadData.url) throw new Error("비디오 업로드 실패");
-          coverVideoUrl = uploadData.url;
+          const uploadResult = await uploadVideoMutation.mutateAsync(
+            value.coverVideo,
+          );
+          coverVideoUrl = uploadResult.videoUrl;
         }
 
         if (mode === "create") {
@@ -157,18 +149,24 @@ export const ServiceForm = ({ mode, service }: Props) => {
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "오류가 발생했습니다";
+        console.error(error);
         toast.error(message);
       }
     },
   });
 
-  const isLoading = createMutation.isPending || updateMutation.isPending;
+  const isLoading =
+    createMutation.isPending ||
+    updateMutation.isPending ||
+    uploadImageMutation.isPending ||
+    uploadVideoMutation.isPending;
 
   return (
     <form
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
+        console.log("submit");
         e.preventDefault();
-        form.handleSubmit();
+        await form.handleSubmit();
       }}
     >
       <form.AppForm>
@@ -265,9 +263,7 @@ export const ServiceForm = ({ mode, service }: Props) => {
               <div className="space-y-4">
                 <h3 className="text-sm font-semibold">서비스 설명</h3>
                 <form.AppField name="description">
-                  {(field) => (
-                    <field.TiptapField label="상세 설명" required />
-                  )}
+                  {(field) => <field.TiptapField label="상세 설명" required />}
                 </form.AppField>
               </div>
 
@@ -279,8 +275,7 @@ export const ServiceForm = ({ mode, service }: Props) => {
                     {(field) => (
                       <field.NumberField
                         label="정가"
-                        step={1000}
-                        min={0}
+                        min={100}
                         required
                         disabled={isLoading}
                       />
@@ -291,8 +286,7 @@ export const ServiceForm = ({ mode, service }: Props) => {
                     {(field) => (
                       <field.NumberField
                         label="할인가 (선택)"
-                        step={1000}
-                        min={0}
+                        min={100}
                         disabled={isLoading}
                       />
                     )}
@@ -302,7 +296,7 @@ export const ServiceForm = ({ mode, service }: Props) => {
             </form.Fieldset>
           </CardContent>
 
-          <CardFooter className="border-t bg-muted/30 justify-end gap-3">
+          <CardFooter className="grid grid-cols-2 border-t bg-muted/30 justify-end gap-3">
             <Button
               variant="outline"
               onClick={() => router.back()}
