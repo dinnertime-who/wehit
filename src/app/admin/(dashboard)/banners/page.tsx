@@ -1,7 +1,9 @@
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { BannersDataTable } from "@/components/reusable/admin/banners/banners-data-table";
 import { makeQueryClient } from "@/config/react-query/query-client";
 import { bannersQueryOptions } from "@/hooks/apis/banners/use-banners";
-import { BannersDataTable } from "./banners-data-table";
+
+export const dynamic = "force-dynamic";
 
 export default async function AdminBannersPage() {
   const queryClient = makeQueryClient();

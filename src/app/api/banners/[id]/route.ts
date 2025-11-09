@@ -16,7 +16,12 @@ export async function GET(
       return NextResponse.json({ error: "Banner not found" }, { status: 404 });
     }
 
-    return NextResponse.json(banner);
+    const items = await service.getActiveBannerItems(banner.id);
+
+    return NextResponse.json({
+      ...banner,
+      items,
+    });
   } catch (error) {
     console.error("Failed to fetch banner:", error);
     return NextResponse.json(

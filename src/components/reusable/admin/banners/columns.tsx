@@ -62,6 +62,6 @@ export const columns: ColumnDef<Banner>[] = [
   {
     id: "actions",
     header: () => <div className="font-semibold"></div>,
-    cell: () => <BannerRowActions />,
+    cell: ({ row }) => <BannerRowActions banner={row.original} />,
   },
 ];

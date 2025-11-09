@@ -9,8 +9,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import type { Banner } from "@/shared/types/banner.type";
 
-export const BannerRowActions = () => {
+type Props = {
+  banner: Banner;
+};
+
+export const BannerRowActions = ({ banner }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -22,7 +27,7 @@ export const BannerRowActions = () => {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-40 p-2" align="end">
-        <Link href="#">
+        <Link href={`/admin/banners/${banner.id}`}>
           <Button
             variant="ghost"
             size="sm"
