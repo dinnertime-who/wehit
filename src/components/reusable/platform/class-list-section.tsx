@@ -21,10 +21,10 @@ type Props = {
 
 export function ClassListSection({ classes, title }: Props) {
   return (
-    <section className="py-12">
+    <section className="py-6 lg:py-12">
       <div className="app-container px-4">
-        <div className="mb-4">
-          <h2 className="text-xl font-bold mb-2">{title}</h2>
+        <div className="mb-6">
+          <h2 className="text-2xl md:text-3xl font-bold">{title}</h2>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
           {classes.map((classItem) => (

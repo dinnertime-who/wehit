@@ -1,3 +1,4 @@
+import type Link from "next/link";
 import { ClassPreviewCard } from "./class-preview-card";
 
 const sampleClasses = [
@@ -37,19 +38,25 @@ const sampleClasses = [
 
 export function ClassPreviewSection() {
   return (
-    <section className="py-12">
+    <section className="py-6 lg:py-12">
       <div className="app-container px-4">
-        <div className="mb-4">
-          <h2 className="text-xl font-bold">이번 주 트렌디 PICK</h2>
-          <div className="text-sm text-gray-500">
+        <div className="mb-6">
+          <h2 className="text-2xl md:text-3xl font-bold mb-2">
+            이번 주 트렌디 PICK
+          </h2>
+          <p className="text-sm md:text-base text-muted-foreground">
             예비 인플루언서들의 화려한 변신, 트렌디 프리미엄 패키지
-          </div>
+          </p>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
           {sampleClasses.map((classItem) => (
             <ClassPreviewCard
               key={classItem.id}
-              href={`/search?id=${classItem.id}` as any}
+              href={
+                `/search?id=${classItem.id}` as React.ComponentProps<
+                  typeof Link
+                >["href"]
+              }
               title={classItem.title}
               tutor={classItem.tutor}
               thumbnailUrl={classItem.thumbnailUrl}

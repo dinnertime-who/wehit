@@ -5,6 +5,7 @@ import { DisplaySection } from "@/components/reusable/platform/display-sections"
 import { ExampleInfluencers } from "@/components/reusable/platform/example-influencers";
 import { MainHeroBanner } from "@/components/reusable/platform/main-hero-banner";
 import { MainMiddleBanner } from "@/components/reusable/platform/main-middle-banner";
+import { TextSection } from "@/components/reusable/platform/text-section";
 import { makeQueryClient } from "@/config/react-query/query-client";
 import { bannerBySlugQueryOptions } from "@/hooks/apis/banners/use-banner-by-slug";
 import { displayBySlugQueryOptions } from "@/hooks/apis/displays/use-display-by-slug";
@@ -63,15 +64,15 @@ export default async function PlatformHomePage() {
         <ClassPreviewSection />
         <DisplaySection slug={NEW_DISPLAY_SLUG} />
 
-        <div className="app-container text-3xl font-bold text-center flex flex-col gap-4 py-12">
-          <div>인스타그램 & 블로그 & 유튜브까지!</div>
-          <div>나만의 SNS 채널로 팔로워와 수익을 동시에 키워보세요</div>
+        <div>
+          <TextSection
+            title={[
+              "인스타그램 & 블로그 & 유튜브까지!",
+              "나만의 SNS 채널로 팔로워와 수익을 동시에 키워보세요",
+            ]}
+          />
+          <ExampleInfluencers />
         </div>
-
-        {/* <LandingSections /> */}
-        <ExampleInfluencers />
-
-        <div className="my-18"></div>
 
         <CtaBanner />
       </HydrationBoundary>

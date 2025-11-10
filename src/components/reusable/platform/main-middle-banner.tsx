@@ -33,7 +33,7 @@ const banners: {
 export function MainMiddleBanner() {
   return (
     <section className="py-6 lg:py-12">
-      <div className="app-container px-4 ">
+      <div className="app-container px-4">
         <Swiper
           modules={[Autoplay]}
           speed={500}

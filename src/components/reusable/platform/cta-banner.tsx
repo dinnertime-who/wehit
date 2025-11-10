@@ -1,11 +1,15 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 interface CtaBannerProps {
   backgroundImage?: string;
   title?: string[];
   subtitle?: string[];
+  buttonText?: string;
+  buttonHref?: React.ComponentProps<typeof Link>["href"];
 }
 
 export function CtaBanner({
@@ -19,6 +23,8 @@ export function CtaBanner({
     "전문가의 꿈꾼한 계정 분석과 컨설팅 후",
     "최고의 매출을 약속합니다",
   ],
+  buttonText = "지금 시작하기",
+  buttonHref = "/sign-in",
 }: CtaBannerProps) {
   return (
     <section className="relative w-full h-[500px] lg:h-[600px] overflow-hidden">
@@ -41,7 +47,7 @@ export function CtaBanner({
         <div className="app-container text-center space-y-8 px-4">
           {/* 메인 제목 */}
           <div className="space-y-2">
-            {title.map((line, index) => (
+            {title.map((line) => (
               <h2
                 key={line}
                 className="text-2xl md:text-3xl lg:text-5xl font-bold text-white leading-tight"
@@ -53,7 +59,7 @@ export function CtaBanner({
 
           {/* 서브 텍스트 */}
           <div className="space-y-3 mt-8">
-            {subtitle.map((line, index) => (
+            {subtitle.map((line) => (
               <p
                 key={line}
                 className="text-sm md:text-base lg:text-lg text-white/90 leading-relaxed"
@@ -61,6 +67,18 @@ export function CtaBanner({
                 {line}
               </p>
             ))}
+          </div>
+
+          {/* CTA 버튼 */}
+          <div className="mt-10">
+            <Link href={buttonHref}>
+              <Button
+                size="lg"
+                className="text-base md:text-lg px-8 md:px-12 py-6 md:py-7 font-semibold bg-white text-gray-900 hover:bg-gray-100 transition-colors"
+              >
+                {buttonText}
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
