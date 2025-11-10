@@ -2,17 +2,19 @@
 
 import { LogOut, Menu } from "lucide-react";
 import Link from "next/link";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { useAuth } from "@/hooks/apis/auth/use-auth";
 import { useSession } from "@/hooks/apis/auth/use-session";
 import { cn } from "@/lib/utils";
 import { Logo } from "../logo";
 import { SearchBar } from "../search-bar";
+import { MobileSidebar } from "./mobile-sidebar";
 
 export const Header = () => {
   const { data: session } = useSession();
   const { signOut } = useAuth();
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 h-(--header-height) w-full border-b bg-white/80 backdrop-blur-lg">
@@ -59,11 +61,21 @@ export const Header = () => {
               </Button>
             </>
           )}
-          <Button variant="ghost" size="icon" className="md:hidden">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            onClick={() => setMobileSidebarOpen(true)}
+          >
             <Menu className="h-5 w-5" />
           </Button>
         </div>
       </div>
+
+      <MobileSidebar
+        open={mobileSidebarOpen}
+        onOpenChange={setMobileSidebarOpen}
+      />
     </header>
   );
 };
