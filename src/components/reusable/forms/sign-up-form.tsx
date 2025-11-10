@@ -24,10 +24,10 @@ type Props = {
 const signUpSchema = z
   .object({
     name: z.string().min(2, "이름은 최소 2자 이상이어야 합니다"),
-    email: z.email("유효한 이메일을 입력해주세요"),
+    email: z.string().email("유효한 이메일을 입력해주세요"),
     password: z.string().min(6, "비밀번호는 최소 6자 이상이어야 합니다"),
     confirmPassword: z.string(),
-    verificationCode: z.string().optional(),
+    verificationCode: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "비밀번호가 일치하지 않습니다",
@@ -154,7 +154,9 @@ export const SignUpAppForm = ({ redirectTo, onSuccess }: Props) => {
             />
             {field.state.meta.errors.length > 0 && (
               <p className="text-sm text-red-500">
-                {field.state.meta.errors[0]?.message}
+                {typeof field.state.meta.errors[0] === "string"
+                  ? field.state.meta.errors[0]
+                  : field.state.meta.errors[0]?.message || "오류가 발생했습니다"}
               </p>
             )}
           </div>
@@ -301,7 +303,9 @@ export const SignUpAppForm = ({ redirectTo, onSuccess }: Props) => {
             />
             {field.state.meta.errors.length > 0 && (
               <p className="text-sm text-red-500">
-                {field.state.meta.errors[0]?.message}
+                {typeof field.state.meta.errors[0] === "string"
+                  ? field.state.meta.errors[0]
+                  : field.state.meta.errors[0]?.message || "오류가 발생했습니다"}
               </p>
             )}
           </div>
@@ -323,7 +327,9 @@ export const SignUpAppForm = ({ redirectTo, onSuccess }: Props) => {
             />
             {field.state.meta.errors.length > 0 && (
               <p className="text-sm text-red-500">
-                {field.state.meta.errors[0]?.message}
+                {typeof field.state.meta.errors[0] === "string"
+                  ? field.state.meta.errors[0]
+                  : field.state.meta.errors[0]?.message || "오류가 발생했습니다"}
               </p>
             )}
           </div>

@@ -5,7 +5,7 @@ import { z } from "zod";
 
 const updateOrderSchema = z.object({
   status: z.enum(["pending", "paid", "cancelled", "completed"]).optional(),
-  paymentInfo: z.record(z.unknown()).optional(),
+  paymentInfo: z.record(z.string(), z.unknown()).optional(),
 });
 
 export async function GET(
@@ -96,7 +96,7 @@ export async function PUT(
     console.error("Failed to update order:", error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: "Validation failed", details: error.errors },
+        { error: "Validation failed", details: error.issues },
         { status: 400 },
       );
     }

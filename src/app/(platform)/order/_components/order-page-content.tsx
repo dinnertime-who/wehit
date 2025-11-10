@@ -1,13 +1,13 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useService } from "@/hooks/apis/services/use-service";
-import { useCreateOrder } from "@/hooks/apis/orders/use-create-order";
-import { useSiteSetting } from "@/hooks/apis/site-settings/use-site-setting";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
-import { toast } from "sonner";
+import { useCreateOrder } from "@/hooks/apis/orders/use-create-order";
+import { useService } from "@/hooks/apis/services/use-service";
+import { useSiteSetting } from "@/hooks/apis/site-settings/use-site-setting";
 
 export function OrderPageContent() {
   const router = useRouter();
@@ -20,31 +20,26 @@ export function OrderPageContent() {
     serviceId || "",
   );
 
-  const handleOrder = () => {
+  const handleOrder = async () => {
     if (!serviceId || !service) {
       toast.error("서비스를 선택해주세요");
       return;
     }
 
-    createOrderMutation.mutate(
-      {
-        items: [
-          {
-            serviceId,
-            quantity: 1,
-            price: service.price,
-            salePrice: service.salePrice || undefined,
-          },
-        ],
-        paymentMethod: "bank_transfer",
-        paymentInfo: {},
-      },
-      {
-        onSuccess: (order) => {
-          router.push(`/order/complete?orderId=${order.id}`);
+    const order = await createOrderMutation.mutateAsync({
+      items: [
+        {
+          serviceId,
+          quantity: 1,
+          price: service.price,
+          salePrice: service.salePrice || undefined,
         },
-      },
-    );
+      ],
+      paymentMethod: "bank_transfer",
+      paymentInfo: {},
+    });
+
+    router.push(`/order/complete?orderId=${order.id}`);
   };
 
   if (!serviceId) {
@@ -97,7 +92,9 @@ export function OrderPageContent() {
                 </div>
                 <div className="pt-4 border-t">
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm text-muted-foreground">수강료</span>
+                    <span className="text-sm text-muted-foreground">
+                      수강료
+                    </span>
                     <span className="text-lg font-bold">
                       {price.toLocaleString()}원
                     </span>
@@ -181,4 +178,3 @@ export function OrderPageContent() {
     </div>
   );
 }
-

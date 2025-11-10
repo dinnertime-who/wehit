@@ -6,7 +6,7 @@ const DEFAULT_ACCOUNT = "0000-0000-0000";
 
 export async function GET(
   _request: NextRequest,
-  context: RouteContext<"/api/site-settings/[key]">,
+  context: { params: Promise<{ key: string }> },
 ) {
   try {
     const { key } = await context.params;
@@ -42,12 +42,26 @@ export async function PUT(request: NextRequest, context: any) {
     const body = await request.json();
     const validData = updateSiteSettingSchema.parse(body);
 
-    const setting = await SiteSettingRepository.update(key, validData);
-    if (!setting) {
-      return NextResponse.json(
-        { error: "설정을 찾을 수 없습니다" },
-        { status: 404 },
-      );
+    // 설정이 없으면 생성, 있으면 업데이트
+    const existingSetting = await SiteSettingRepository.getByKey(key);
+    let setting;
+
+    if (!existingSetting) {
+      // 설정이 없으면 생성
+      setting = await SiteSettingRepository.create({
+        key,
+        value: validData.value,
+        description: validData.description,
+      });
+    } else {
+      // 설정이 있으면 업데이트
+      setting = await SiteSettingRepository.update(key, validData);
+      if (!setting) {
+        return NextResponse.json(
+          { error: "설정을 찾을 수 없습니다" },
+          { status: 404 },
+        );
+      }
     }
 
     return NextResponse.json(setting);

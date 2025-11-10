@@ -1,9 +1,10 @@
-import { type NextRequest, NextResponse } from "next/server";
-import { render } from "@react-email/render";
+import { render } from "@react-email/components";
 import { eq } from "drizzle-orm";
+import { type NextRequest, NextResponse } from "next/server";
+import { serverEnv } from "@/config/env/server";
 import { db } from "@/infrastructure/db/drizzle";
-import { user } from "@/infrastructure/db/schema";
 import { getRedis } from "@/infrastructure/db/redis";
+import { user } from "@/infrastructure/db/schema";
 import { transporter } from "@/infrastructure/notification/nodemailer";
 import { VerificationCodeEmail } from "@/infrastructure/notification/nodemailer/templates/verification-code-email";
 import {
@@ -11,7 +12,6 @@ import {
   getVerificationKey,
   VERIFICATION_CODE_EXPIRY,
 } from "@/utils/verification";
-import { serverEnv } from "@/config/env/server";
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,10 +19,7 @@ export async function POST(request: NextRequest) {
     const { email } = body;
 
     if (!email) {
-      return NextResponse.json(
-        { error: "Email is required" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
 
     // 이메일 형식 검증
@@ -55,7 +52,7 @@ export async function POST(request: NextRequest) {
     await redis.setex(key, VERIFICATION_CODE_EXPIRY, code);
 
     // 이메일 발송
-    const emailHtml = render(
+    const emailHtml = await render(
       VerificationCodeEmail({
         code,
       }),
@@ -80,4 +77,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-

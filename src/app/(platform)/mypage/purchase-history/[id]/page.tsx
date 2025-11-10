@@ -3,6 +3,8 @@ import { makeQueryClient } from "@/config/react-query/query-client";
 import { PurchaseDetailContent } from "./_components/purchase-detail-content";
 import { orderQueryOptions } from "@/hooks/apis/orders/use-order";
 
+export const dynamic = "force-dynamic";
+
 type Props = {
   params: Promise<{ id: string }>;
 };

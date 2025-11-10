@@ -1,14 +1,13 @@
 import { type NextRequest, NextResponse } from "next/server";
-import type { RouteContext } from "@/shared/types/route.type";
 import { ReviewRepository } from "@/features/review/repositories/review.repository";
 import { updateReviewSchema } from "@/features/review/schemas/review.schema";
 
 export async function PUT(
   request: NextRequest,
-  { params }: RouteContext<"/api/reviews/[id]">,
+  context: { params: Promise<{ id: string }> },
 ) {
   try {
-    const { id } = await params;
+    const { id } = await context.params;
     const body = await request.json();
     const validData = updateReviewSchema.parse(body);
 
@@ -39,10 +38,10 @@ export async function PUT(
 
 export async function DELETE(
   _request: NextRequest,
-  { params }: RouteContext<"/api/reviews/[id]">,
+  context: { params: Promise<{ id: string }> },
 ) {
   try {
-    const { id } = await params;
+    const { id } = await context.params;
     const deleted = await ReviewRepository.delete(id);
 
     if (!deleted) {

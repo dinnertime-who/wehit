@@ -1,20 +1,22 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth/auth";
-import { OrderService } from "@/features/order/services/order.service";
 import { z } from "zod";
+import { OrderService } from "@/features/order/services/order.service";
+import { auth } from "@/lib/auth/auth";
 import type { CreateOrderDTO } from "@/shared/types/order.type";
 
 const createOrderSchema = z.object({
-  items: z.array(
-    z.object({
-      serviceId: z.string(),
-      quantity: z.number().int().positive().optional().default(1),
-      price: z.number().int().positive(),
-      salePrice: z.number().int().positive().optional(),
-    }),
-  ).min(1),
+  items: z
+    .array(
+      z.object({
+        serviceId: z.string(),
+        quantity: z.number().int().positive().optional().default(1),
+        price: z.number().int().positive(),
+        salePrice: z.number().int().positive().optional(),
+      }),
+    )
+    .min(1),
   paymentMethod: z.string().optional().default("bank_transfer"),
-  paymentInfo: z.record(z.unknown()).optional(),
+  paymentInfo: z.record(z.any(), z.any()).optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -24,10 +26,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!session?.user) {
-      return NextResponse.json(
-        { error: "인증이 필요합니다" },
-        { status: 401 },
-      );
+      return NextResponse.json({ error: "인증이 필요합니다" }, { status: 401 });
     }
 
     const body = await request.json();
@@ -47,7 +46,7 @@ export async function POST(request: NextRequest) {
     console.error("Order creation error:", error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: "Validation failed", details: error.errors },
+        { error: "Validation failed", details: error.message },
         { status: 400 },
       );
     }
@@ -65,10 +64,7 @@ export async function GET(request: NextRequest) {
     });
 
     if (!session?.user) {
-      return NextResponse.json(
-        { error: "인증이 필요합니다" },
-        { status: 401 },
-      );
+      return NextResponse.json({ error: "인증이 필요합니다" }, { status: 401 });
     }
 
     const orders = await OrderService.getOrdersByUserId(session.user.id);
@@ -76,10 +72,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(orders);
   } catch (error) {
     console.error("Failed to fetch orders:", error);
-    return NextResponse.json(
-      { error: "주문 목록 조회 실패" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "주문 목록 조회 실패" }, { status: 500 });
   }
 }
-

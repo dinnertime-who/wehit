@@ -3,6 +3,8 @@ import { makeQueryClient } from "@/config/react-query/query-client";
 import { OrderPageContent } from "./_components/order-page-content";
 import { serviceQueryOptions } from "@/hooks/apis/services/use-service";
 
+export const dynamic = "force-dynamic";
+
 type Props = {
   searchParams: Promise<{ serviceId?: string }>;
 };

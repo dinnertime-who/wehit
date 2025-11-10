@@ -8,6 +8,8 @@ import { makeQueryClient } from "@/config/react-query/query-client";
 import { bannerQueryOptions } from "@/hooks/apis/banners/use-banner";
 import { tryCatch } from "@/lib/try-catch";
 
+export const dynamic = "force-dynamic";
+
 export default async function Page({
   params,
 }: PageProps<"/admin/banners/[id]">) {
