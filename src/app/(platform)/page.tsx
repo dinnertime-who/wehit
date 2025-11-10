@@ -56,13 +56,19 @@ export default async function PlatformHomePage() {
     <div>
       <HydrationBoundary state={dehydrate(queryClient)}>
         <MainHeroBanner />
+
+        <div className="my-18"></div>
+
         <DisplaySection slug={RECOMMENDED_DISPLAY_SLUG} />
-        <DisplaySection slug={POPULAR_DISPLAY_SLUG} />
+
+        <ClassPreviewSection />
 
         {/* <MiddleBanner /> */}
         <MainMiddleBanner />
-        <ClassPreviewSection />
         <DisplaySection slug={NEW_DISPLAY_SLUG} />
+        <DisplaySection slug={NEW_DISPLAY_SLUG} />
+
+        <div className="my-18"></div>
 
         <div>
           <TextSection
@@ -73,6 +79,12 @@ export default async function PlatformHomePage() {
           />
           <ExampleInfluencers />
         </div>
+
+        <DisplaySection slug={POPULAR_DISPLAY_SLUG} />
+        <DisplaySection slug={POPULAR_DISPLAY_SLUG} />
+        <DisplaySection slug={POPULAR_DISPLAY_SLUG} />
+
+        <div className="my-18"></div>
 
         <CtaBanner />
       </HydrationBoundary>
