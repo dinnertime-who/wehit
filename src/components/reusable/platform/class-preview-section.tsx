@@ -1,42 +1,17 @@
+"use client";
+
 import type Link from "next/link";
+import { useBannerBySlug } from "@/hooks/apis/banners/use-banner-by-slug";
+import { WEEKLY_TREND_BANNER_SLUG } from "@/shared/constants/banner.constant";
 import { ClassPreviewCard } from "./class-preview-card";
 
-const sampleClasses = [
-  {
-    id: 1,
-    title: "하루 10분으로 평생 편해지는 <성인 ADHD 탈출법>",
-    tutor: "김개발",
-    thumbnailUrl: "https://placehold.co/300x400/6366F1/ffffff/png?text=Python",
-    videoUrl:
-      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-  },
-  {
-    id: 2,
-    title: "처음 시작하는 일러스트레이터 디자인",
-    tutor: "박디자인",
-    thumbnailUrl: "https://placehold.co/300x400/EC4899/ffffff/png?text=Design",
-    videoUrl:
-      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-  },
-  {
-    id: 3,
-    title: "직장인을 위한 영어회화 마스터",
-    tutor: "이영어",
-    thumbnailUrl: "https://placehold.co/300x400/10B981/ffffff/png?text=English",
-    videoUrl:
-      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-  },
-  {
-    id: 4,
-    title: "홈트레이닝으로 시작하는 필라테스",
-    tutor: "최운동",
-    thumbnailUrl: "https://placehold.co/300x400/F59E0B/ffffff/png?text=Pilates",
-    videoUrl:
-      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-  },
-];
-
 export function ClassPreviewSection() {
+  const { data: banner } = useBannerBySlug(WEEKLY_TREND_BANNER_SLUG);
+
+  if (!banner || !banner.items || banner.items.length === 0) {
+    return null;
+  }
+
   return (
     <section className="py-6 lg:py-12">
       <div className="app-container px-4">
@@ -49,18 +24,18 @@ export function ClassPreviewSection() {
           </p>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
-          {sampleClasses.map((classItem) => (
+          {banner.items.map((item) => (
             <ClassPreviewCard
-              key={classItem.id}
+              key={item.id}
               href={
-                `/search?id=${classItem.id}` as React.ComponentProps<
+                (item.linkUrl || "/") as React.ComponentProps<
                   typeof Link
                 >["href"]
               }
-              title={classItem.title}
-              tutor={classItem.tutor}
-              thumbnailUrl={classItem.thumbnailUrl}
-              videoUrl={classItem.videoUrl}
+              title="트렌디 클래스"
+              tutor="트렌디"
+              thumbnailUrl={item.imageUrl}
+              videoUrl={item.videoUrl || ""}
             />
           ))}
         </div>

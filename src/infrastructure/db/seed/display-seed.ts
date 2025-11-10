@@ -1,9 +1,11 @@
 import { db } from "@/infrastructure/db/drizzle";
 import { display, displayService, service } from "@/infrastructure/db/schema";
 import {
+  FEATURED_DISPLAY_SLUG,
   NEW_DISPLAY_SLUG,
   POPULAR_DISPLAY_SLUG,
   RECOMMENDED_DISPLAY_SLUG,
+  TRENDING_DISPLAY_SLUG,
 } from "@/shared/constants/display.constant";
 
 const displayData = [
@@ -18,6 +20,14 @@ const displayData = [
   {
     title: "신규 강의",
     slug: NEW_DISPLAY_SLUG,
+  },
+  {
+    title: "트렌딩 강의",
+    slug: TRENDING_DISPLAY_SLUG,
+  },
+  {
+    title: "특별 기획 강의",
+    slug: FEATURED_DISPLAY_SLUG,
   },
 ];
 
@@ -53,9 +63,9 @@ export async function seedDisplay() {
     }[] = [];
 
     for (const disp of createdDisplays) {
-      // 각 display에 4-6개의 서비스를 랜덤하게 할당
+      // 각 display에 6-8개의 서비스를 랜덤하게 할당 (40개 서비스 활용)
       const serviceCount = Math.min(
-        4 + Math.floor(Math.random() * 3), // 4-6
+        6 + Math.floor(Math.random() * 3), // 6-8
         services.length,
       );
 

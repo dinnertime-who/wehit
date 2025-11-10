@@ -23,6 +23,7 @@ export const bannerItem = pgTable("banner_item", {
     .notNull()
     .references(() => banner.id, { onDelete: "cascade" }),
   imageUrl: text("image_url").notNull(),
+  videoUrl: text("video_url"), // 영상 URL (선택)
   linkUrl: text("link_url").notNull(),
   order: integer("order").notNull(),
   viewStartDate: timestamp("view_start_date"),

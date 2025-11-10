@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -8,7 +9,9 @@ import { Button } from "@/components/ui/button";
 import { useCreateBannerItem } from "@/hooks/apis/banners/use-create-banner-item";
 import { useUpdateBannerItem } from "@/hooks/apis/banners/use-update-banner-item";
 import { useUploadImage } from "@/hooks/apis/upload/use-upload-image";
+import { useUploadVideo } from "@/hooks/apis/upload/use-upload-video";
 import type { Banner, BannerItem } from "@/shared/types/banner.type";
+import { ServiceLinkDialog } from "./service-link-dialog";
 
 const bannerItemFormSchema = z.object({
   image: z
@@ -20,6 +23,18 @@ const bannerItemFormSchema = z.object({
     .refine(
       (file) => ["image/jpeg", "image/png", "image/webp"].includes(file.type),
       "JPEG, PNG, WEBP 형식만 지원됩니다",
+    )
+    .nullable()
+    .optional(),
+  video: z
+    .instanceof(File)
+    .refine(
+      (file) => file.size <= 50 * 1024 * 1024,
+      "파일 크기는 50MB 이하여야 합니다",
+    )
+    .refine(
+      (file) => ["video/mp4", "video/webm", "video/quicktime"].includes(file.type),
+      "MP4, WEBM, MOV 형식만 지원됩니다",
     )
     .nullable()
     .optional(),
@@ -50,13 +65,16 @@ export const BannerItemForm = ({
   onClose,
 }: Props) => {
   const router = useRouter();
-  const uploadMutation = useUploadImage();
+  const uploadImageMutation = useUploadImage();
+  const uploadVideoMutation = useUploadVideo();
   const createMutation = useCreateBannerItem(bannerId);
   const updateMutation = useUpdateBannerItem(item?.id || "", bannerId);
+  const [isServiceLinkDialogOpen, setIsServiceLinkDialogOpen] = useState(false);
 
   const form = useAppForm({
     defaultValues: {
       image: null as File | null,
+      video: null as File | null,
       linkUrl: item?.linkUrl || "",
       order: item?.order ?? 0,
       viewStartDate: item?.viewStartDate || null,
@@ -68,11 +86,18 @@ export const BannerItemForm = ({
     onSubmit: async ({ value }) => {
       try {
         let imageUrl = item?.imageUrl;
+        let videoUrl = item?.videoUrl || null;
 
         // 새 이미지가 선택된 경우 업로드
         if (value.image) {
-          const uploadResult = await uploadMutation.mutateAsync(value.image);
+          const uploadResult = await uploadImageMutation.mutateAsync(value.image);
           imageUrl = uploadResult.imageUrl;
+        }
+
+        // 새 영상이 선택된 경우 업로드
+        if (value.video) {
+          const uploadResult = await uploadVideoMutation.mutateAsync(value.video);
+          videoUrl = uploadResult.videoUrl;
         }
 
         // 이미지가 없으면 에러
@@ -85,6 +110,7 @@ export const BannerItemForm = ({
           await createMutation.mutateAsync({
             bannerId,
             imageUrl,
+            videoUrl: videoUrl || undefined,
             linkUrl: value.linkUrl,
             order: value.order,
             viewStartDate: value.viewStartDate,
@@ -94,6 +120,7 @@ export const BannerItemForm = ({
         } else {
           await updateMutation.mutateAsync({
             imageUrl,
+            videoUrl: videoUrl || undefined,
             linkUrl: value.linkUrl,
             order: value.order,
             viewStartDate: value.viewStartDate,
@@ -113,6 +140,11 @@ export const BannerItemForm = ({
       }
     },
   });
+
+  const handleServiceSelect = (serviceId: string) => {
+    form.setFieldValue("linkUrl", `/service/${serviceId}`);
+    setIsServiceLinkDialogOpen(false);
+  };
 
   return (
     <form
@@ -135,14 +167,38 @@ export const BannerItemForm = ({
             )}
           </form.AppField>
 
+          {/* 영상 필드 */}
+          <form.AppField name="video">
+            {(field) => (
+              <field.VideoField
+                label={mode === "edit" ? "새 영상 (선택)" : "배너 영상 (선택)"}
+                defaultPreview={item?.videoUrl || undefined}
+              />
+            )}
+          </form.AppField>
+
           {/* 링크 URL */}
           <form.AppField name="linkUrl">
             {(field) => (
-              <field.TextField
-                label="클릭 링크 URL"
-                placeholder="https://example.com"
-                required
-              />
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-medium">
+                    클릭 링크 URL<span className="text-red-500 ml-1">*</span>
+                  </label>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setIsServiceLinkDialogOpen(true)}
+                  >
+                    서비스 검색
+                  </Button>
+                </div>
+                <field.TextField
+                  placeholder="https://example.com 또는 /service/123"
+                  required
+                />
+              </div>
             )}
           </form.AppField>
 
@@ -189,5 +245,11 @@ export const BannerItemForm = ({
         </div>
       </form.AppForm>
     </form>
+
+    <ServiceLinkDialog
+      open={isServiceLinkDialogOpen}
+      onOpenChange={setIsServiceLinkDialogOpen}
+      onSelect={handleServiceSelect}
+    />
   );
 };

@@ -13,11 +13,14 @@ import { tryCatch } from "@/lib/try-catch";
 import {
   MAIN_HERO_BANNER_SLUG,
   MIDDLE_BANNER_SLUG,
+  WEEKLY_TREND_BANNER_SLUG,
 } from "@/shared/constants/banner.constant";
 import {
+  FEATURED_DISPLAY_SLUG,
   NEW_DISPLAY_SLUG,
   POPULAR_DISPLAY_SLUG,
   RECOMMENDED_DISPLAY_SLUG,
+  TRENDING_DISPLAY_SLUG,
 } from "@/shared/constants/display.constant";
 
 export const dynamic = "force-dynamic";
@@ -37,6 +40,11 @@ export default async function PlatformHomePage() {
         bannerBySlugQueryOptions(MIDDLE_BANNER_SLUG),
       );
     }),
+    tryCatch(async () => {
+      return await queryClient.ensureQueryData(
+        bannerBySlugQueryOptions(WEEKLY_TREND_BANNER_SLUG),
+      );
+    }),
   ]);
 
   // Display prefetch
@@ -44,6 +52,8 @@ export default async function PlatformHomePage() {
     RECOMMENDED_DISPLAY_SLUG,
     POPULAR_DISPLAY_SLUG,
     NEW_DISPLAY_SLUG,
+    TRENDING_DISPLAY_SLUG,
+    FEATURED_DISPLAY_SLUG,
   ];
 
   await Promise.all(
@@ -65,8 +75,8 @@ export default async function PlatformHomePage() {
 
         {/* <MiddleBanner /> */}
         <MainMiddleBanner />
-        <DisplaySection slug={NEW_DISPLAY_SLUG} />
-        <DisplaySection slug={NEW_DISPLAY_SLUG} />
+        <DisplaySection slug={POPULAR_DISPLAY_SLUG} />
+        <DisplaySection slug={TRENDING_DISPLAY_SLUG} />
 
         <div className="my-18"></div>
 
@@ -80,8 +90,8 @@ export default async function PlatformHomePage() {
           <ExampleInfluencers />
         </div>
 
-        <DisplaySection slug={POPULAR_DISPLAY_SLUG} />
-        <DisplaySection slug={POPULAR_DISPLAY_SLUG} />
+        <DisplaySection slug={FEATURED_DISPLAY_SLUG} />
+        <DisplaySection slug={NEW_DISPLAY_SLUG} />
         <DisplaySection slug={POPULAR_DISPLAY_SLUG} />
 
         <div className="my-18"></div>

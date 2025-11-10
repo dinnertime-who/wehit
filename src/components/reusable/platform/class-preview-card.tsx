@@ -46,17 +46,19 @@ export function ClassPreviewCard({
         <Image src={thumbnailUrl} alt={title} width={300} height={400} />
       </div>
 
-      <video
-        ref={videoRef}
-        src={videoUrl}
-        className="absolute top-0 left-0 border-0 right-0 w-full h-full object-cover hidden"
-        controls={false}
-        muted
-        loop
-        playsInline
-      >
-        <track kind="captions" src={videoUrl} />
-      </video>
+      {videoUrl && (
+        <video
+          ref={videoRef}
+          src={videoUrl}
+          className="absolute top-0 left-0 border-0 right-0 w-full h-full object-cover hidden"
+          controls={false}
+          muted
+          loop
+          playsInline
+        >
+          <track kind="captions" src={videoUrl} />
+        </video>
+      )}
 
       <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-gray-800/50 to-transparent text-white">
         <h3 className="text-xs sm:text-body font-semibold text-balance break-keep line-clamp-2">

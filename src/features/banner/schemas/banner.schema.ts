@@ -14,6 +14,7 @@ export const updateBannerSchema = createBannerSchema.partial();
 export const createBannerItemSchema = z.object({
   bannerId: z.string().min(1, "Banner ID is required"),
   imageUrl: z.url("Invalid image URL"),
+  videoUrl: z.string().url("Invalid video URL").optional().nullable(),
   linkUrl: z.string("Invalid link URL"),
   order: z.number().int().nonnegative("Order must be non-negative"),
   viewStartDate: z.date().nullable().optional(),
