@@ -29,6 +29,13 @@ export class ReviewRepository {
     return results as Review[];
   }
 
+  static async getAll(): Promise<Review[]> {
+    const results = await db.query.review.findMany({
+      orderBy: (review, { desc }) => [desc(review.createdAt)],
+    });
+    return results as Review[];
+  }
+
   static async update(
     id: string,
     data: UpdateReviewDTO,

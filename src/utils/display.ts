@@ -4,6 +4,7 @@ export type ClassListItem = {
   id: string;
   title: string;
   tutor: string;
+  category: string;
   discountRate: number;
   originalPrice: number;
   salePrice: number;
@@ -32,6 +33,7 @@ export function convertServiceToClassItem(
     id: service.id,
     title: service.title,
     tutor,
+    category: service.category,
     discountRate,
     originalPrice,
     salePrice,
