@@ -1,6 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { createServiceSchema } from "@/features/service/schemas/service.schema";
-import { ServiceRepository } from "@/features/service/repositories/service.repository";
+import {
+  ServiceRepository,
+  type ServiceListParams,
+} from "@/features/service/repositories/service.repository";
 import { db } from "@/infrastructure/db/drizzle";
 import { service, review } from "@/infrastructure/db/schema";
 import { sql, inArray } from "drizzle-orm";
@@ -25,18 +28,49 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const withStats = searchParams.get("withStats") === "true";
+    const page = parseInt(searchParams.get("page") || "1", 10);
+    const limit = parseInt(searchParams.get("limit") || "12", 10);
+    const category = searchParams.get("category") || undefined;
+    const search = searchParams.get("search") || undefined;
 
-    const services = await ServiceRepository.getAll();
+    // 페이지네이션 및 필터 파라미터
+    const listParams: ServiceListParams = {
+      page,
+      limit,
+      filters: {
+        ...(category && { category }),
+        ...(search && { search }),
+      },
+    };
+
+    const paginatedResult = await ServiceRepository.getPaginated(listParams);
+    const services = paginatedResult.data;
 
     if (!withStats) {
-      return NextResponse.json(services);
+      return NextResponse.json({
+        data: services,
+        pagination: {
+          total: paginatedResult.total,
+          page: paginatedResult.page,
+          limit: paginatedResult.limit,
+          totalPages: paginatedResult.totalPages,
+        },
+      });
     }
 
     // 리뷰 통계 포함
     const serviceIds = services.map((s) => s.id);
 
     if (serviceIds.length === 0) {
-      return NextResponse.json([]);
+      return NextResponse.json({
+        data: [],
+        pagination: {
+          total: paginatedResult.total,
+          page: paginatedResult.page,
+          limit: paginatedResult.limit,
+          totalPages: paginatedResult.totalPages,
+        },
+      });
     }
 
     // 리뷰 집계 쿼리
@@ -73,7 +107,15 @@ export async function GET(request: NextRequest) {
       order: 0, // 목록에서는 order가 필요 없지만 타입을 맞추기 위해
     }));
 
-    return NextResponse.json(servicesWithStats);
+    return NextResponse.json({
+      data: servicesWithStats,
+      pagination: {
+        total: paginatedResult.total,
+        page: paginatedResult.page,
+        limit: paginatedResult.limit,
+        totalPages: paginatedResult.totalPages,
+      },
+    });
   } catch (error) {
     console.error("Services fetch error:", error);
     return NextResponse.json({ error: "서비스 조회 실패" }, { status: 500 });

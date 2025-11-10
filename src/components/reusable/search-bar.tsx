@@ -22,7 +22,7 @@ export const SearchBar = () => {
 
   const handleSearch = (formData: FormData) => {
     const { q } = schema.parse({ q: formData.get("q") });
-    router.push(`/services?q=${q}`);
+    router.push(`/service?search=${q}`);
   };
 
   return (
