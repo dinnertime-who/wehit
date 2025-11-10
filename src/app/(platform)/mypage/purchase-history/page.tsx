@@ -1,10 +1,16 @@
-export default function PurchaseHistoryPage() {
+import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
+import { makeQueryClient } from "@/config/react-query/query-client";
+import { PurchaseHistoryContent } from "./_components/purchase-history-content";
+import { ordersQueryOptions } from "@/hooks/apis/orders/use-orders";
+
+export default async function PurchaseHistoryPage() {
+  const queryClient = makeQueryClient();
+
+  await queryClient.ensureQueryData(ordersQueryOptions());
+
   return (
-    <div className="app-container px-4 py-12">
-      <div className="text-center py-12">
-        <h1 className="text-2xl font-bold mb-4">구매 내역</h1>
-        <p className="text-muted-foreground">구현중...</p>
-      </div>
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <PurchaseHistoryContent />
+    </HydrationBoundary>
   );
 }

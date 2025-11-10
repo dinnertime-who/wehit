@@ -1,10 +1,23 @@
-export default function OrderCompletePage() {
+import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
+import { makeQueryClient } from "@/config/react-query/query-client";
+import { OrderCompleteContent } from "./_components/order-complete-content";
+import { orderQueryOptions } from "@/hooks/apis/orders/use-order";
+
+type Props = {
+  searchParams: Promise<{ orderId?: string }>;
+};
+
+export default async function OrderCompletePage({ searchParams }: Props) {
+  const queryClient = makeQueryClient();
+  const params = await searchParams;
+
+  if (params.orderId) {
+    await queryClient.ensureQueryData(orderQueryOptions(params.orderId));
+  }
+
   return (
-    <div className="app-container px-4 py-12">
-      <div className="text-center py-12">
-        <h1 className="text-2xl font-bold mb-4">주문 완료</h1>
-        <p className="text-muted-foreground">구현중...</p>
-      </div>
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <OrderCompleteContent />
+    </HydrationBoundary>
   );
 }

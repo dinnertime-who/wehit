@@ -1,10 +1,23 @@
-export default function OrderPage() {
+import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
+import { makeQueryClient } from "@/config/react-query/query-client";
+import { OrderPageContent } from "./_components/order-page-content";
+import { serviceQueryOptions } from "@/hooks/apis/services/use-service";
+
+type Props = {
+  searchParams: Promise<{ serviceId?: string }>;
+};
+
+export default async function OrderPage({ searchParams }: Props) {
+  const queryClient = makeQueryClient();
+  const params = await searchParams;
+
+  if (params.serviceId) {
+    await queryClient.ensureQueryData(serviceQueryOptions(params.serviceId));
+  }
+
   return (
-    <div className="app-container px-4 py-12">
-      <div className="text-center py-12">
-        <h1 className="text-2xl font-bold mb-4">주문/결제</h1>
-        <p className="text-muted-foreground">구현중...</p>
-      </div>
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <OrderPageContent />
+    </HydrationBoundary>
   );
 }
