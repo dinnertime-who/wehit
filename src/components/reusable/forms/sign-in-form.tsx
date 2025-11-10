@@ -10,6 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import { useAuth } from "@/hooks/apis/auth/use-auth";
+import { useSession } from "@/hooks/apis/auth/use-session";
+import { isProfileCompleted } from "@/utils/user";
 
 type Props = {
   redirectTo?: React.ComponentProps<typeof Link>["href"];
@@ -24,6 +26,7 @@ const signInSchema = z.object({
 export const SignInAppForm = ({ redirectTo, onSuccess }: Props) => {
   const router = useRouter();
   const { emailPassword } = useAuth();
+  const { refetch: refetchSession } = useSession();
 
   const form = useForm({
     defaultValues: {
@@ -43,6 +46,22 @@ export const SignInAppForm = ({ redirectTo, onSuccess }: Props) => {
 
       toast.success("로그인 성공했습니다");
       onSuccess?.();
+
+      // 세션 정보를 다시 가져와서 추가 정보 체크
+      const sessionResult = await refetchSession();
+      const user = sessionResult.data?.user as
+        | {
+            phone?: string | null;
+            birthDate?: string | Date | null;
+            gender?: string | null;
+            profileCompleted?: boolean | null;
+          }
+        | undefined;
+
+      if (user && !isProfileCompleted(user)) {
+        router.push("/additional-info");
+        return;
+      }
 
       if (redirectTo) {
         router.push(redirectTo as any);

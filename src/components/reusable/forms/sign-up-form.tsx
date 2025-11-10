@@ -15,6 +15,8 @@ import { useAuth } from "@/hooks/apis/auth/use-auth";
 import { useCheckEmail } from "@/hooks/apis/auth/use-check-email";
 import { useSendVerificationCode } from "@/hooks/apis/auth/use-send-verification-code";
 import { useVerifyEmailCode } from "@/hooks/apis/auth/use-verify-email-code";
+import { useSession } from "@/hooks/apis/auth/use-session";
+import { isProfileCompleted } from "@/utils/user";
 
 type Props = {
   redirectTo?: React.ComponentProps<typeof Link>["href"];
@@ -37,6 +39,7 @@ const signUpSchema = z
 export const SignUpAppForm = ({ redirectTo, onSuccess }: Props) => {
   const router = useRouter();
   const { signUpEmail } = useAuth();
+  const { refetch: refetchSession } = useSession();
   const [emailForVerification, setEmailForVerification] = useState("");
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [verificationCode, setVerificationCode] = useState("");
@@ -82,6 +85,22 @@ export const SignUpAppForm = ({ redirectTo, onSuccess }: Props) => {
 
       toast.success("회원가입이 완료되었습니다");
       onSuccess?.();
+
+      // 세션 정보를 다시 가져와서 추가 정보 체크
+      const sessionResult = await refetchSession();
+      const user = sessionResult.data?.user as
+        | {
+            phone?: string | null;
+            birthDate?: string | Date | null;
+            gender?: string | null;
+            profileCompleted?: boolean | null;
+          }
+        | undefined;
+
+      if (user && !isProfileCompleted(user)) {
+        router.push("/additional-info");
+        return;
+      }
 
       if (redirectTo) {
         router.push(redirectTo as any);

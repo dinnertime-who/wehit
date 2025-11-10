@@ -21,9 +21,9 @@ export const ServiceDetailHero = ({ service, onPaymentClick }: Props) => {
     : null;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-12">
       {/* Hero Media */}
-      <div className="relative w-full aspect-video bg-neutral-100 rounded-lg overflow-hidden">
+      <div className="relative w-full aspect-video bg-neutral-100 rounded-xl overflow-hidden shadow-lg">
         {service.coverVideoUrl && !isVideoOpen ? (
           <>
             <Image
@@ -58,15 +58,17 @@ export const ServiceDetailHero = ({ service, onPaymentClick }: Props) => {
 
       {/* Content */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-4">
-          <div className="space-y-2">
-            <div className="inline-block px-3 py-1 bg-blue-50 text-blue-700 text-sm font-medium rounded-full">
+        <div className="lg:col-span-2 space-y-6">
+          <div className="space-y-4">
+            <div className="inline-block px-4 py-1.5 bg-primary/10 text-primary text-sm font-semibold rounded-full border border-primary/20">
               {service.category}
             </div>
-            <h1 className="text-4xl font-bold tracking-tight">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight">
               {service.title}
             </h1>
-            <p className="text-lg text-muted-foreground">{service.subtitle}</p>
+            <p className="text-xl text-muted-foreground leading-relaxed">
+              {service.subtitle}
+            </p>
           </div>
 
           <div className="flex items-start gap-6 pt-4">
@@ -79,37 +81,39 @@ export const ServiceDetailHero = ({ service, onPaymentClick }: Props) => {
 
         {/* Pricing Card */}
         <div className="lg:col-span-1">
-          <div className="border rounded-lg p-6 space-y-4 sticky top-20">
+          <div className="border rounded-xl p-6 space-y-6 sticky top-24 bg-card shadow-lg">
             <div>
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {originalPrice && (
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg font-bold">
-                      {displayPrice.toLocaleString()}원
-                    </span>
-                    <span className="text-sm text-muted-foreground line-through">
-                      {originalPrice.toLocaleString()}원
-                    </span>
-                    {discount && (
-                      <span className="text-sm font-bold text-red-600">
-                        {discount}% 할인
+                  <div className="space-y-2">
+                    <div className="flex items-baseline gap-3">
+                      <span className="text-3xl font-bold text-foreground">
+                        {displayPrice.toLocaleString()}원
                       </span>
+                      <span className="text-base text-muted-foreground line-through">
+                        {originalPrice.toLocaleString()}원
+                      </span>
+                    </div>
+                    {discount && (
+                      <div className="inline-block px-3 py-1 bg-red-50 text-red-600 text-sm font-semibold rounded-full">
+                        {discount}% 할인
+                      </div>
                     )}
                   </div>
                 )}
                 {!originalPrice && (
-                  <span className="text-3xl font-bold">
+                  <span className="text-3xl font-bold text-foreground">
                     {displayPrice.toLocaleString()}원
                   </span>
                 )}
               </div>
             </div>
 
-            <Button size="lg" onClick={onPaymentClick} className="w-full">
+            <Button size="lg" onClick={onPaymentClick} className="w-full h-12 text-base font-semibold">
               수강 신청하기
             </Button>
 
-            <p className="text-xs text-muted-foreground text-center">
+            <p className="text-xs text-muted-foreground text-center leading-relaxed">
               수강 신청 후 바로 시작할 수 있습니다
             </p>
           </div>

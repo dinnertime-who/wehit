@@ -8,11 +8,13 @@ import {
 } from "@/shared/constants/display.constant";
 import { convertServiceToClassItem } from "@/utils/display";
 import { ClassListSection } from "./class-list-section";
+import { MiddleBanner } from "./middle-banner";
 
 export function DisplaySections() {
   return (
     <>
       <DisplaySection slug={RECOMMENDED_DISPLAY_SLUG} />
+      <MiddleBanner />
       <DisplaySection slug={POPULAR_DISPLAY_SLUG} />
       <DisplaySection slug={NEW_DISPLAY_SLUG} />
     </>

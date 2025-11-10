@@ -1,12 +1,13 @@
 "use client";
 
-import Link from "next/link";
-import { Plus } from "lucide-react";
 import {
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { Plus } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -15,7 +16,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import { useServices } from "@/hooks/apis/services/use-services";
 import { cn } from "@/lib/utils";
 import { columns } from "./columns";
@@ -23,8 +23,10 @@ import { columns } from "./columns";
 export const ServicesDataTable = () => {
   const { data: services } = useServices();
 
+  console.log(services);
+
   const table = useReactTable({
-    data: services || [],
+    data: services?.data || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -94,7 +96,7 @@ export const ServicesDataTable = () => {
         {/* Summary */}
         <div className="flex items-center justify-between border shadow-sm rounded-b-lg bg-card px-6 py-4">
           <div className="text-sm text-muted-foreground font-medium">
-            총 {services?.length || 0}개 서비스
+            총 {services?.pagination.total || 0}개 서비스
           </div>
         </div>
       </div>

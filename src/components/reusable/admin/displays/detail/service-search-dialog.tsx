@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
 import { z } from "zod";
+import { useAppForm } from "@/components/reusable/forms/app-form/app-form";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,10 +12,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useAppForm } from "@/components/reusable/forms/app-form/app-form";
-import { useServices } from "@/hooks/apis/services/use-services";
 import { useAddDisplayService } from "@/hooks/apis/displays/use-add-display-service";
-import { toast } from "sonner";
+import { useServices } from "@/hooks/apis/services/use-services";
 
 const serviceSearchSchema = z.object({
   serviceId: z.string().min(1, "서비스를 선택해주세요"),
@@ -33,12 +33,12 @@ export const ServiceSearchDialog = ({
   open,
   onOpenChange,
 }: Props) => {
-  const { data: services = [] } = useServices();
+  const { data: services } = useServices();
   const addMutation = useAddDisplayService(displayId);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredServices = services.filter((service) =>
-    service.title.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredServices = services.data.filter((service) =>
+    service.title.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const form = useAppForm({
@@ -90,10 +90,11 @@ export const ServiceSearchDialog = ({
           <form.AppForm>
             {/* 서비스 검색 */}
             <div className="space-y-2">
-              <label className="text-sm font-medium">
+              <label htmlFor="search-input" className="text-sm font-medium">
                 서비스 검색<span className="text-red-500 ml-1">*</span>
               </label>
               <input
+                id="search-input"
                 type="text"
                 placeholder="서비스명으로 검색..."
                 value={searchTerm}
@@ -106,7 +107,10 @@ export const ServiceSearchDialog = ({
             <form.AppField name="serviceId">
               {(field) => (
                 <div className="space-y-2">
-                  <label htmlFor="service-select" className="text-sm font-medium">
+                  <label
+                    htmlFor="service-select"
+                    className="text-sm font-medium"
+                  >
                     선택된 서비스<span className="text-red-500 ml-1">*</span>
                   </label>
                   <select

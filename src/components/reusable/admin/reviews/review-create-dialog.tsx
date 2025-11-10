@@ -4,6 +4,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { useAppForm } from "@/components/reusable/forms/app-form/app-form";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -13,10 +14,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -24,9 +23,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { useAdminCreateReview } from "@/hooks/apis/admin/use-admin-create-review";
-import { servicesQueryOptions } from "@/hooks/apis/services/use-services";
-import { useQuery } from "@tanstack/react-query";
+import { useServices } from "@/hooks/apis/services/use-services";
 
 const reviewFormSchema = z.object({
   serviceId: z.string().min(1, "서비스를 선택해주세요"),
@@ -48,7 +47,7 @@ type Props = {
 export const ReviewCreateDialog = ({ children }: Props) => {
   const [open, setOpen] = useState(false);
   const createMutation = useAdminCreateReview();
-  const { data: services } = useQuery(servicesQueryOptions());
+  const { data: services } = useServices();
 
   const form = useAppForm({
     defaultValues: {
@@ -113,7 +112,7 @@ export const ReviewCreateDialog = ({ children }: Props) => {
                     <SelectValue placeholder="서비스를 선택하세요" />
                   </SelectTrigger>
                   <SelectContent>
-                    {services?.map((service) => (
+                    {services?.data.map((service) => (
                       <SelectItem key={service.id} value={service.id}>
                         {service.title}
                       </SelectItem>
@@ -238,4 +237,3 @@ export const ReviewCreateDialog = ({ children }: Props) => {
     </Dialog>
   );
 };
-

@@ -1,29 +1,56 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Spinner } from "@/components/ui/spinner";
+import { useSession } from "@/hooks/apis/auth/use-session";
 import { useCreateOrder } from "@/hooks/apis/orders/use-create-order";
 import { useService } from "@/hooks/apis/services/use-service";
 import { useSiteSetting } from "@/hooks/apis/site-settings/use-site-setting";
+import { isProfileCompleted } from "@/utils/user";
 
 export function OrderPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const serviceId = searchParams.get("serviceId");
+  const [showProfileDialog, setShowProfileDialog] = useState(false);
 
   const createOrderMutation = useCreateOrder();
   const { data: siteSetting } = useSiteSetting("site-account");
   const { data: service, isLoading: isServiceLoading } = useService(
     serviceId || "",
   );
+  const { data: session } = useSession();
 
   const handleOrder = async () => {
     if (!serviceId || !service) {
       toast.error("서비스를 선택해주세요");
       return;
+    }
+
+    // 추가 정보 체크
+    if (session?.user) {
+      const user = session.user as {
+        phone?: string | null;
+        birthDate?: string | Date | null;
+        gender?: string | null;
+        profileCompleted?: boolean | null;
+      };
+      if (!isProfileCompleted(user)) {
+        setShowProfileDialog(true);
+        return;
+      }
     }
 
     const order = await createOrderMutation.mutateAsync({
@@ -40,6 +67,11 @@ export function OrderPageContent() {
     });
 
     router.push(`/order/complete?orderId=${order.id}`);
+  };
+
+  const handleGoToAdditionalInfo = () => {
+    setShowProfileDialog(false);
+    router.push("/additional-info");
   };
 
   if (!serviceId) {
@@ -175,6 +207,31 @@ export function OrderPageContent() {
           </div>
         </div>
       </div>
+
+      {/* 추가 정보 입력 안내 다이얼로그 */}
+      <Dialog open={showProfileDialog} onOpenChange={setShowProfileDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>추가 정보 입력 필요</DialogTitle>
+            <DialogDescription>
+              서비스 구매를 위해 추가 정보 입력이 필요합니다.
+              <br />
+              전화번호, 생년월일, 성별을 입력해주세요.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setShowProfileDialog(false)}
+            >
+              취소
+            </Button>
+            <Button onClick={handleGoToAdditionalInfo}>
+              추가 정보 입력하기
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

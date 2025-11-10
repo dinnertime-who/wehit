@@ -18,17 +18,17 @@ export const ServiceDetail = ({ service, reviews }: Props) => {
 
   return (
     <>
-      <div className="space-y-16">
+      <div className="space-y-20">
         <ServiceDetailHero
           service={service}
           onPaymentClick={() => setIsPaymentOpen(true)}
         />
 
-        <div className="border-t pt-12">
+        <div className="border-t border-border/50 pt-16">
           <ServiceDetailDescription description={service.description} />
         </div>
 
-        <div className="border-t pt-12">
+        <div className="border-t border-border/50 pt-16">
           <ServiceDetailReviews reviews={reviews} />
         </div>
       </div>

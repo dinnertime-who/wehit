@@ -6,7 +6,17 @@ export const servicesQueryOptions = () =>
   queryOptions({
     queryKey: ["services"] as const,
     queryFn: async () => {
-      return kyClient.get("services").json<Service[]>();
+      return kyClient
+        .get("services")
+        .json<{
+          data: Service[];
+          pagination: {
+            total: number;
+            page: number;
+            limit: number;
+            totalPages: number;
+          };
+        }>();
     },
   });
 

@@ -1,4 +1,4 @@
-import { boolean, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, date, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { createdAt, cuidPrimaryKey, updatedAt } from "./_core";
 
 export const user = pgTable("user", {
@@ -11,6 +11,10 @@ export const user = pgTable("user", {
   banned: boolean("banned").default(false),
   banReason: text("ban_reason"),
   banExpires: timestamp("ban_expires"),
+  phone: text("phone"),
+  birthDate: date("birth_date"),
+  gender: text("gender"),
+  profileCompleted: boolean("profile_completed").default(false).notNull(),
   createdAt: createdAt(),
   updatedAt: updatedAt(),
 });
