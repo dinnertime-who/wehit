@@ -8,6 +8,16 @@ export type DisplayWithServices = Display & {
   services: DisplayServiceRecord[];
 };
 
+export type ServiceWithReviewStats = Service & {
+  reviewCount: number;
+  rating: number; // 평균 평점
+  order: number; // display_service의 order
+};
+
+export type DisplayWithServiceDetails = Display & {
+  services: ServiceWithReviewStats[];
+};
+
 export type CreateDisplayInput = Omit<
   typeof display.$inferInsert,
   "id" | "createdAt" | "updatedAt"

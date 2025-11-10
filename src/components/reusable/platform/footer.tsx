@@ -123,8 +123,8 @@ export function Footer() {
               통신판매업신고: 2024-서울강남-12345 | 주소: 서울특별시 강남구
               테헤란로 123
             </p>
-            <p>고객센터: 1234-5678 | 이메일: help@taling.me</p>
-            <p className="mt-4">© 2025 Taling. All rights reserved.</p>
+            <p>고객센터: 1234-5678 | 이메일: help@wehit.me</p>
+            <p className="mt-4">© 2025 Wehit. All rights reserved.</p>
           </div>
         </div>
       </div>

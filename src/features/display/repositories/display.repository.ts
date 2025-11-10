@@ -1,12 +1,14 @@
 import "server-only";
 
-import { eq, and } from "drizzle-orm";
+import { eq, and, sql, inArray } from "drizzle-orm";
 import { db } from "@/infrastructure/db/drizzle";
-import { display, displayService, service } from "@/infrastructure/db/schema";
+import { display, displayService, service, review } from "@/infrastructure/db/schema";
 import type {
   Display,
   DisplayServiceRecord,
   DisplayWithServices,
+  DisplayWithServiceDetails,
+  ServiceWithReviewStats,
   CreateDisplayInput,
   UpdateDisplayInput,
   AddServiceToDisplayInput,
@@ -98,5 +100,76 @@ export class DisplayRepository implements IDisplayRepository {
         ),
       );
     return result[0] ?? null;
+  }
+
+  async getDisplayWithServiceDetailsBySlug(
+    slug: string,
+  ): Promise<DisplayWithServiceDetails | null> {
+    // 1. Display 조회
+    const displayData = await this.getDisplayBySlug(slug);
+    if (!displayData) return null;
+
+    // 2. Display의 services 조회 (join table)
+    const displayServices = await db
+      .select({
+        displayService: displayService,
+        service: service,
+      })
+      .from(displayService)
+      .innerJoin(service, eq(displayService.serviceId, service.id))
+      .where(eq(displayService.displayId, displayData.id))
+      .orderBy(displayService.order);
+
+    // 3. 각 Service의 리뷰 통계 계산
+    const serviceIds = displayServices.map((ds) => ds.service.id);
+
+    if (serviceIds.length === 0) {
+      return {
+        ...displayData,
+        services: [],
+      };
+    }
+
+    // 리뷰 집계 쿼리
+    const reviewStats = await db
+      .select({
+        serviceId: review.serviceId,
+        reviewCount: sql<number>`count(*)::int`,
+        rating: sql<number>`coalesce(avg(${review.rating})::numeric, 0)`,
+      })
+      .from(review)
+      .where(inArray(review.serviceId, serviceIds))
+      .groupBy(review.serviceId);
+
+    // ServiceId를 키로 하는 맵 생성
+    const statsMap = new Map(
+      reviewStats.map((stat) => {
+        const rawRating = Number(stat.rating);
+        // 소수점 1자리에서 반올림
+        const roundedRating = Math.round(rawRating * 10) / 10;
+        return [
+          stat.serviceId,
+          {
+            reviewCount: stat.reviewCount,
+            rating: roundedRating,
+          },
+        ];
+      }),
+    );
+
+    // 4. Service 정보와 리뷰 통계 결합
+    const servicesWithStats: ServiceWithReviewStats[] = displayServices.map(
+      ({ service: svc, displayService: ds }) => ({
+        ...svc,
+        reviewCount: statsMap.get(svc.id)?.reviewCount ?? 0,
+        rating: statsMap.get(svc.id)?.rating ?? 0,
+        order: ds.order,
+      }),
+    );
+
+    return {
+      ...displayData,
+      services: servicesWithStats,
+    };
   }
 }

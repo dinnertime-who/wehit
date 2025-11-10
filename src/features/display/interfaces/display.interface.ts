@@ -2,6 +2,7 @@ import type {
   Display,
   DisplayServiceRecord,
   DisplayWithServices,
+  DisplayWithServiceDetails,
   CreateDisplayInput,
   UpdateDisplayInput,
   AddServiceToDisplayInput,
@@ -24,6 +25,9 @@ export interface IDisplayRepository {
     displayId: string,
     order: number,
   ): Promise<DisplayServiceRecord | null>;
+  getDisplayWithServiceDetailsBySlug(
+    slug: string,
+  ): Promise<DisplayWithServiceDetails | null>;
 }
 
 export interface IDisplayService {
@@ -37,6 +41,9 @@ export interface IDisplayService {
 
   // Display with services
   getDisplayWithServices(displayId: string): Promise<DisplayWithServices | null>;
+  getDisplayWithServiceDetailsBySlug(
+    slug: string,
+  ): Promise<DisplayWithServiceDetails | null>;
 
   // Display-Service operations
   addServiceToDisplay(data: AddServiceToDisplayInput): Promise<DisplayServiceRecord>;

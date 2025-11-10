@@ -4,6 +4,7 @@ import type {
   Display,
   DisplayServiceRecord,
   DisplayWithServices,
+  DisplayWithServiceDetails,
   CreateDisplayInput,
   UpdateDisplayInput,
   AddServiceToDisplayInput,
@@ -76,5 +77,11 @@ export class DisplayService implements IDisplayService {
 
   async getDisplayServices(displayId: string): Promise<DisplayServiceRecord[]> {
     return this.repository.getDisplayServices(displayId);
+  }
+
+  async getDisplayWithServiceDetailsBySlug(
+    slug: string,
+  ): Promise<DisplayWithServiceDetails | null> {
+    return this.repository.getDisplayWithServiceDetailsBySlug(slug);
   }
 }
