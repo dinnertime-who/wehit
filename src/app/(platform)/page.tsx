@@ -1,14 +1,15 @@
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import { MainHeroBanner } from "@/components/reusable/platform/main-hero-banner";
 import { DisplaySections } from "@/components/reusable/platform/display-sections";
+import { MainHeroBanner } from "@/components/reusable/platform/main-hero-banner";
 import { makeQueryClient } from "@/config/react-query/query-client";
 import { bannerBySlugQueryOptions } from "@/hooks/apis/banners/use-banner-by-slug";
 import { displayBySlugQueryOptions } from "@/hooks/apis/displays/use-display-by-slug";
+import { tryCatch } from "@/lib/try-catch";
 import { MAIN_HERO_BANNER_SLUG } from "@/shared/constants/banner.constant";
 import {
-  RECOMMENDED_DISPLAY_SLUG,
-  POPULAR_DISPLAY_SLUG,
   NEW_DISPLAY_SLUG,
+  POPULAR_DISPLAY_SLUG,
+  RECOMMENDED_DISPLAY_SLUG,
 } from "@/shared/constants/display.constant";
 
 export const dynamic = "force-dynamic";
@@ -17,9 +18,11 @@ export default async function PlatformHomePage() {
   const queryClient = makeQueryClient();
 
   // Banner prefetch
-  await queryClient.ensureQueryData(
-    bannerBySlugQueryOptions(MAIN_HERO_BANNER_SLUG),
-  );
+  await tryCatch(async () => {
+    return await queryClient.ensureQueryData(
+      bannerBySlugQueryOptions(MAIN_HERO_BANNER_SLUG),
+    );
+  });
 
   // Display prefetch
   const displaySlugs = [

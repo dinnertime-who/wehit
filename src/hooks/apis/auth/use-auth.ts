@@ -24,6 +24,23 @@ export const useAuth = () => {
     },
   });
 
+  const signUpEmail = useMutation({
+    mutationFn: ({
+      email,
+      password,
+      name,
+    }: {
+      email: string;
+      password: string;
+      name: string;
+    }) => {
+      return authClient.signUp.email({ email, password, name });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: sessionQueryOptions.queryKey });
+    },
+  });
+
   const signOut = useMutation({
     mutationFn: () => {
       return authClient.signOut();
@@ -36,6 +53,7 @@ export const useAuth = () => {
   return {
     oauth,
     emailPassword,
+    signUpEmail,
     signOut,
   };
 };
