@@ -32,24 +32,24 @@ export function MobileSidebar({ open, onOpenChange }: Props) {
   const navItems = [
     {
       label: "서비스 목록",
-      href: "/service",
+      href: "/service" as const,
       icon: ShoppingBag,
     },
-  ];
+  ] as const;
 
   const userNavItems = session
-    ? [
+    ? ([
         {
           label: "마이페이지",
-          href: "/mypage",
+          href: "/mypage" as const,
           icon: User,
         },
         {
           label: "구매 내역",
-          href: "/mypage/purchase-history",
+          href: "/mypage/purchase-history" as const,
           icon: ShoppingBag,
         },
-      ]
+      ] as const)
     : [];
 
   return (
