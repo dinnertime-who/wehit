@@ -126,7 +126,7 @@ export function PurchaseDetailContent({ orderId }: Props) {
                 key={item.id}
                 className="flex gap-4 p-4 border rounded-lg"
               >
-                <div className="relative w-24 h-24 flex-shrink-0">
+                <div className="relative w-24 h-24 shrink-0">
                   <Image
                     src={item.service.coverImageUrl}
                     alt={item.service.title}

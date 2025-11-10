@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { useAppForm } from "@/components/reusable/forms/app-form/app-form";
@@ -33,7 +33,8 @@ const bannerItemFormSchema = z.object({
       "파일 크기는 50MB 이하여야 합니다",
     )
     .refine(
-      (file) => ["video/mp4", "video/webm", "video/quicktime"].includes(file.type),
+      (file) =>
+        ["video/mp4", "video/webm", "video/quicktime"].includes(file.type),
       "MP4, WEBM, MOV 형식만 지원됩니다",
     )
     .nullable()
@@ -90,13 +91,17 @@ export const BannerItemForm = ({
 
         // 새 이미지가 선택된 경우 업로드
         if (value.image) {
-          const uploadResult = await uploadImageMutation.mutateAsync(value.image);
+          const uploadResult = await uploadImageMutation.mutateAsync(
+            value.image,
+          );
           imageUrl = uploadResult.imageUrl;
         }
 
         // 새 영상이 선택된 경우 업로드
         if (value.video) {
-          const uploadResult = await uploadVideoMutation.mutateAsync(value.video);
+          const uploadResult = await uploadVideoMutation.mutateAsync(
+            value.video,
+          );
           videoUrl = uploadResult.videoUrl;
         }
 
@@ -147,109 +152,114 @@ export const BannerItemForm = ({
   };
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        form.handleSubmit();
-      }}
-      className="space-y-6"
-    >
-      <form.AppForm>
-        <form.Fieldset className="space-y-6">
-          {/* 이미지 필드 */}
-          <form.AppField name="image">
-            {(field) => (
-              <field.ImageField
-                label={mode === "edit" ? "새 이미지 (선택)" : "배너 이미지"}
-                required={mode === "create"}
-                aspectRatio={`${banner.widthRatio}/${banner.heightRatio}`}
-              />
-            )}
-          </form.AppField>
+    <>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          form.handleSubmit();
+        }}
+        className="space-y-6"
+      >
+        <form.AppForm>
+          <form.Fieldset className="space-y-6">
+            {/* 이미지 필드 */}
+            <form.AppField name="image">
+              {(field) => (
+                <field.ImageField
+                  label={mode === "edit" ? "새 이미지 (선택)" : "배너 이미지"}
+                  required={mode === "create"}
+                  aspectRatio={`${banner.widthRatio}/${banner.heightRatio}`}
+                />
+              )}
+            </form.AppField>
 
-          {/* 영상 필드 */}
-          <form.AppField name="video">
-            {(field) => (
-              <field.VideoField
-                label={mode === "edit" ? "새 영상 (선택)" : "배너 영상 (선택)"}
-                defaultPreview={item?.videoUrl || undefined}
-              />
-            )}
-          </form.AppField>
+            {/* 영상 필드 */}
+            <form.AppField name="video">
+              {(field) => (
+                <field.VideoField
+                  label={
+                    mode === "edit" ? "새 영상 (선택)" : "배너 영상 (선택)"
+                  }
+                  defaultPreview={item?.videoUrl || undefined}
+                />
+              )}
+            </form.AppField>
 
-          {/* 링크 URL */}
-          <form.AppField name="linkUrl">
-            {(field) => (
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <label className="text-sm font-medium">
-                    클릭 링크 URL<span className="text-red-500 ml-1">*</span>
-                  </label>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setIsServiceLinkDialogOpen(true)}
-                  >
-                    서비스 검색
-                  </Button>
+            {/* 링크 URL */}
+            <form.AppField name="linkUrl">
+              {(field) => (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium">
+                      클릭 링크 URL<span className="text-red-500 ml-1">*</span>
+                    </span>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setIsServiceLinkDialogOpen(true)}
+                    >
+                      서비스 검색
+                    </Button>
+                  </div>
+                  <field.TextField
+                    label="클릭 링크 URL"
+                    placeholder="https://example.com 또는 /service/123"
+                    required
+                  />
                 </div>
-                <field.TextField
-                  placeholder="https://example.com 또는 /service/123"
+              )}
+            </form.AppField>
+
+            {/* 순서 */}
+            <form.AppField name="order">
+              {(field) => (
+                <field.NumberField
+                  label="표시 순서"
+                  placeholder="0"
+                  step="1"
+                  min="0"
                   required
                 />
-              </div>
-            )}
-          </form.AppField>
-
-          {/* 순서 */}
-          <form.AppField name="order">
-            {(field) => (
-              <field.NumberField
-                label="표시 순서"
-                placeholder="0"
-                step="1"
-                min="0"
-                required
-              />
-            )}
-          </form.AppField>
-
-          {/* 날짜 필드 */}
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <form.AppField name="viewStartDate">
-              {(field) => <field.DateField label="노출 시작일 (선택)" />}
+              )}
             </form.AppField>
 
-            <form.AppField name="viewEndDate">
-              {(field) => <field.DateField label="노출 종료일 (선택)" />}
-            </form.AppField>
+            {/* 날짜 필드 */}
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <form.AppField name="viewStartDate">
+                {(field) => <field.DateField label="노출 시작일 (선택)" />}
+              </form.AppField>
+
+              <form.AppField name="viewEndDate">
+                {(field) => <field.DateField label="노출 종료일 (선택)" />}
+              </form.AppField>
+            </div>
+          </form.Fieldset>
+
+          {/* 버튼 */}
+          <div className="grid grid-cols-2 gap-3 justify-end pt-6">
+            {onClose && (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={onClose}
+                className="w-full cursor-pointer px-4 py-2 text-sm rounded-md border hover:bg-muted"
+              >
+                취소
+              </Button>
+            )}
+            <form.SubmitButton>
+              {mode === "create" ? "생성" : "수정"}
+            </form.SubmitButton>
           </div>
-        </form.Fieldset>
+        </form.AppForm>
+      </form>
 
-        {/* 버튼 */}
-        <div className="grid grid-cols-2 gap-3 justify-end pt-6">
-          {onClose && (
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onClose}
-              className="w-full cursor-pointer px-4 py-2 text-sm rounded-md border hover:bg-muted"
-            >
-              취소
-            </Button>
-          )}
-          <form.SubmitButton>
-            {mode === "create" ? "생성" : "수정"}
-          </form.SubmitButton>
-        </div>
-      </form.AppForm>
-    </form>
-
-    <ServiceLinkDialog
-      open={isServiceLinkDialogOpen}
-      onOpenChange={setIsServiceLinkDialogOpen}
-      onSelect={handleServiceSelect}
-    />
+      <ServiceLinkDialog
+        open={isServiceLinkDialogOpen}
+        onOpenChange={setIsServiceLinkDialogOpen}
+        onSelect={handleServiceSelect}
+      />
+    </>
   );
 };
