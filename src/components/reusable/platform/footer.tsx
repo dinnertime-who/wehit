@@ -8,9 +8,9 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* 회사 정보 */}
           <div>
-            <h3 className="font-bold text-lg mb-4">WeHit</h3>
+            <h3 className="font-bold text-lg mb-4">WiHit</h3>
             <p className="text-sm text-muted-foreground">
-              배움을 재밌게, WeHit!
+              배움을 재밌게, WiHit!
             </p>
             <div className="flex space-x-4 mt-4">
               <Link
@@ -117,14 +117,14 @@ export function Footer() {
         <div className="border-t pt-8">
           <div className="text-sm text-muted-foreground space-y-2">
             <p>
-              상호명: (주)WeHit | 대표자: 홍길동 | 사업자등록번호: 123-45-67890
+              상호명: (주)Wihit | 대표자: 홍길동 | 사업자등록번호: 123-45-67890
             </p>
             <p>
               통신판매업신고: 2024-서울강남-12345 | 주소: 서울특별시 강남구
               테헤란로 123
             </p>
-            <p>고객센터: 1234-5678 | 이메일: help@wehit.me</p>
-            <p className="mt-4">© 2025 Wehit. All rights reserved.</p>
+            <p>고객센터: 1234-5678 | 이메일: help@wihit.me</p>
+            <p className="mt-4">© 2025 Wihit. All rights reserved.</p>
           </div>
         </div>
       </div>

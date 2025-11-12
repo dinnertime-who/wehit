@@ -15,6 +15,27 @@ const mainHeroBannerImages = [
   "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1920&h=400&fit=crop",
   "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=1920&h=400&fit=crop",
   "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1920&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1920&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1920&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1920&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1920&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1506157786151-b8491531f063?w=1920&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1762255421012-9fd499621e7e?w=1920&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1920&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=1920&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1920&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1920&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1920&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1920&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1920&h=400&fit=crop",
+];
+
+const mainHeroBannerItemNames = [
+  "[블로그]",
+  "[유튜브]",
+  "[인스타그램]",
+  "[틱톡]",
 ];
 
 // Unsplash 이미지 URL (1200x400 크기의 중간 배너용 이미지)
@@ -55,6 +76,9 @@ export async function seedBanner() {
         imageUrl,
         linkUrl: "/",
         order: index,
+        name: mainHeroBannerItemNames[
+          Math.floor(Math.random() * mainHeroBannerItemNames.length)
+        ],
       }),
     );
 

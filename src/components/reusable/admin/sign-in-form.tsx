@@ -7,7 +7,7 @@ export const SignInForm = () => {
   return (
     <Card className="w-full max-w-md">
       <CardHeader>
-        <CardTitle>WeHit 관리자 로그인</CardTitle>
+        <CardTitle>WiHit 관리자 로그인</CardTitle>
       </CardHeader>
       <CardContent>
         <SignInAppForm redirectTo="/admin" />

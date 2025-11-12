@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
     await transporter.sendMail({
       from: serverEnv.SMTP_USER,
       to: email,
-      subject: "[WeHit] 이메일 인증번호",
+      subject: "[WiHit] 이메일 인증번호",
       html: emailHtml,
     });
 

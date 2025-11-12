@@ -4,7 +4,7 @@ import { SignInForm } from "@/components/reusable/platform/sign-in-form";
 
 export default function SignInPage() {
   return (
-    <div className="flex min-h-[calc(100vh-var(--header-height))] items-center justify-center bg-gray-50 px-4">
+    <div className="flex min-h-screen py-20 items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-md space-y-8">
         {/* 헤더 */}
         <div className="text-center">

@@ -78,7 +78,7 @@
   --sidebar-ring: oklch(0.708 0 0);
 
   --app-container-width: calc(var(--spacing) * 320);
-  --header-height: calc(var(--spacing) * 20);
+  --header-height: calc(var(--spacing) * 32);
 }
 
 .dark {
@@ -135,6 +135,12 @@
 @utility text-heading-3 {
   font-size: 1.25rem;
   line-height: 1.75rem;
+  font-weight: 600;
+}
+
+@utility text-heading-5 {
+  font-size: 1rem;
+  line-height: 1.625rem;
   font-weight: 600;
 }
 

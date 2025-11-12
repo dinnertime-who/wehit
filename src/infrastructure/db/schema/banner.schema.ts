@@ -10,6 +10,7 @@ export const displayDeviceEnum = pgEnum("display_device", [
 export const banner = pgTable("banner", {
   id: cuidPrimaryKey(),
   slug: text("slug").notNull().unique(),
+  name: text("name"),
   widthRatio: integer("width_ratio").notNull(),
   heightRatio: integer("height_ratio").notNull(),
   displayDevice: displayDeviceEnum("display_device").notNull(),
@@ -24,6 +25,7 @@ export const bannerItem = pgTable("banner_item", {
     .references(() => banner.id, { onDelete: "cascade" }),
   imageUrl: text("image_url").notNull(),
   videoUrl: text("video_url"), // 영상 URL (선택)
+  name: text("name"),
   linkUrl: text("link_url").notNull(),
   order: integer("order").notNull(),
   viewStartDate: timestamp("view_start_date"),
