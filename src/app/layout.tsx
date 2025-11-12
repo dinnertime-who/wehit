@@ -23,9 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body
-        className={`${pretendard.className} ${pretendard.variable} antialiased `}
-      >
+      <body className={`${pretendard.className} ${pretendard.variable}`}>
         <ViewTransition>
           <ReactQueryProvider>
             <NuqsAdapter>{children}</NuqsAdapter>

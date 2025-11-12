@@ -4,6 +4,7 @@ import { ClassPreviewSection } from "@/components/reusable/platform/class-previe
 import { CtaBanner } from "@/components/reusable/platform/cta-banner";
 import { DisplaySection } from "@/components/reusable/platform/display-sections";
 import { ExampleInfluencers } from "@/components/reusable/platform/example-influencers";
+import { ExpertSection } from "@/components/reusable/platform/expert-section";
 import { MainHeroBanner } from "@/components/reusable/platform/main-hero-banner";
 import { MainMiddleBanner } from "@/components/reusable/platform/main-middle-banner";
 import { TextSection } from "@/components/reusable/platform/text-section";
@@ -88,6 +89,8 @@ export default async function PlatformHomePage() {
           />
           <ExampleInfluencers />
         </div>
+
+        <ExpertSection />
 
         <CtaBanner />
       </HydrationBoundary>
