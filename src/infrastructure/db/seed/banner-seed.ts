@@ -20,7 +20,7 @@ const mainHeroBannerImages = [
 // Unsplash 이미지 URL (1200x400 크기의 중간 배너용 이미지)
 const middleBannerImages = [
   "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1526374965328-7f61d4f18ac5?w=1200&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1200&h=400&fit=crop",
   "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=400&fit=crop",
   "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1200&h=400&fit=crop",
 ];
@@ -138,6 +138,34 @@ export async function seedBanner() {
           "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
         linkUrl: "/service",
       },
+      {
+        imageUrl:
+          "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=300&h=400&fit=crop",
+        videoUrl:
+          "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        linkUrl: "/service",
+      },
+      {
+        imageUrl:
+          "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=300&h=400&fit=crop",
+        videoUrl:
+          "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        linkUrl: "/service",
+      },
+      {
+        imageUrl:
+          "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=300&h=400&fit=crop",
+        videoUrl:
+          "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        linkUrl: "/service",
+      },
+      {
+        imageUrl:
+          "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=300&h=400&fit=crop",
+        videoUrl:
+          "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        linkUrl: "/service",
+      },
     ];
 
     const weeklyTrendBannerItemsToInsert = weeklyTrendBannerItems.map(
@@ -155,7 +183,9 @@ export async function seedBanner() {
       .values(weeklyTrendBannerItemsToInsert)
       .returning();
 
-    console.log(`✓ Created ${createdWeeklyTrendItems.length} weekly trend banner items`);
+    console.log(
+      `✓ Created ${createdWeeklyTrendItems.length} weekly trend banner items`,
+    );
     console.log("✅ Banner seed completed successfully");
 
     return {

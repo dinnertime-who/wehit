@@ -21,82 +21,90 @@ const influencers = [
 
 export function ExampleInfluencers() {
   return (
-    <section className="py-6 lg:py-12">
-      <div className="space-y-4">
-        <Swiper
-          speed={6000}
-          loop={true}
-          className=""
-          modules={[Autoplay]}
-          centeredSlides={true}
-          slidesPerView={"auto"}
-          freeMode={true}
-          spaceBetween={10}
-          allowTouchMove={false}
-          autoplay={{
-            delay: 1,
-            disableOnInteraction: false,
-          }}
-        >
-          {[
-            ...influencers,
-            ...influencers,
-            ...influencers,
-            ...influencers,
-            ...influencers,
-            ...influencers,
-            ...influencers,
-            ...influencers,
-            ...influencers,
-          ].map((influencer) => (
-            <SwiperSlide key={influencer.id} style={{ width: "max-content" }}>
-              <Image
-                src={influencer.image}
-                alt={influencer.name}
-                width={230}
-                height={300}
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
+    <section className="mt-28 py-4">
+      <div className="space-y-10">
+        <div className="py-4">
+          <Swiper
+            speed={10000}
+            loop={true}
+            modules={[Autoplay]}
+            centeredSlides={true}
+            slidesPerView={"auto"}
+            freeMode={true}
+            spaceBetween={20}
+            allowTouchMove={false}
+            autoplay={{
+              delay: 1,
+              disableOnInteraction: false,
+            }}
+          >
+            {[
+              ...influencers,
+              ...influencers,
+              ...influencers,
+              ...influencers,
+              ...influencers,
+              ...influencers,
+              ...influencers,
+              ...influencers,
+              ...influencers,
+            ].map((influencer, index) => (
+              <SwiperSlide
+                key={`${influencer.id}-${index}`}
+                style={{ width: "max-content" }}
+              >
+                <Image
+                  src={influencer.image}
+                  alt={influencer.name}
+                  width={230}
+                  height={300}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
 
-        <Swiper
-          speed={6500}
-          loop={true}
-          className=""
-          modules={[Autoplay]}
-          centeredSlides={true}
-          slidesPerView={"auto"}
-          freeMode={true}
-          spaceBetween={10}
-          allowTouchMove={false}
-          autoplay={{
-            delay: 1,
-            disableOnInteraction: false,
-            reverseDirection: true,
-          }}
-        >
-          {[
-            ...influencers,
-            ...influencers,
-            ...influencers,
-            ...influencers,
-            ...influencers,
-            ...influencers,
-            ...influencers,
-            ...influencers,
-            ...influencers,
-          ].map((influencer) => (
-            <SwiperSlide key={influencer.id} style={{ width: "max-content" }}>
-              <Image
-                src={influencer.image}
-                alt={influencer.name}
-                width={230}
-                height={300}
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        <div className="py-4 ">
+          <Swiper
+            speed={10000}
+            loop={true}
+            modules={[Autoplay]}
+            centeredSlides={true}
+            slidesPerView={"auto"}
+            freeMode={true}
+            spaceBetween={20}
+            allowTouchMove={false}
+            autoplay={{
+              delay: 1,
+              disableOnInteraction: false,
+              reverseDirection: true,
+            }}
+          >
+            {[
+              ...influencers,
+              ...influencers,
+              ...influencers,
+              ...influencers,
+              ...influencers,
+              ...influencers,
+              ...influencers,
+              ...influencers,
+              ...influencers,
+            ].map((influencer, index) => (
+              <SwiperSlide
+                key={`${influencer.id}-${index}`}
+                style={{ width: "max-content" }}
+              >
+                <Image
+                  src={influencer.image}
+                  alt={influencer.name}
+                  width={230}
+                  height={300}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
       </div>
     </section>
   );

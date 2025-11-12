@@ -9,12 +9,12 @@ export function TextSection({ title, className = "" }: Props) {
   const titleLines = Array.isArray(title) ? title : [title];
 
   return (
-    <section className={`app-container text-center py-6 lg:py-12 ${className}`}>
-      <div className="flex flex-col gap-4">
+    <section className={`app-container text-center mt-20 mb-6 ${className}`}>
+      <div className="flex flex-col gap-5">
         {titleLines.map((line) => (
           <h2
             key={line}
-            className="text-lg md:text-2xl lg:text-3xl font-bold leading-tight"
+            className="text-lg md:text-2xl lg:text-3xl font-extrabold leading-tight"
           >
             {line}
           </h2>

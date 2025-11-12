@@ -63,11 +63,8 @@ export async function seedDisplay() {
     }[] = [];
 
     for (const disp of createdDisplays) {
-      // 각 display에 6-8개의 서비스를 랜덤하게 할당 (40개 서비스 활용)
-      const serviceCount = Math.min(
-        6 + Math.floor(Math.random() * 3), // 6-8
-        services.length,
-      );
+      // 각 display에 12개의 서비스를 랜덤하게 할당 (40개 서비스 활용)
+      const serviceCount = 12;
 
       // 서비스 배열을 섞어서 랜덤하게 선택
       const shuffledServices = [...services].sort(() => Math.random() - 0.5);

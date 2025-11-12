@@ -57,9 +57,9 @@ export const ClassCard = ({
           {category}
         </Badge>
 
-        <h3 className="text-[0.93rem] font-semibold line-clamp-1">{title}</h3>
+        <h3 className="text-body-1 line-clamp-1">{title}</h3>
 
-        <div className="text-sm text-muted-foreground flex items-center gap-0.5">
+        <div className="text-label-1 text-muted-foreground/60 flex items-center gap-0.5">
           <span className="flex items-center gap-0.5">
             <Star className="h-3 w-3 fill-current text-yellow-500" />
             {reviewRating}
@@ -70,7 +70,7 @@ export const ClassCard = ({
         </div>
 
         <div>
-          <span className="text-xs text-muted-foreground/80 line-through">
+          <span className="text-label-1 text-muted-foreground/60 line-through">
             {originalPrice.toLocaleString()}원
           </span>
 

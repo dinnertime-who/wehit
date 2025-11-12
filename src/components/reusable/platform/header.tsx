@@ -30,6 +30,8 @@ export const Header = () => {
 
         {/* 우측 액션 버튼 */}
         <div className="flex items-center">
+          <div>엔터프라이즈</div>
+          <div>마이페이지</div>
           {!session ? (
             <Link
               href="/sign-in"
@@ -69,6 +71,16 @@ export const Header = () => {
           >
             <Menu className="h-5 w-5" />
           </Button>
+        </div>
+      </div>
+
+      <div className="app-container">
+        <div className="flex items-center justify-between">
+          <div>전체보기</div>
+          <div>VOD</div>
+          <div>온/오프라인</div>
+          <div>멤버쉽</div>
+          <div>전자책</div>
         </div>
       </div>
 

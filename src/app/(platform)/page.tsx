@@ -1,4 +1,5 @@
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { CategorySection } from "@/components/reusable/platform/category-section";
 import { ClassPreviewSection } from "@/components/reusable/platform/class-preview-section";
 import { CtaBanner } from "@/components/reusable/platform/cta-banner";
 import { DisplaySection } from "@/components/reusable/platform/display-sections";
@@ -67,18 +68,16 @@ export default async function PlatformHomePage() {
       <HydrationBoundary state={dehydrate(queryClient)}>
         <MainHeroBanner />
 
-        <div className="my-18"></div>
+        <CategorySection />
 
-        <DisplaySection slug={RECOMMENDED_DISPLAY_SLUG} />
+        <DisplaySection
+          slug={RECOMMENDED_DISPLAY_SLUG}
+          className="pt-0 lg:pt-0"
+        />
+
+        <MainMiddleBanner />
 
         <ClassPreviewSection />
-
-        {/* <MiddleBanner /> */}
-        <MainMiddleBanner />
-        <DisplaySection slug={POPULAR_DISPLAY_SLUG} />
-        <DisplaySection slug={TRENDING_DISPLAY_SLUG} />
-
-        <div className="my-18"></div>
 
         <div>
           <TextSection
@@ -89,12 +88,6 @@ export default async function PlatformHomePage() {
           />
           <ExampleInfluencers />
         </div>
-
-        <DisplaySection slug={FEATURED_DISPLAY_SLUG} />
-        <DisplaySection slug={NEW_DISPLAY_SLUG} />
-        <DisplaySection slug={POPULAR_DISPLAY_SLUG} />
-
-        <div className="my-18"></div>
 
         <CtaBanner />
       </HydrationBoundary>
