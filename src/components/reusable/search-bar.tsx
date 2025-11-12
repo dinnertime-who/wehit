@@ -26,7 +26,7 @@ export const SearchBar = () => {
   };
 
   return (
-    <Form className="w-full" action={handleSearch}>
+    <Form className="w-full max-w-[400px]" action={handleSearch}>
       <InputGroup className="bg-background">
         <InputGroupInput
           className="w-full"

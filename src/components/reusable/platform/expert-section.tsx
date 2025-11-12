@@ -28,13 +28,12 @@ export const ExpertSection = () => {
             <motion.div
               // biome-ignore lint/suspicious/noArrayIndexKey: index is not unique
               key={index}
-              initial={{ opacity: 0, scale: 0 }}
-              whileInView={{ opacity: [0, 1, 1], scale: [0, 1.125, 1] }}
+              initial={{ opacity: 0, translateY: 100 }}
+              whileInView={{ opacity: [0, 1], translateY: [100, 0] }}
               viewport={{ once: true }}
               transition={{
                 duration: 0.5,
-                delay: index * 0.25,
-                times: [0, 0.6, 1],
+                delay: Math.round(index / 8) * 0.25,
               }}
             >
               <Image

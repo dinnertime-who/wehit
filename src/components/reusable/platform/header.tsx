@@ -53,7 +53,7 @@ export const Header = () => {
         </div>
 
         {/* 우측 액션 버튼 */}
-        <div className="flex items-center text-base font-medium gap-x-5 break-keep">
+        <div className="flex items-center text-[15px] font-medium gap-x-5 break-keep">
           <div className={cn("hidden md:flex")}>엔터프라이즈</div>
           <div className={cn("hidden md:flex")}>마이페이지</div>
           <Link href="/sign-in" className={cn("hidden md:flex")}>
@@ -63,7 +63,7 @@ export const Header = () => {
             href="/sign-up"
             className={cn(
               buttonVariants({ variant: "default" }),
-              "hidden md:flex rounded-full font-black py-1.5 h-auto text-[15px]",
+              "hidden md:flex rounded-full font-bold py-1.5 h-auto text-[14px]",
             )}
           >
             회원가입
@@ -85,7 +85,7 @@ export const Header = () => {
           <button
             key={tag.value}
             type="button"
-            className="py-2.5 cursor-pointer border-b-3 transition-all duration-200 border-transparent hover:border-pink-600 data-[selected=true]:border-pink-600"
+            className="py-1.5 cursor-pointer border-b-3 transition-all duration-200 border-transparent hover:border-pink-600 data-[selected=true]:border-pink-600"
             onClick={() => setBannerTag(tag.value)}
             data-selected={bannerTag ? bannerTag === tag.value : false}
           >

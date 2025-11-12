@@ -9,26 +9,26 @@ import {
 
 // Unsplash 이미지 URL (1920x400 크기의 배너용 이미지)
 const mainHeroBannerImages = [
-  "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1506157786151-b8491531f063?w=1920&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1762255421012-9fd499621e7e?w=1920&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1920&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=1920&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1920&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1920&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1920&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1920&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1920&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1506157786151-b8491531f063?w=1920&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1762255421012-9fd499621e7e?w=1920&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1920&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=1920&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1920&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1920&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1920&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1920&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1920&h=400&fit=crop",
+  "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1280&h=370&fit=crop",
+  "https://images.unsplash.com/photo-1506157786151-b8491531f063?w=1280&h=370&fit=crop",
+  "https://images.unsplash.com/photo-1762255421012-9fd499621e7e?w=1280&h=370&fit=crop",
+  "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1280&h=370&fit=crop",
+  "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=1280&h=370&fit=crop",
+  "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1280&h=370&fit=crop",
+  "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1280&h=370&fit=crop",
+  "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1280&h=370&fit=crop",
+  "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1280&h=370&fit=crop",
+  "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1280&h=370&fit=crop",
+  "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1280&h=370&fit=crop",
+  "https://images.unsplash.com/photo-1506157786151-b8491531f063?w=1280&h=370&fit=crop",
+  "https://images.unsplash.com/photo-1762255421012-9fd499621e7e?w=1280&h=370&fit=crop",
+  "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1280&h=370&fit=crop",
+  "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=1280&h=370&fit=crop",
+  "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1280&h=370&fit=crop",
+  "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1280&h=370&fit=crop",
+  "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1280&h=370&fit=crop",
+  "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1280&h=370&fit=crop",
+  "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1280&h=370&fit=crop",
 ];
 
 const mainHeroBannerItemNames = [
@@ -61,8 +61,8 @@ export async function seedBanner() {
       .insert(banner)
       .values({
         slug: MAIN_HERO_BANNER_SLUG,
-        widthRatio: 1920,
-        heightRatio: 400,
+        widthRatio: 1280,
+        heightRatio: 370,
         displayDevice: "all",
       })
       .returning();
@@ -79,6 +79,11 @@ export async function seedBanner() {
         name: mainHeroBannerItemNames[
           Math.floor(Math.random() * mainHeroBannerItemNames.length)
         ],
+        backgroundColor:
+          "#" +
+          Math.floor(Math.random() * 16777215)
+            .toString(16)
+            .padStart(6, "0"),
       }),
     );
 

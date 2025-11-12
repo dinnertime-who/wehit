@@ -61,7 +61,7 @@ export const ClassCard = ({
 
         <div className="text-label-1 text-muted-foreground/60 flex items-center gap-0.5">
           <span className="flex items-center gap-0.5">
-            <Star className="h-3 w-3 fill-current text-yellow-500" />
+            <Star className="h-3 w-3 fill-current text-yellow-400" />
             {reviewRating}
           </span>
           <span>({reviewCount.toLocaleString()})</span>

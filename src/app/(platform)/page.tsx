@@ -5,7 +5,6 @@ import { DisplaySection } from "@/components/reusable/platform/display-sections"
 import { ExampleInfluencers } from "@/components/reusable/platform/example-influencers";
 import { ExpertSection } from "@/components/reusable/platform/expert-section";
 import { MainHeroBanner } from "@/components/reusable/platform/main-hero-banner";
-import { MainMiddleBanner } from "@/components/reusable/platform/main-middle-banner";
 import { ReviewSection } from "@/components/reusable/platform/review-section";
 import { SnsServices } from "@/components/reusable/platform/sns-services";
 import { TextSection } from "@/components/reusable/platform/text-section";
@@ -76,8 +75,6 @@ export default async function PlatformHomePage() {
           slug={RECOMMENDED_DISPLAY_SLUG}
           className="pt-0 lg:pt-0"
         />
-
-        <MainMiddleBanner />
 
         <ClassPreviewSection />
 

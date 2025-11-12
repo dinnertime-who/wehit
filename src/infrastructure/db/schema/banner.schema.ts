@@ -30,6 +30,7 @@ export const bannerItem = pgTable("banner_item", {
   order: integer("order").notNull(),
   viewStartDate: timestamp("view_start_date"),
   viewEndDate: timestamp("view_end_date"),
+  backgroundColor: text("background_color"),
   createdAt: createdAt(),
   updatedAt: updatedAt(),
 });

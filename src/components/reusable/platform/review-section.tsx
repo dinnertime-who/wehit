@@ -60,51 +60,6 @@ const reviews: Review[] = [
     content:
       "팔로워가 자연스럽게 늘어났고, 계정 활동도 활발해졌어요. 정말 좋은 서비스입니다!",
   },
-  {
-    id: "6",
-    userName: "yoon**",
-    service: "인스타팔로워구매",
-    rating: 5,
-    avatarUrl: "/model-1.png",
-    content:
-      "팔로워가 자연스럽게 늘어났고, 계정 활동도 활발해졌어요. 정말 좋은 서비스입니다!",
-  },
-  {
-    id: "7",
-    userName: "yoon**",
-    service: "인스타팔로워구매",
-    rating: 5,
-    avatarUrl: "/model-1.png",
-    content:
-      "팔로워가 자연스럽게 늘어났고, 계정 활동도 활발해졌어요. 정말 좋은 서비스입니다!",
-  },
-  {
-    id: "8",
-    userName: "yoon**",
-    service: "인스타팔로워구매",
-    rating: 5,
-    avatarUrl: "/model-1.png",
-    content:
-      "팔로워가 자연스럽게 늘어났고, 계정 활동도 활발해졌어요. 정말 좋은 서비스입니다!",
-  },
-  {
-    id: "9",
-    userName: "yoon**",
-    service: "인스타팔로워구매",
-    rating: 5,
-    avatarUrl: "/model-1.png",
-    content:
-      "팔로워가 자연스럽게 늘어났고, 계정 활동도 활발해졌어요. 정말 좋은 서비스입니다!",
-  },
-  {
-    id: "10",
-    userName: "yoon**",
-    service: "인스타팔로워구매",
-    rating: 5,
-    avatarUrl: "/model-1.png",
-    content:
-      "팔로워가 자연스럽게 늘어났고, 계정 활동도 활발해졌어요. 정말 좋은 서비스입니다!",
-  },
 ];
 
 export const ReviewSection = () => {
@@ -130,8 +85,8 @@ export const ReviewSection = () => {
             spaceBetween={24}
             slidesPerView={"auto"}
             className="pb-12"
-            loop={true}
             centeredSlides={true}
+            initialSlide={2}
           >
             {reviews.map((review) => (
               <SwiperSlide
