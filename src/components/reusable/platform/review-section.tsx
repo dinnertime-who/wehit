@@ -113,8 +113,7 @@ export const ReviewSection = () => {
       <div className="">
         {/* 헤더 */}
         <h2 className="text-2xl md:text-3xl lg:text-4xl leading-normal font-semibold text-white text-center mb-12">
-          SNS플레이는 지금 이 순간도 <br /> 많은 브랜드와 함께 성장하고
-          있습니다.
+          WIHIT는 지금 이 순간도 <br /> 많은 브랜드와 함께 성장하고 있습니다.
         </h2>
 
         {/* Swiper 리뷰 카드들 */}
