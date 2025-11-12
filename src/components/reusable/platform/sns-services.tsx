@@ -8,17 +8,17 @@ export function SnsServices() {
     <section className="app-container py-20">
       <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
         {/* 왼쪽 섹션 */}
-        <div className="flex-1 space-y-6 max-w-md">
+        <div className="flex-1 space-y-6 max-w-md break-keep">
           <div className="text-lime-600 text-lg font-semibold uppercase tracking-wider">
             SERVICE
           </div>
 
-          <h2 className="text-4xl font-semibold leading-tight">
+          <h2 className="text-[40px] font-semibold leading-tight">
             다양한 마케팅 서비스를 통해 SNS가 만드는 대표님의 경쟁력을
             느껴보세요.
           </h2>
 
-          <p className="text-base md:text-lg leading-relaxed">
+          <p className="text-xl leading-relaxed">
             인스타그램은 물론 페이스북, 유튜브, 네이버 등 모든 SNS와 다양한
             웹사이트를 셀프로 관리가 가능합니다.
           </p>
