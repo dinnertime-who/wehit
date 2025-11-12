@@ -85,7 +85,7 @@ export const Header = () => {
           <button
             key={tag.value}
             type="button"
-            className="py-1.5 cursor-pointer border-b-3 transition-all duration-200 border-transparent hover:border-pink-600 data-[selected=true]:border-pink-600"
+            className="py-1.5 cursor-pointer border-b-2 transition-all duration-200 border-transparent hover:border-pink-600 data-[selected=true]:border-pink-600"
             onClick={() => setBannerTag(tag.value)}
             data-selected={bannerTag ? bannerTag === tag.value : false}
           >
