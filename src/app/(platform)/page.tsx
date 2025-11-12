@@ -1,12 +1,13 @@
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { CategorySection } from "@/components/reusable/platform/category-section";
 import { ClassPreviewSection } from "@/components/reusable/platform/class-preview-section";
-import { CtaBanner } from "@/components/reusable/platform/cta-banner";
 import { DisplaySection } from "@/components/reusable/platform/display-sections";
 import { ExampleInfluencers } from "@/components/reusable/platform/example-influencers";
 import { ExpertSection } from "@/components/reusable/platform/expert-section";
 import { MainHeroBanner } from "@/components/reusable/platform/main-hero-banner";
 import { MainMiddleBanner } from "@/components/reusable/platform/main-middle-banner";
+import { ReviewSection } from "@/components/reusable/platform/review-section";
+import { SnsServices } from "@/components/reusable/platform/sns-services";
 import { TextSection } from "@/components/reusable/platform/text-section";
 import { makeQueryClient } from "@/config/react-query/query-client";
 import { bannerBySlugQueryOptions } from "@/hooks/apis/banners/use-banner-by-slug";
@@ -92,7 +93,9 @@ export default async function PlatformHomePage() {
 
         <ExpertSection />
 
-        <CtaBanner />
+        <SnsServices />
+
+        <ReviewSection />
       </HydrationBoundary>
     </div>
   );
