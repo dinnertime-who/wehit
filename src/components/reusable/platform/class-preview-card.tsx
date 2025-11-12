@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useVideoPlayControl } from "@/hooks/reusable/platform/video-play-control";
 
 type Props = {
@@ -50,6 +50,22 @@ export function ClassPreviewCard({
     }
   };
 
+  // 컴포넌트 언마운트 시 클린업
+  useEffect(() => {
+    return () => {
+      // timeout 정리
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      // 비디오 리소스 정리
+      if (videoRef.current) {
+        videoRef.current.pause();
+        videoRef.current.src = "";
+        videoRef.current.load();
+      }
+    };
+  }, []);
+
   return (
     <Link
       href={href}
@@ -81,7 +97,7 @@ export function ClassPreviewCard({
         </video>
       )}
 
-      <div className="absolute z-10 bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-gray-800/50 to-transparent text-white">
+      <div className="absolute z-10 bottom-0 left-0 right-0 p-4 bg-linear-to-t from-gray-800/50 to-transparent text-white">
         <h3 className="text-xs sm:text-body font-semibold text-balance break-keep line-clamp-2">
           {title}
         </h3>

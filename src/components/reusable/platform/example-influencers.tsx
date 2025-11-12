@@ -20,6 +20,9 @@ const influencers = [
 ];
 
 export function ExampleInfluencers() {
+  // 메모리 최적화: 복제 횟수를 9번에서 4번으로 줄임
+  const duplicatedInfluencers = Array(4).fill(influencers).flat();
+
   return (
     <section className="mt-28 py-4">
       <div className="space-y-10">
@@ -38,17 +41,7 @@ export function ExampleInfluencers() {
               disableOnInteraction: false,
             }}
           >
-            {[
-              ...influencers,
-              ...influencers,
-              ...influencers,
-              ...influencers,
-              ...influencers,
-              ...influencers,
-              ...influencers,
-              ...influencers,
-              ...influencers,
-            ].map((influencer, index) => (
+            {duplicatedInfluencers.map((influencer, index) => (
               <SwiperSlide
                 key={`${influencer.id}-${index}`}
                 style={{ width: "max-content" }}
@@ -80,19 +73,9 @@ export function ExampleInfluencers() {
               reverseDirection: true,
             }}
           >
-            {[
-              ...influencers,
-              ...influencers,
-              ...influencers,
-              ...influencers,
-              ...influencers,
-              ...influencers,
-              ...influencers,
-              ...influencers,
-              ...influencers,
-            ].map((influencer, index) => (
+            {duplicatedInfluencers.map((influencer, index) => (
               <SwiperSlide
-                key={`${influencer.id}-${index}`}
+                key={`reverse-${influencer.id}-${index}`}
                 style={{ width: "max-content" }}
               >
                 <Image

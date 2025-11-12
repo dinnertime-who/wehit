@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { FaGoogle } from "react-icons/fa";
 import { RiKakaoTalkFill } from "react-icons/ri";
@@ -14,6 +14,7 @@ export function OAuthButtons() {
   const router = useRouter();
   const { oauth } = useAuth();
   const { data: session, refetch: refetchSession } = useSession();
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // OAuth 로그인 후 세션 체크
   useEffect(() => {
@@ -34,11 +35,20 @@ export function OAuthButtons() {
     checkProfileAfterOAuth();
   }, [session, router]);
 
+  // 컴포넌트 언마운트 시 클린업
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
   const handleOAuthClick = async (provider: "google" | "kakao" | "naver") => {
     await oauth.mutateAsync(provider);
     // OAuth는 서버 사이드 리다이렉트이므로, 리다이렉트 후 세션 체크는 useEffect에서 처리
     // 짧은 딜레이 후 세션을 다시 가져와서 체크
-    setTimeout(async () => {
+    timeoutRef.current = setTimeout(async () => {
       const sessionResult = await refetchSession();
       const user = sessionResult.data?.user as
         | {
