@@ -76,6 +76,8 @@ export default async function PlatformHomePage() {
           className="pt-0 lg:pt-0"
         />
 
+        <DisplaySection slug={POPULAR_DISPLAY_SLUG} className="pt-0 lg:pt-0" />
+
         <ClassPreviewSection />
 
         <div>
