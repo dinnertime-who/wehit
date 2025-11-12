@@ -24,7 +24,7 @@ export function ExampleInfluencers() {
   const duplicatedInfluencers = Array(8).fill(influencers).flat();
 
   return (
-    <section className="mt-28 py-4">
+    <section className="mt-24 py-4">
       <div className="space-y-10">
         <div className="py-4">
           <Swiper
