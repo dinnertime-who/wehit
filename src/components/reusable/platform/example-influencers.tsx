@@ -21,7 +21,7 @@ const influencers = [
 
 export function ExampleInfluencers() {
   // 메모리 최적화: 복제 횟수를 9번에서 4번으로 줄임
-  const duplicatedInfluencers = Array(6).fill(influencers).flat();
+  const duplicatedInfluencers = Array(8).fill(influencers).flat();
 
   return (
     <section className="mt-28 py-4">

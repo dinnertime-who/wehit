@@ -29,7 +29,7 @@ export function SnsServices() {
             <motion.div
               initial={{ opacity: 0, translateY: 100 }}
               whileInView={{ opacity: [0, 1], translateY: [84, 0] }}
-              viewport={{ once: false }}
+              viewport={{ once: true }}
               transition={{
                 duration: 0.65,
                 delay: 0.35,
@@ -47,7 +47,7 @@ export function SnsServices() {
             <motion.div
               initial={{ opacity: 0, translateY: 100 }}
               whileInView={{ opacity: [0, 1], translateY: [84, 0] }}
-              viewport={{ once: false }}
+              viewport={{ once: true }}
               transition={{
                 duration: 0.65,
                 delay: 0.6,
@@ -65,7 +65,7 @@ export function SnsServices() {
             <motion.div
               initial={{ opacity: 0, translateY: 100 }}
               whileInView={{ opacity: [0, 1], translateY: [84, 0] }}
-              viewport={{ once: false }}
+              viewport={{ once: true }}
               transition={{
                 duration: 0.65,
                 delay: 0.85,
@@ -83,7 +83,7 @@ export function SnsServices() {
             <motion.div
               initial={{ opacity: 0, translateY: 100 }}
               whileInView={{ opacity: [0, 1], translateY: [84, 0] }}
-              viewport={{ once: false }}
+              viewport={{ once: true }}
               transition={{
                 duration: 0.65,
                 delay: 1.1,
@@ -104,7 +104,7 @@ export function SnsServices() {
           className="flex-1 flex justify-center lg:justify-end"
           initial={{ opacity: 0, translateY: 100 }}
           whileInView={{ opacity: [0, 1], translateY: [84, 0] }}
-          viewport={{ once: false }}
+          viewport={{ once: true }}
           transition={{
             duration: 0.65,
           }}

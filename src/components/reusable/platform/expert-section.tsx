@@ -30,7 +30,7 @@ export const ExpertSection = () => {
               key={index}
               initial={{ opacity: 0, scale: 0 }}
               whileInView={{ opacity: [0, 1, 1], scale: [0, 1.125, 1] }}
-              viewport={{ once: false }}
+              viewport={{ once: true }}
               transition={{
                 duration: 0.5,
                 delay: index * 0.25,
