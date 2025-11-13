@@ -55,10 +55,11 @@ export const SignInAppForm = ({ redirectTo, onSuccess }: Props) => {
             birthDate?: string | Date | null;
             gender?: string | null;
             profileCompleted?: boolean | null;
+            role?: string | null;
           }
         | undefined;
 
-      if (user && !isProfileCompleted(user)) {
+      if (user && user.role !== "admin" && !isProfileCompleted(user)) {
         router.push("/additional-info");
         return;
       }

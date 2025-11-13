@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useEffect, useRef } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { RiKakaoTalkFill } from "react-icons/ri";
 import { SiNaver } from "react-icons/si";
@@ -25,8 +25,9 @@ export function OAuthButtons() {
           birthDate?: string | Date | null;
           gender?: string | null;
           profileCompleted?: boolean | null;
+          role?: string | null;
         };
-        if (!isProfileCompleted(user)) {
+        if (!isProfileCompleted(user) && user.role !== "admin") {
           router.push("/additional-info");
         }
       }
