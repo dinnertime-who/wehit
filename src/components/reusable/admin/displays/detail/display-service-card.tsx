@@ -2,6 +2,7 @@
 
 import { Trash2 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { useRemoveDisplayService } from "@/hooks/apis/displays/use-remove-display-service";
@@ -37,7 +38,14 @@ export const DisplayServiceCard = ({ displayService, displayId }: Props) => {
           <div className="text-sm text-muted-foreground">
             서비스 이름: {displayService.service.title}
           </div>
-          <div className="relative aspect-640/360">
+          <Link
+            href={`/admin/services/${displayService.serviceId}`}
+            className="text-xs text-blue-600 hover:underline truncate"
+            target="_blank"
+          >
+            서비스 수정하기
+          </Link>
+          <div className="relative aspect-640/360 w-full mt-4">
             <Image
               src={displayService.service.coverImageUrl}
               alt={displayService.service.title}
