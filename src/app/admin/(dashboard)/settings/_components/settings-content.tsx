@@ -13,9 +13,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Spinner } from "@/components/ui/spinner";
 import { useSiteSetting } from "@/hooks/apis/site-settings/use-site-setting";
 import { useUpdateSiteSetting } from "@/hooks/apis/site-settings/use-update-site-setting";
-import { Spinner } from "@/components/ui/spinner";
 
 const paymentAccountSchema = z.object({
   accountNumber: z
@@ -72,19 +72,21 @@ export function SettingsContent() {
             await form.handleSubmit();
           }}
         >
-          <CardContent className="pt-6">
-            <form.Fieldset className="space-y-4">
-              <form.AppField name="accountNumber">
-                {(field) => (
-                  <field.TextField
-                    label="계좌번호"
-                    required
-                    disabled={isLoading}
-                    placeholder="0000-0000-0000"
-                  />
-                )}
-              </form.AppField>
-            </form.Fieldset>
+          <CardContent className="">
+            <form.AppForm>
+              <form.Fieldset className="space-y-4">
+                <form.AppField name="accountNumber">
+                  {(field) => (
+                    <field.TextField
+                      label="계좌번호"
+                      required
+                      disabled={isLoading}
+                      placeholder="0000-0000-0000"
+                    />
+                  )}
+                </form.AppField>
+              </form.Fieldset>
+            </form.AppForm>
           </CardContent>
           <CardFooter>
             <Button type="submit" disabled={isLoading}>
@@ -103,4 +105,3 @@ export function SettingsContent() {
     </div>
   );
 }
-
