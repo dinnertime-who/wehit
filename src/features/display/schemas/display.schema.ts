@@ -13,6 +13,17 @@ export const addServiceToDisplaySchema = z.object({
   order: z.number().int().nonnegative("순서는 음수가 될 수 없습니다"),
 });
 
+export const reorderDisplayServicesSchema = z.object({
+  displayId: z.string().min(1, "디스플레이 ID는 필수입니다"),
+  items: z.array(
+    z.object({
+      serviceId: z.string().min(1, "서비스 ID는 필수입니다"),
+      order: z.number().int().nonnegative("순서는 음수가 될 수 없습니다"),
+    }),
+  ).min(1, "최소 하나의 항목이 필요합니다"),
+});
+
 export type CreateDisplayDTO = z.infer<typeof createDisplaySchema>;
 export type UpdateDisplayDTO = z.infer<typeof updateDisplaySchema>;
 export type AddServiceToDisplayDTO = z.infer<typeof addServiceToDisplaySchema>;
+export type ReorderDisplayServicesDTO = z.infer<typeof reorderDisplayServicesSchema>;

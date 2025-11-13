@@ -40,3 +40,11 @@ export type RemoveServiceFromDisplayInput = {
   displayId: string;
   serviceId: string;
 };
+
+export type ReorderDisplayServicesInput = {
+  displayId: string;
+  items: Array<{
+    serviceId: string;
+    order: number;
+  }>;
+};

@@ -5,6 +5,7 @@ import type {
   DisplayServiceRecord,
   DisplayWithServiceDetails,
   DisplayWithServices,
+  ReorderDisplayServicesInput,
   UpdateDisplayInput,
 } from "@/shared/types/display.type";
 
@@ -21,6 +22,7 @@ export interface IDisplayRepository {
   addServiceToDisplay(data: AddServiceToDisplayInput): Promise<{ id: string }>;
   getDisplayServices(displayId: string): Promise<DisplayServiceRecord[]>;
   removeServiceFromDisplay(displayId: string, serviceId: string): Promise<void>;
+  reorderDisplayServices(data: ReorderDisplayServicesInput): Promise<void>;
   getDisplayServiceByOrder(
     displayId: string,
     order: number,
@@ -50,5 +52,6 @@ export interface IDisplayService {
   // Display-Service operations
   addServiceToDisplay(data: AddServiceToDisplayInput): Promise<{ id: string }>;
   removeServiceFromDisplay(displayId: string, serviceId: string): Promise<void>;
+  reorderDisplayServices(data: ReorderDisplayServicesInput): Promise<void>;
   getDisplayServices(displayId: string): Promise<DisplayServiceRecord[]>;
 }

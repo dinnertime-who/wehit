@@ -7,6 +7,7 @@ import type {
   DisplayServiceRecord,
   DisplayWithServiceDetails,
   DisplayWithServices,
+  ReorderDisplayServicesInput,
   UpdateDisplayInput,
 } from "@/shared/types/display.type";
 import type {
@@ -70,6 +71,12 @@ export class DisplayService implements IDisplayService {
     serviceId: string,
   ): Promise<void> {
     return this.repository.removeServiceFromDisplay(displayId, serviceId);
+  }
+
+  async reorderDisplayServices(
+    data: ReorderDisplayServicesInput,
+  ): Promise<void> {
+    return this.repository.reorderDisplayServices(data);
   }
 
   async getDisplayServices(displayId: string): Promise<DisplayServiceRecord[]> {

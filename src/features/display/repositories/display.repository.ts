@@ -14,6 +14,7 @@ import type {
   Display,
   DisplayServiceRecord,
   DisplayWithServiceDetails,
+  ReorderDisplayServicesInput,
   ServiceWithReviewStats,
   UpdateDisplayInput,
 } from "@/shared/types/display.type";
@@ -92,6 +93,25 @@ export class DisplayRepository implements IDisplayRepository {
           eq(displayService.serviceId, serviceId),
         ),
       );
+  }
+
+  async reorderDisplayServices(
+    data: ReorderDisplayServicesInput,
+  ): Promise<void> {
+    await db.transaction(async (tx) => {
+      // 각 항목의 order를 업데이트
+      for (const item of data.items) {
+        await tx
+          .update(displayService)
+          .set({ order: item.order })
+          .where(
+            and(
+              eq(displayService.displayId, data.displayId),
+              eq(displayService.serviceId, item.serviceId),
+            ),
+          );
+      }
+    });
   }
 
   async getDisplayServiceByOrder(
