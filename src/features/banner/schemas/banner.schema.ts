@@ -6,6 +6,7 @@ export const createBannerSchema = z.object({
   slug: z.string().min(1, "Slug is required"),
   widthRatio: z.number().positive("Width ratio must be positive"),
   heightRatio: z.number().positive("Height ratio must be positive"),
+  name: z.string().optional().nullable(),
   displayDevice: displayDeviceSchema,
 });
 
@@ -15,6 +16,8 @@ export const createBannerItemSchema = z.object({
   bannerId: z.string().min(1, "Banner ID is required"),
   imageUrl: z.url("Invalid image URL"),
   videoUrl: z.url("Invalid video URL").optional().nullable(),
+  name: z.string().optional().nullable(),
+  backgroundColor: z.string().optional().nullable(),
   linkUrl: z.string("Invalid link URL"),
   order: z.number().int().nonnegative("Order must be non-negative"),
   viewStartDate: z.date().nullable().optional(),

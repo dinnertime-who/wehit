@@ -1,9 +1,10 @@
 "use client";
 
 import { Trash2 } from "lucide-react";
+import Image from "next/image";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { useRemoveDisplayService } from "@/hooks/apis/displays/use-remove-display-service";
-import { toast } from "sonner";
 import type { DisplayServiceRecord } from "@/shared/types/display.type";
 
 type Props = {
@@ -31,10 +32,17 @@ export const DisplayServiceCard = ({ displayService, displayId }: Props) => {
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
           <div className="text-sm font-medium text-muted-foreground mb-1">
-            순서: {displayService.order}
+            순서: {displayService.order + 1}
           </div>
           <div className="text-sm text-muted-foreground">
-            서비스 ID: {displayService.serviceId}
+            서비스 이름: {displayService.service.title}
+          </div>
+          <div className="relative aspect-640/360">
+            <Image
+              src={displayService.service.coverImageUrl}
+              alt={displayService.service.title}
+              fill
+            />
           </div>
         </div>
         <Button

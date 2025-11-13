@@ -17,13 +17,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import type { Banner } from "@/shared/types/banner.type";
+import type { BannerWithItems } from "@/shared/types/banner.type";
 import { BannerItemCard } from "./banner-item-card";
 import { BannerItemForm } from "./banner-item-form";
 
 type Props = {
   bannerId: string;
-  banner: Banner & { items?: any[] };
+  banner: BannerWithItems;
 };
 
 export const BannerItemList = ({ bannerId, banner }: Props) => {

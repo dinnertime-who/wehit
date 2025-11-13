@@ -1,11 +1,8 @@
 import { db } from "@/infrastructure/db/drizzle";
 import { display, displayService, service } from "@/infrastructure/db/schema";
 import {
-  FEATURED_DISPLAY_SLUG,
-  NEW_DISPLAY_SLUG,
   POPULAR_DISPLAY_SLUG,
   RECOMMENDED_DISPLAY_SLUG,
-  TRENDING_DISPLAY_SLUG,
 } from "@/shared/constants/display.constant";
 
 const displayData = [
@@ -16,18 +13,6 @@ const displayData = [
   {
     title: "인기 강의",
     slug: POPULAR_DISPLAY_SLUG,
-  },
-  {
-    title: "신규 강의",
-    slug: NEW_DISPLAY_SLUG,
-  },
-  {
-    title: "트렌딩 강의",
-    slug: TRENDING_DISPLAY_SLUG,
-  },
-  {
-    title: "특별 기획 강의",
-    slug: FEATURED_DISPLAY_SLUG,
   },
 ];
 

@@ -1,8 +1,14 @@
-import type { display, displayService } from "@/infrastructure/db/schema";
+import type {
+  display,
+  displayService,
+  service,
+} from "@/infrastructure/db/schema";
 import type { Service } from "./service.type";
 
 export type Display = typeof display.$inferSelect;
-export type DisplayServiceRecord = typeof displayService.$inferSelect;
+export type DisplayServiceRecord = typeof displayService.$inferSelect & {
+  service: typeof service.$inferSelect;
+};
 
 export type DisplayWithServices = Display & {
   services: DisplayServiceRecord[];

@@ -38,14 +38,6 @@ const mainHeroBannerItemNames = [
   "[틱톡]",
 ];
 
-// Unsplash 이미지 URL (1200x400 크기의 중간 배너용 이미지)
-const middleBannerImages = [
-  "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1200&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=400&fit=crop",
-  "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1200&h=400&fit=crop",
-];
-
 export async function seedBanner() {
   try {
     console.log("🌱 Seeding banner data...");
@@ -64,6 +56,7 @@ export async function seedBanner() {
         widthRatio: 1280,
         heightRatio: 370,
         displayDevice: "all",
+        name: "메인 배너",
       })
       .returning();
 
@@ -94,36 +87,6 @@ export async function seedBanner() {
 
     console.log(`✓ Created ${createdMainItems.length} main hero banner items`);
 
-    // 4. Create middle banner
-    const [createdMiddleBanner] = await db
-      .insert(banner)
-      .values({
-        slug: MIDDLE_BANNER_SLUG,
-        widthRatio: 1200,
-        heightRatio: 400,
-        displayDevice: "all",
-      })
-      .returning();
-
-    console.log(`✓ Created banner: ${createdMiddleBanner.slug}`);
-
-    // 5. Create middle banner items
-    const middleBannerItemsToInsert = middleBannerImages.map(
-      (imageUrl, index) => ({
-        bannerId: createdMiddleBanner.id,
-        imageUrl,
-        linkUrl: "/",
-        order: index,
-      }),
-    );
-
-    const createdMiddleItems = await db
-      .insert(bannerItem)
-      .values(middleBannerItemsToInsert)
-      .returning();
-
-    console.log(`✓ Created ${createdMiddleItems.length} middle banner items`);
-
     // 6. Create weekly trend banner
     const [createdWeeklyTrendBanner] = await db
       .insert(banner)
@@ -132,6 +95,7 @@ export async function seedBanner() {
         widthRatio: 300,
         heightRatio: 400,
         displayDevice: "all",
+        name: "이번 주 트렌디 PICK",
       })
       .returning();
 
@@ -219,10 +183,6 @@ export async function seedBanner() {
 
     return {
       mainBanner: { banner: createdMainBanner, items: createdMainItems },
-      middleBanner: {
-        banner: createdMiddleBanner,
-        items: createdMiddleItems,
-      },
       weeklyTrendBanner: {
         banner: createdWeeklyTrendBanner,
         items: createdWeeklyTrendItems,

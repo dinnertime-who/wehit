@@ -40,10 +40,12 @@ const bannerItemFormSchema = z.object({
     .nullable()
     .optional(),
   linkUrl: z.string("유효한 URL을 입력해주세요"),
+  backgroundColor: z.string("유효한 배경색을 입력해주세요").optional(),
   order: z
     .number()
     .int("정수를 입력해주세요")
     .nonnegative("0 이상의 정수를 입력해주세요"),
+  name: z.string("유효한 이름을 입력해주세요").optional(),
   viewStartDate: z.date().nullable().optional(),
   viewEndDate: z.date().nullable().optional(),
 });
@@ -80,6 +82,8 @@ export const BannerItemForm = ({
       order: item?.order ?? 0,
       viewStartDate: item?.viewStartDate || null,
       viewEndDate: item?.viewEndDate || null,
+      backgroundColor: item?.backgroundColor ?? "#ffffff",
+      name: item?.name || "",
     } as BannerItemFormValues,
     validators: {
       onSubmit: bannerItemFormSchema,
@@ -120,6 +124,8 @@ export const BannerItemForm = ({
             order: value.order,
             viewStartDate: value.viewStartDate,
             viewEndDate: value.viewEndDate,
+            backgroundColor: value.backgroundColor,
+            name: value.name,
           });
           toast.success("배너 아이템이 생성되었습니다");
         } else {
@@ -130,6 +136,8 @@ export const BannerItemForm = ({
             order: value.order,
             viewStartDate: value.viewStartDate,
             viewEndDate: value.viewEndDate,
+            backgroundColor: value.backgroundColor,
+            name: value.name,
           });
           toast.success("배너 아이템이 업데이트되었습니다");
         }
@@ -211,8 +219,23 @@ export const BannerItemForm = ({
               )}
             </form.AppField>
 
+            <form.AppField name="name">
+              {(field) => (
+                <field.TextField label="이름" placeholder="이름" required />
+              )}
+            </form.AppField>
+
+            <form.AppField name="backgroundColor">
+              {(field) => (
+                <field.ColorPickerField
+                  label="배경색"
+                  defaultValue={item?.backgroundColor ?? "#ffffff"}
+                />
+              )}
+            </form.AppField>
+
             {/* 순서 */}
-            <form.AppField name="order">
+            {/* <form.AppField name="order">
               {(field) => (
                 <field.NumberField
                   label="표시 순서"
@@ -222,10 +245,10 @@ export const BannerItemForm = ({
                   required
                 />
               )}
-            </form.AppField>
+            </form.AppField> */}
 
             {/* 날짜 필드 */}
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {/* <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <form.AppField name="viewStartDate">
                 {(field) => <field.DateField label="노출 시작일 (선택)" />}
               </form.AppField>
@@ -233,7 +256,7 @@ export const BannerItemForm = ({
               <form.AppField name="viewEndDate">
                 {(field) => <field.DateField label="노출 종료일 (선택)" />}
               </form.AppField>
-            </div>
+            </div> */}
           </form.Fieldset>
 
           {/* 버튼 */}

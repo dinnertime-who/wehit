@@ -17,7 +17,7 @@ export function ClassPreviewSection() {
     <section className="py-6 lg:py-12">
       <div className="app-container px-4">
         <div className="mb-5">
-          <h2 className="text-heading-3">이번 주 트렌디 PICK</h2>
+          <h2 className="text-heading-3">{banner.name}</h2>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
           <VideoPlayControlProvider>

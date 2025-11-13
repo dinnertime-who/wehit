@@ -16,9 +16,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { publicEnv } from "@/config/env/public";
 import { useDeleteBannerItem } from "@/hooks/apis/banners/use-delete-banner-item";
 import { useDialogService } from "@/hooks/stores/use-dialog-service";
 import type { Banner, BannerItem } from "@/shared/types/banner.type";
+import type { LinkHref } from "@/shared/types/util.type";
 import { BannerItemForm } from "./banner-item-form";
 
 type Props = {
@@ -49,12 +51,11 @@ export const BannerItemCard = ({ bannerId, banner, item }: Props) => {
     }
   };
 
-  const formatDate = (date: Date | null | undefined) => {
-    if (!date) return "-";
-    return format(new Date(date), "yyyy-MM-dd", { locale: ko });
-  };
-
   const aspectRatioStyle = `${banner.widthRatio}/${banner.heightRatio}`;
+
+  const linkUrl = item.linkUrl.startsWith("http")
+    ? item.linkUrl
+    : `${publicEnv.NEXT_PUBLIC_URL}${item.linkUrl}`;
 
   return (
     <>
@@ -63,7 +64,7 @@ export const BannerItemCard = ({ bannerId, banner, item }: Props) => {
           <div className="flex flex-col gap-4">
             {/* 이미지 썸네일 */}
             <div
-              className="relative rounded-lg border border-input overflow-hidden"
+              className="relative overflow-hidden max-h-[250px]"
               style={{ aspectRatio: aspectRatioStyle }}
             >
               <Image
@@ -76,16 +77,18 @@ export const BannerItemCard = ({ bannerId, banner, item }: Props) => {
 
             <div>
               {/* 정보 */}
-              <div className="flex-1 space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="text-sm font-medium">순서: {item.order}</div>
+              <div className="flex-1 space-y-2 mb-4">
+                <div className="flex flex-col items-start gap-y-2 justify-between">
+                  <div className="text-sm font-medium">
+                    순서: {item.order + 1}
+                  </div>
+                  <div className="text-sm font-medium">{item.name}</div>
                   <Link
-                    href={item.linkUrl as any}
+                    href={linkUrl as LinkHref}
                     target="_blank"
-                    rel="noopener noreferrer"
                     className="text-xs text-blue-600 hover:underline truncate"
                   >
-                    {item.linkUrl}
+                    {linkUrl}
                   </Link>
                 </div>
 
@@ -96,9 +99,16 @@ export const BannerItemCard = ({ bannerId, banner, item }: Props) => {
                       locale: ko,
                     })}
                   </div>
-                  <div>
-                    노출기간: {formatDate(item.viewStartDate)} ~{" "}
-                    {formatDate(item.viewEndDate)}
+                </div>
+
+                <div className="text-sm flex items-center gap-x-2 text-muted-foreground">
+                  <div>배경색:</div>
+                  <div className="py-1 px-2 border rounded-lg">
+                    <input
+                      type="color"
+                      disabled
+                      value={item.backgroundColor ?? "#ffffff"}
+                    />
                   </div>
                 </div>
               </div>

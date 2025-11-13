@@ -1,5 +1,6 @@
 "use client";
 
+import { Plus } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,7 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Plus } from "lucide-react";
 import { useDisplay } from "@/hooks/apis/displays/use-display";
 import { DisplayServiceCard } from "./display-service-card";
 import { ServiceSearchDialog } from "./service-search-dialog";
@@ -35,10 +35,7 @@ export const DisplayServicesSection = ({ displayId }: Props) => {
                 디스플레이에 표시될 서비스를 관리합니다
               </CardDescription>
             </div>
-            <Button
-              size="sm"
-              onClick={() => setIsDialogOpen(true)}
-            >
+            <Button size="sm" onClick={() => setIsDialogOpen(true)}>
               <Plus className="w-4 h-4 mr-2" />
               서비스 추가
             </Button>
@@ -60,9 +57,7 @@ export const DisplayServicesSection = ({ displayId }: Props) => {
             </div>
           ) : (
             <div className="text-center py-12">
-              <p className="text-muted-foreground">
-                연결된 서비스가 없습니다
-              </p>
+              <p className="text-muted-foreground">연결된 서비스가 없습니다</p>
             </div>
           )}
         </CardContent>

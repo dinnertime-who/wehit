@@ -1,4 +1,5 @@
 import { createFormHook, createFormHookContexts } from "@tanstack/react-form";
+import { ColorPickerField } from "./field-components/color-picker-field";
 import { DateField } from "./field-components/date-field";
 import { ImageField } from "./field-components/image-field";
 import { NumberField } from "./field-components/number-field";
@@ -25,6 +26,7 @@ const { useAppForm, withForm, withFieldGroup } = createFormHook({
     ImageField,
     TiptapField,
     VideoField,
+    ColorPickerField,
   },
   formComponents: {
     SubmitButton,

@@ -35,6 +35,7 @@ export const BannerUpdateForm = () => {
       displayDevice: banner.displayDevice,
       heightRatio: banner.heightRatio,
       widthRatio: banner.widthRatio,
+      name: banner.name,
     } as z.infer<typeof updateBannerSchema>,
     validators: {
       onSubmit: updateBannerSchema,
@@ -71,11 +72,10 @@ export const BannerUpdateForm = () => {
             </CardDescription>
           </CardHeader>
 
-          <CardContent className="pt-6">
+          <CardContent className="">
             <form.Fieldset className="space-y-6">
               {/* 기본 정보 섹션 */}
               <div className="space-y-4">
-                <div className="text-sm font-medium">기본 정보</div>
                 <form.AppField name="slug">
                   {(field) => (
                     <field.TextField
@@ -85,14 +85,14 @@ export const BannerUpdateForm = () => {
                     />
                   )}
                 </form.AppField>
+              </div>
 
-                <form.AppField name="displayDevice">
+              <div className="space-y-4">
+                <form.AppField name="name">
                   {(field) => (
-                    <field.SelectField
-                      label="노출 기기"
-                      placeholder="기기를 선택해주세요"
-                      options={displayDeviceOptions}
-                      disabled
+                    <field.TextField
+                      label="배너 이름"
+                      placeholder="예: 메인 배너"
                     />
                   )}
                 </form.AppField>
@@ -125,7 +125,7 @@ export const BannerUpdateForm = () => {
                   </form.AppField>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  현재 비율: {banner.widthRatio} × {banner.heightRatio}
+                  현재 비율: {banner.widthRatio} x {banner.heightRatio}
                 </p>
               </div>
             </form.Fieldset>

@@ -1,13 +1,13 @@
 import "server-only";
 
 import type {
+  AddServiceToDisplayInput,
+  CreateDisplayInput,
   Display,
   DisplayServiceRecord,
-  DisplayWithServices,
   DisplayWithServiceDetails,
-  CreateDisplayInput,
+  DisplayWithServices,
   UpdateDisplayInput,
-  AddServiceToDisplayInput,
 } from "@/shared/types/display.type";
 import type {
   IDisplayRepository,
@@ -38,10 +38,7 @@ export class DisplayService implements IDisplayService {
     return this.repository.getAllDisplays();
   }
 
-  async updateDisplay(
-    id: string,
-    data: UpdateDisplayInput,
-  ): Promise<Display> {
+  async updateDisplay(id: string, data: UpdateDisplayInput): Promise<Display> {
     return this.repository.updateDisplay(id, data);
   }
 
@@ -64,7 +61,7 @@ export class DisplayService implements IDisplayService {
 
   async addServiceToDisplay(
     data: AddServiceToDisplayInput,
-  ): Promise<DisplayServiceRecord> {
+  ): Promise<{ id: string }> {
     return this.repository.addServiceToDisplay(data);
   }
 

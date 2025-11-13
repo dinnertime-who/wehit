@@ -1,17 +1,21 @@
 import "server-only";
 
-import { eq, and, sql, inArray } from "drizzle-orm";
+import { and, eq, inArray, sql } from "drizzle-orm";
 import { db } from "@/infrastructure/db/drizzle";
-import { display, displayService, service, review } from "@/infrastructure/db/schema";
+import {
+  display,
+  displayService,
+  review,
+  service,
+} from "@/infrastructure/db/schema";
 import type {
+  AddServiceToDisplayInput,
+  CreateDisplayInput,
   Display,
   DisplayServiceRecord,
-  DisplayWithServices,
   DisplayWithServiceDetails,
   ServiceWithReviewStats,
-  CreateDisplayInput,
   UpdateDisplayInput,
-  AddServiceToDisplayInput,
 } from "@/shared/types/display.type";
 import type { IDisplayRepository } from "../interfaces/display.interface";
 
@@ -38,10 +42,7 @@ export class DisplayRepository implements IDisplayRepository {
     return db.select().from(display).orderBy(display.createdAt);
   }
 
-  async updateDisplay(
-    id: string,
-    data: UpdateDisplayInput,
-  ): Promise<Display> {
+  async updateDisplay(id: string, data: UpdateDisplayInput): Promise<Display> {
     const result = await db
       .update(display)
       .set(data)
@@ -56,20 +57,27 @@ export class DisplayRepository implements IDisplayRepository {
 
   async addServiceToDisplay(
     data: AddServiceToDisplayInput,
-  ): Promise<DisplayServiceRecord> {
-    const result = await db
-      .insert(displayService)
-      .values(data)
-      .returning();
-    return result[0];
+  ): Promise<{ id: string }> {
+    const result = await db.insert(displayService).values(data).returning();
+    return { id: result[0].id };
   }
 
   async getDisplayServices(displayId: string): Promise<DisplayServiceRecord[]> {
     return db
-      .select()
+      .select({
+        displayService: displayService,
+        service: service,
+      })
       .from(displayService)
+      .innerJoin(service, eq(displayService.serviceId, service.id))
       .where(eq(displayService.displayId, displayId))
-      .orderBy(displayService.order);
+      .orderBy(displayService.order)
+      .then((result) =>
+        result.map(({ displayService, service }) => ({
+          ...displayService,
+          service: service,
+        })),
+      );
   }
 
   async removeServiceFromDisplay(
@@ -90,16 +98,25 @@ export class DisplayRepository implements IDisplayRepository {
     displayId: string,
     order: number,
   ): Promise<DisplayServiceRecord | null> {
-    const result = await db
-      .select()
+    const [result] = await db
+      .select({
+        displayService: displayService,
+        service: service,
+      })
       .from(displayService)
+      .innerJoin(service, eq(displayService.serviceId, service.id))
       .where(
         and(
           eq(displayService.displayId, displayId),
           eq(displayService.order, order),
         ),
       );
-    return result[0] ?? null;
+    if (!result) return null;
+
+    return {
+      ...result.displayService,
+      service: result.service,
+    };
   }
 
   async getDisplayWithServiceDetailsBySlug(

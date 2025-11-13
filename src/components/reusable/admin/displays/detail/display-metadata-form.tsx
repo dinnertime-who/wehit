@@ -20,8 +20,11 @@ const displayMetadataSchema = z.object({
   title: z.string().min(1, "제목은 필수입니다"),
   slug: z
     .string()
-    .min(1, "슬러그는 필수입니다")
-    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "슬러그는 소문자, 숫자, 하이픈만 포함 가능합니다"),
+    .min(1, "전시 아이디는 필수입니다")
+    .regex(
+      /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+      "전시 아이디는 소문자, 숫자, 하이픈만 포함 가능합니다",
+    ),
 });
 
 type DisplayMetadataFormValues = z.infer<typeof displayMetadataSchema>;
@@ -79,23 +82,23 @@ export const DisplayMetadataForm = ({ display }: Props) => {
 
           <CardContent className="pt-6">
             <form.Fieldset className="space-y-6">
+              <form.AppField name="slug">
+                {(field) => (
+                  <field.TextField
+                    label="전시 아이디"
+                    required
+                    disabled={true}
+                    placeholder="예: main-hero"
+                  />
+                )}
+              </form.AppField>
+
               <form.AppField name="title">
                 {(field) => (
                   <field.TextField
                     label="디스플레이 제목"
                     required
                     disabled={isLoading}
-                  />
-                )}
-              </form.AppField>
-
-              <form.AppField name="slug">
-                {(field) => (
-                  <field.TextField
-                    label="슬러그"
-                    required
-                    disabled={isLoading}
-                    placeholder="예: main-hero"
                   />
                 )}
               </form.AppField>

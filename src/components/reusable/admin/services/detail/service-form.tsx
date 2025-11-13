@@ -182,7 +182,7 @@ export const ServiceForm = ({ mode, service }: Props) => {
             </CardDescription>
           </CardHeader>
 
-          <CardContent className="pt-6">
+          <CardContent className="">
             <form.Fieldset className="space-y-8">
               {/* 기본 정보 섹션 */}
               <div className="space-y-4">
@@ -240,8 +240,8 @@ export const ServiceForm = ({ mode, service }: Props) => {
                   <form.AppField name="coverImage">
                     {(field) => (
                       <field.ImageField
-                        label="커버 이미지"
-                        aspectRatio="16/9"
+                        label="커버 이미지 ( 640x360 )"
+                        aspectRatio="640/360"
                         required
                         disabled={isLoading}
                         defaultPreview={service?.coverImageUrl}

@@ -10,7 +10,12 @@ export const columns: ColumnDef<Banner>[] = [
     accessorKey: "slug",
     header: () => <div className="font-semibold">배너 이름</div>,
     cell: ({ row }) => (
-      <span className="font-medium">{row.getValue("slug")}</span>
+      <div className="flex flex-col gap-y-1">
+        <span className="text-sm text-muted-foreground">
+          {row.getValue("slug")}
+        </span>
+        <span className="font-medium">{row.original.name}</span>
+      </div>
     ),
   },
   {

@@ -14,7 +14,7 @@ export function TextSection({ title, className = "" }: Props) {
         {titleLines.map((line) => (
           <h2
             key={line}
-            className="text-2xl font-semibold leading-normal text-[rgb(161,161,161)]"
+            className="text-[27px] font-semibold leading-normal text-[rgb(161,161,161)]"
           >
             {line}
           </h2>
