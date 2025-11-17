@@ -1,16 +1,14 @@
-import { seedBanner } from "./banner-seed";
-import { seedService } from "./service-seed";
-import { seedReview } from "./review-seed";
-import { seedDisplay } from "./display-seed";
+import { seedCategoryBanner } from "./category-banner-seed";
 
 async function main() {
   console.log("\n🚀 Starting database seed...\n");
 
   try {
-    await seedBanner();
-    await seedService();
-    await seedReview();
-    await seedDisplay();
+    // await seedBanner();
+    // await seedService();
+    // await seedReview();
+    // await seedDisplay();
+    await seedCategoryBanner();
 
     console.log("\n✨ Database seed completed!\n");
     process.exit(0);
