@@ -16,6 +16,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { publicEnv } from "@/config/env/public";
 import { useDeleteBannerItem } from "@/hooks/apis/banners/use-delete-banner-item";
 import { useDialogService } from "@/hooks/stores/use-dialog-service";
@@ -148,13 +149,15 @@ export const BannerItemCard = ({ bannerId, banner, item }: Props) => {
               배너 아이템의 정보를 수정합니다
             </DialogDescription>
           </DialogHeader>
-          <BannerItemForm
-            bannerId={bannerId}
-            banner={banner}
-            mode="edit"
-            item={item}
-            onClose={() => setIsEditDialogOpen(false)}
-          />
+          <ScrollArea className="h-[clamp(200px,80dvh,500px)]">
+            <BannerItemForm
+              bannerId={bannerId}
+              banner={banner}
+              mode="edit"
+              item={item}
+              onClose={() => setIsEditDialogOpen(false)}
+            />
+          </ScrollArea>
         </DialogContent>
       </Dialog>
     </>

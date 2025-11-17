@@ -17,6 +17,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import type { BannerWithItems } from "@/shared/types/banner.type";
 import { BannerItemCard } from "./banner-item-card";
 import { BannerItemForm } from "./banner-item-form";
@@ -86,12 +87,14 @@ export const BannerItemList = ({ bannerId, banner }: Props) => {
               배너에 표시될 새로운 아이템을 추가합니다
             </DialogDescription>
           </DialogHeader>
-          <BannerItemForm
-            bannerId={bannerId}
-            banner={banner}
-            mode="create"
-            onClose={() => setIsFormOpen(false)}
-          />
+          <ScrollArea className="h-[clamp(200px,80dvh,500px)]">
+            <BannerItemForm
+              bannerId={bannerId}
+              banner={banner}
+              mode="create"
+              onClose={() => setIsFormOpen(false)}
+            />
+          </ScrollArea>
         </DialogContent>
       </Dialog>
     </>
