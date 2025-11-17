@@ -13,6 +13,7 @@ import { bannerBySlugQueryOptions } from "@/hooks/apis/banners/use-banner-by-slu
 import { displayBySlugQueryOptions } from "@/hooks/apis/displays/use-display-by-slug";
 import { tryCatch } from "@/lib/try-catch";
 import {
+  CATEGORY_BANNER_SLUG,
   MAIN_HERO_BANNER_SLUG,
   WEEKLY_TREND_BANNER_SLUG,
 } from "@/shared/constants/banner.constant";
@@ -41,7 +42,11 @@ export default async function PlatformHomePage() {
   ]);
 
   // Display prefetch
-  const displaySlugs = [RECOMMENDED_DISPLAY_SLUG, POPULAR_DISPLAY_SLUG];
+  const displaySlugs = [
+    RECOMMENDED_DISPLAY_SLUG,
+    POPULAR_DISPLAY_SLUG,
+    CATEGORY_BANNER_SLUG,
+  ];
 
   await Promise.allSettled(
     displaySlugs.map((slug) =>
