@@ -1,4 +1,4 @@
-import { seedCategoryBanner } from "./category-banner-seed";
+import { seedLogoBanner } from "./logo-banner-seed";
 
 async function main() {
   console.log("\n🚀 Starting database seed...\n");
@@ -8,7 +8,8 @@ async function main() {
     // await seedService();
     // await seedReview();
     // await seedDisplay();
-    await seedCategoryBanner();
+    // await seedCategoryBanner();
+    await seedLogoBanner();
 
     console.log("\n✨ Database seed completed!\n");
     process.exit(0);
