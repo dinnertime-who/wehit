@@ -2,8 +2,32 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useBannerBySlug } from "@/hooks/apis/banners/use-banner-by-slug";
+import {
+  MOBILE_MOCK_BANNER_SLUG,
+  SNS_BANNER_SLUG,
+} from "@/shared/constants/banner.constant";
 
 export function SnsServices() {
+  const { data: banner } = useBannerBySlug(SNS_BANNER_SLUG);
+  const { data: mobileMock } = useBannerBySlug(MOBILE_MOCK_BANNER_SLUG);
+  if (
+    !banner ||
+    !banner.items ||
+    banner.items.length === 0 ||
+    !mobileMock ||
+    !mobileMock.items ||
+    mobileMock.items.length === 0
+  ) {
+    return null;
+  }
+
+  const snsItems = banner.items.map((item) => ({
+    id: item.id,
+    imageUrl: item.imageUrl,
+    name: item.name,
+  }));
+
   return (
     <section className="app-container py-20">
       <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
@@ -25,77 +49,25 @@ export function SnsServices() {
 
           {/* 소셜 미디어 아이콘들 */}
           <div className="flex items-center gap-4 pt-8">
-            {/* Instagram */}
-            <motion.div
-              initial={{ opacity: 0, translateY: 100 }}
-              whileInView={{ opacity: [0, 1], translateY: [84, 0] }}
-              viewport={{ once: true }}
-              transition={{
-                duration: 0.65,
-                delay: 0.35,
-              }}
-            >
-              <Image
-                src="/icons/instagram.png"
-                alt="Instagram"
-                width={84}
-                height={84}
-              />
-            </motion.div>
-
-            {/* Facebook */}
-            <motion.div
-              initial={{ opacity: 0, translateY: 100 }}
-              whileInView={{ opacity: [0, 1], translateY: [84, 0] }}
-              viewport={{ once: true }}
-              transition={{
-                duration: 0.65,
-                delay: 0.6,
-              }}
-            >
-              <Image
-                src="/icons/facebook.png"
-                alt="Facebook"
-                width={84}
-                height={84}
-              />
-            </motion.div>
-
-            {/* YouTube */}
-            <motion.div
-              initial={{ opacity: 0, translateY: 100 }}
-              whileInView={{ opacity: [0, 1], translateY: [84, 0] }}
-              viewport={{ once: true }}
-              transition={{
-                duration: 0.65,
-                delay: 0.85,
-              }}
-            >
-              <Image
-                src="/icons/youtube.png"
-                alt="YouTube"
-                width={84}
-                height={84}
-              />
-            </motion.div>
-
-            {/* TikTok */}
-            <motion.div
-              initial={{ opacity: 0, translateY: 100 }}
-              whileInView={{ opacity: [0, 1], translateY: [84, 0] }}
-              viewport={{ once: true }}
-              transition={{
-                duration: 0.65,
-                delay: 1.1,
-              }}
-            >
-              <Image
-                src="/icons/tiktok.png"
-                alt="TikTok"
-                width={84}
-                height={84}
-              />
-            </motion.div>
+            {snsItems.map((item, index) => (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, translateY: 100 }}
+                whileInView={{ opacity: [0, 1], translateY: [84, 0] }}
+                viewport={{ once: true }}
+                transition={{
+                  duration: 0.65,
+                  delay: (index + 1) * 0.25,
+                }}
+              >
+                <Image
+                  src={item.imageUrl}
+                  alt={item.name || "SNS"}
+                  width={84}
+                  height={84}
+                />
+              </motion.div>
+            ))}
           </div>
         </div>
 
@@ -110,7 +82,7 @@ export function SnsServices() {
           }}
         >
           <Image
-            src="/smart-phone-mock.png"
+            src={mobileMock.items[0].imageUrl}
             alt="SNS Services"
             width={362}
             height={849}

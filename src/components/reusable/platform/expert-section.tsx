@@ -3,8 +3,22 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { useBannerBySlug } from "@/hooks/apis/banners/use-banner-by-slug";
+import { EXPERT_BANNER_SLUG } from "@/shared/constants/banner.constant";
 
 export const ExpertSection = () => {
+  const { data: banner } = useBannerBySlug(EXPERT_BANNER_SLUG);
+
+  if (!banner || !banner.items || banner.items.length === 0) {
+    return null;
+  }
+
+  const expertItems = banner.items.map((item) => ({
+    id: item.id,
+    imageUrl: item.imageUrl,
+    name: item.name,
+  }));
+
   return (
     <div className="bg-linear-to-r from-[#303441] to-[#303441] mt-25 mb-12 text-background h-[500px]">
       <div className="app-container h-full flex items-center justify-between">
@@ -24,7 +38,7 @@ export const ExpertSection = () => {
         </div>
 
         <div className="grid grid-cols-4 gap-4">
-          {Array.from({ length: 8 }).map((_, index) => (
+          {expertItems.map((item, index) => (
             <motion.div
               // biome-ignore lint/suspicious/noArrayIndexKey: index is not unique
               key={index}
@@ -37,8 +51,8 @@ export const ExpertSection = () => {
               }}
             >
               <Image
-                src={`/model-1.png`}
-                alt="Expert Section"
+                src={item.imageUrl}
+                alt={item.name || "Expert"}
                 width={276}
                 height={324}
                 className="w-40"

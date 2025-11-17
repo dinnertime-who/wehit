@@ -1,5 +1,3 @@
-import { seedLogoBanner } from "./logo-banner-seed";
-
 async function main() {
   console.log("\n🚀 Starting database seed...\n");
 
@@ -9,7 +7,11 @@ async function main() {
     // await seedReview();
     // await seedDisplay();
     // await seedCategoryBanner();
-    await seedLogoBanner();
+    // await seedLogoBanner();
+    // await seedExpertBanner()
+    // await seedSnsBanner();
+    // await seedMobileMockBanner();
+    // await seedExampleInfluencersBanner();
 
     console.log("\n✨ Database seed completed!\n");
     process.exit(0);

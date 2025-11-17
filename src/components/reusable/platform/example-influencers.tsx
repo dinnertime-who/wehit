@@ -5,23 +5,31 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "./example-influencers.style.css";
 import { Autoplay } from "swiper/modules";
+import { useBannerBySlug } from "@/hooks/apis/banners/use-banner-by-slug";
+import { EXAMPLE_INFLUENCERS_BANNER_SLUG } from "@/shared/constants/banner.constant";
 
-const influencers = [
-  {
-    id: 1,
-    name: "John Doe",
-    image: "/img1.png",
-  },
-  {
-    id: 2,
-    name: "Jane Doe",
-    image: "/img2.png",
-  },
-];
+function ensureMinimumItems<T>(items: T[], minCount: number): T[] {
+  if (items.length === 0) return [];
+  if (items.length >= minCount) return items;
+  return ensureMinimumItems([...items, ...items], minCount);
+}
 
 export function ExampleInfluencers() {
-  // 메모리 최적화: 복제 횟수를 9번에서 4번으로 줄임
-  const duplicatedInfluencers = Array(8).fill(influencers).flat();
+  const { data: banner } = useBannerBySlug(EXAMPLE_INFLUENCERS_BANNER_SLUG);
+  if (!banner || !banner.items || banner.items.length === 0) {
+    return null;
+  }
+
+  // 최소 16개의 아이템이 보장되도록 재귀적으로 배열을 복제합니다.
+
+  const exampleInfluencers = ensureMinimumItems(
+    banner.items.map((item) => ({
+      id: item.id,
+      imageUrl: item.imageUrl,
+      name: item.name,
+    })),
+    16,
+  );
 
   return (
     <section className="mt-24 py-4">
@@ -41,14 +49,14 @@ export function ExampleInfluencers() {
               disableOnInteraction: false,
             }}
           >
-            {duplicatedInfluencers.map((influencer, index) => (
+            {exampleInfluencers.map((influencer, index) => (
               <SwiperSlide
                 key={`${influencer.id}-${index}`}
                 style={{ width: "max-content" }}
               >
                 <Image
-                  src={influencer.image}
-                  alt={influencer.name}
+                  src={influencer.imageUrl}
+                  alt={influencer.name || "Example Influencer"}
                   width={230}
                   height={300}
                   unoptimized
@@ -74,14 +82,14 @@ export function ExampleInfluencers() {
               reverseDirection: true,
             }}
           >
-            {duplicatedInfluencers.map((influencer, index) => (
+            {exampleInfluencers.map((influencer, index) => (
               <SwiperSlide
                 key={`reverse-${influencer.id}-${index}`}
                 style={{ width: "max-content" }}
               >
                 <Image
-                  src={influencer.image}
-                  alt={influencer.name}
+                  src={influencer.imageUrl}
+                  alt={influencer.name || "Example Influencer"}
                   width={230}
                   height={300}
                   unoptimized

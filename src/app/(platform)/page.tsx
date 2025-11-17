@@ -14,7 +14,10 @@ import { displayBySlugQueryOptions } from "@/hooks/apis/displays/use-display-by-
 import { tryCatch } from "@/lib/try-catch";
 import {
   CATEGORY_BANNER_SLUG,
+  EXPERT_BANNER_SLUG,
   MAIN_HERO_BANNER_SLUG,
+  MOBILE_MOCK_BANNER_SLUG,
+  SNS_BANNER_SLUG,
   WEEKLY_TREND_BANNER_SLUG,
 } from "@/shared/constants/banner.constant";
 import {
@@ -39,14 +42,30 @@ export default async function PlatformHomePage() {
         bannerBySlugQueryOptions(WEEKLY_TREND_BANNER_SLUG),
       );
     }),
+    tryCatch(async () => {
+      return await queryClient.ensureQueryData(
+        bannerBySlugQueryOptions(MOBILE_MOCK_BANNER_SLUG),
+      );
+    }),
+    tryCatch(async () => {
+      return await queryClient.ensureQueryData(
+        bannerBySlugQueryOptions(SNS_BANNER_SLUG),
+      );
+    }),
+    tryCatch(async () => {
+      return await queryClient.ensureQueryData(
+        bannerBySlugQueryOptions(CATEGORY_BANNER_SLUG),
+      );
+    }),
+    tryCatch(async () => {
+      return await queryClient.ensureQueryData(
+        bannerBySlugQueryOptions(EXPERT_BANNER_SLUG),
+      );
+    }),
   ]);
 
   // Display prefetch
-  const displaySlugs = [
-    RECOMMENDED_DISPLAY_SLUG,
-    POPULAR_DISPLAY_SLUG,
-    CATEGORY_BANNER_SLUG,
-  ];
+  const displaySlugs = [RECOMMENDED_DISPLAY_SLUG, POPULAR_DISPLAY_SLUG];
 
   await Promise.allSettled(
     displaySlugs.map((slug) =>
