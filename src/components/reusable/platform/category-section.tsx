@@ -26,16 +26,14 @@ export function CategorySection() {
               }
               className="group flex flex-col items-center justify-center"
             >
-              <div className="flex items-center justify-center w-16 h-16 rounded-full bg-muted border border-border mb-2 group-hover:border-primary/40 group-hover:bg-primary/5 transition-all duration-300 overflow-hidden">
-                <Image
-                  src={item.imageUrl}
-                  alt={item.name || "카테고리"}
-                  width={32}
-                  height={32}
-                  className="w-8 h-8 object-contain"
-                />
-              </div>
-              <span className="text-sm font-medium text-center text-foreground group-hover:text-primary transition-colors">
+              <Image
+                src={item.imageUrl}
+                alt={item.name || "카테고리"}
+                width={banner.widthRatio}
+                height={banner.heightRatio}
+                className="w-16 h-16 object-contain"
+              />
+              <span className="text-sm font-medium text-center text-foreground group-hover:text-primary transition-colors mt-2">
                 {item.name || "카테고리"}
               </span>
             </Link>
