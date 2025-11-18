@@ -32,6 +32,10 @@ export function CategorySection() {
                 width={banner.widthRatio}
                 height={banner.heightRatio}
                 className="w-16 h-16 object-contain"
+                style={{
+                  width: `${banner.widthRatio}px`,
+                  height: `${banner.heightRatio}px`,
+                }}
               />
               <span className="text-sm font-medium text-center text-foreground group-hover:text-primary transition-colors mt-2">
                 {item.name || "카테고리"}

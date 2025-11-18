@@ -21,8 +21,8 @@ export const Logo = ({ className }: Props) => {
         <Image
           src={logoSrc || "/logo.png"}
           alt="WiHit Logo"
-          width={48}
-          height={32}
+          width={banner?.widthRatio}
+          height={banner?.heightRatio}
         />
       )}
     </Link>

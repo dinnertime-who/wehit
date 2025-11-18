@@ -52,8 +52,6 @@ export const BannerItemCard = ({ bannerId, banner, item }: Props) => {
     }
   };
 
-  const aspectRatioStyle = `${banner.widthRatio}/${banner.heightRatio}`;
-
   const linkUrl = item.linkUrl.startsWith("http")
     ? item.linkUrl
     : `${publicEnv.NEXT_PUBLIC_URL}${item.linkUrl}`;
@@ -64,15 +62,13 @@ export const BannerItemCard = ({ bannerId, banner, item }: Props) => {
         <CardContent className="pt-6">
           <div className="flex flex-col gap-4">
             {/* 이미지 썸네일 */}
-            <div
-              className="relative overflow-hidden max-h-[250px]"
-              style={{ aspectRatio: aspectRatioStyle }}
-            >
+            <div className="relative overflow-hidden max-h-[250px]">
               <Image
                 src={item.imageUrl}
                 alt="배너 아이템"
-                fill
                 className="object-contain"
+                width={banner.widthRatio}
+                height={banner.heightRatio}
               />
             </div>
 
