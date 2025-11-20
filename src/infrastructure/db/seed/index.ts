@@ -8,7 +8,7 @@ async function main() {
     // await seedDisplay();
     // await seedCategoryBanner();
     // await seedLogoBanner();
-    // await seedExpertBanner()
+    // await seedExpertBanner();
     // await seedSnsBanner();
     // await seedMobileMockBanner();
     // await seedExampleInfluencersBanner();

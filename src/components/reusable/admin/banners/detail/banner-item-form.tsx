@@ -20,10 +20,16 @@ const bannerItemFormSchema = z.object({
       (file) => file.size <= 5 * 1024 * 1024,
       "파일 크기는 5MB 이하여야 합니다",
     )
-    .refine(
-      (file) => ["image/jpeg", "image/png", "image/webp"].includes(file.type),
-      "JPEG, PNG, WEBP 형식만 지원됩니다",
-    )
+    .refine((file) => {
+      console.log(file.type);
+      return [
+        "image/jpeg",
+        "image/png",
+        "image/webp",
+        "image/avif",
+        "image/svg+xml",
+      ].includes(file.type);
+    }, "JPEG, PNG, WEBP, AVIF, SVG 형식만 지원됩니다")
     .nullable()
     .optional(),
   video: z

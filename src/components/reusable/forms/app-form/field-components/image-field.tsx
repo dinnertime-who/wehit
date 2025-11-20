@@ -22,7 +22,7 @@ type Props = Omit<
 
 export const ImageField = ({
   className,
-  accept = "image/jpeg,image/png,image/webp",
+  accept = "image/jpeg,image/png,image/webp,image/avif,image/svg+xml",
   maxSizeMB = 5,
   aspectRatio,
   defaultPreview,
