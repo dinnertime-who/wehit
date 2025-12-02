@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
 import { Play } from "lucide-react";
+import Image from "next/image";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import type { Service } from "@/shared/types/service.type";
 
@@ -33,6 +33,7 @@ export const ServiceDetailHero = ({ service, onPaymentClick }: Props) => {
               className="object-cover"
             />
             <button
+              type="button"
               onClick={() => setIsVideoOpen(true)}
               className="absolute inset-0 flex items-center justify-center bg-black/30 hover:bg-black/40 transition-colors"
             >
@@ -42,7 +43,14 @@ export const ServiceDetailHero = ({ service, onPaymentClick }: Props) => {
             </button>
           </>
         ) : isVideoOpen && service.coverVideoUrl ? (
-          <video autoPlay controls className="w-full h-full object-cover">
+          <video
+            autoPlay
+            controls
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover"
+          >
             <source src={service.coverVideoUrl} type="video/mp4" />
             브라우저가 비디오를 지원하지 않습니다.
           </video>
@@ -52,6 +60,7 @@ export const ServiceDetailHero = ({ service, onPaymentClick }: Props) => {
             alt={service.title}
             fill
             className="object-cover"
+            unoptimized
           />
         )}
       </div>
@@ -109,7 +118,11 @@ export const ServiceDetailHero = ({ service, onPaymentClick }: Props) => {
               </div>
             </div>
 
-            <Button size="lg" onClick={onPaymentClick} className="w-full h-12 text-base font-semibold">
+            <Button
+              size="lg"
+              onClick={onPaymentClick}
+              className="w-full h-12 text-base font-semibold"
+            >
               수강 신청하기
             </Button>
 

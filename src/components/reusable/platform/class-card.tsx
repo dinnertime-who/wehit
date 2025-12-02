@@ -35,7 +35,7 @@ export const ClassCard = ({
     <div
       className={cn(
         "relative hover:-translate-y-1 transition-all duration-300 ease-out",
-        className
+        className,
       )}
     >
       <div className="absolute right-3 top-3 z-20 flex cursor-pointer">
@@ -49,10 +49,9 @@ export const ClassCard = ({
           className="aspect-square sm:aspect-video object-cover object-center relative overflow-hidden rounded-lg w-full"
           src={thumbnailUrl}
           alt={title}
-          width={320}
-          height={180}
+          width={640}
+          height={360}
           quality={100}
-          priority
         />
 
         <Badge variant={"secondary"} className="rounded-full my-2">
