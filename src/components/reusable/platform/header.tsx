@@ -2,7 +2,8 @@
 
 import { Menu } from "lucide-react";
 import Link from "next/link";
-import { Suspense, useState } from "react";
+import { usePathname } from "next/navigation";
+import { Activity, Suspense, useEffect, useState } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { useAuth } from "@/hooks/apis/auth/use-auth";
 import { useSession } from "@/hooks/apis/auth/use-session";
@@ -40,8 +41,25 @@ export const Header = () => {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const { bannerTag, setBannerTag } = useBannerTagStore();
 
+  const pathname = usePathname();
+  const isMainPage = pathname === "/";
+
+  useEffect(() => {
+    if (isMainPage) {
+      document.documentElement.style.setProperty(
+        "--header-height",
+        "calc(var(--spacing) * 32)",
+      );
+    } else {
+      document.documentElement.style.setProperty(
+        "--header-height",
+        "calc(var(--spacing) * 20)",
+      );
+    }
+  }, [isMainPage]);
+
   return (
-    <header className="flex flex-col sticky top-0 z-50 h-(--header-height) w-full border-b bg-white/80 backdrop-blur-lg">
+    <header className="flex flex-col sticky top-0 z-50 h-(--header-height) w-full border-b bg-white">
       <div className="app-container flex items-center justify-between px-4 h-14 md:h-20">
         <div className="flex items-center gap-x-8 w-full">
           <Logo />
@@ -80,19 +98,21 @@ export const Header = () => {
         </div>
       </div>
 
-      <div className="flex-1 app-container flex gap-x-8 items-end justify-start text-heading-5 translate-y-px">
-        {BANNER_TAGS.map((tag) => (
-          <button
-            key={tag.value}
-            type="button"
-            className="py-1.5 cursor-pointer border-b-2 transition-all duration-200 border-transparent hover:border-pink-600 data-[selected=true]:border-pink-600"
-            onClick={() => setBannerTag(tag.value)}
-            data-selected={bannerTag ? bannerTag === tag.value : false}
-          >
-            {tag.label}
-          </button>
-        ))}
-      </div>
+      <Activity mode={isMainPage ? "visible" : "hidden"}>
+        <div className="flex-1 app-container flex gap-x-8 items-end justify-start text-heading-5 translate-y-px">
+          {BANNER_TAGS.map((tag) => (
+            <button
+              key={tag.value}
+              type="button"
+              className="py-1.5 cursor-pointer border-b-2 transition-all duration-200 border-transparent hover:border-pink-600 data-[selected=true]:border-pink-600"
+              onClick={() => setBannerTag(tag.value)}
+              data-selected={bannerTag ? bannerTag === tag.value : false}
+            >
+              {tag.label}
+            </button>
+          ))}
+        </div>
+      </Activity>
 
       <MobileSidebar
         open={mobileSidebarOpen}
