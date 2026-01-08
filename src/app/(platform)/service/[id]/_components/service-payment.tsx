@@ -135,7 +135,7 @@ export function ServicePayment(props: Props) {
         <div className="flex w-full items-start gap-2">
           <div className="relative w-full">
             <div className="relative w-full">
-              <a className="flex flex-col" href="#a">
+              <a className="flex flex-col" href="#service-plan">
                 <div className="flex items-center justify-center h-12 bg-taling-pink hover:bg-taling-pink-600 tracking-wider text-white rounded-md text-sm font-bold">
                   클래스 결제하기
                 </div>

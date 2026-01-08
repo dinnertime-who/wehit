@@ -60,7 +60,7 @@ export const Header = () => {
 
   return (
     <header className="flex flex-col sticky top-0 z-50 h-(--header-height) w-full border-b bg-white">
-      <div className="app-container flex items-center justify-between px-4 h-14 md:h-20">
+      <div className="app-container flex items-center justify-between px-4 h-20">
         <div className="flex items-center gap-x-8 w-full">
           <Logo />
           <div className="hidden md:flex items-center flex-1 max-w-md">

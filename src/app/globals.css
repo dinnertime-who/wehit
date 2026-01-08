@@ -226,6 +226,9 @@
 }
 
 @layer base {
+  html {
+    @apply scroll-smooth scroll-pt-[calc(var(--header-height)+80px)];
+  }
   * {
     @apply border-border outline-ring/50 antialiased;
   }
@@ -286,6 +289,10 @@
 
 @utility bg-taling-pink {
   background-color: rgb(var(--taling-pink-500) / 1);
+}
+
+@utility text-taling-pink {
+  color: rgb(var(--taling-pink-500) / 1);
 }
 
 /* Custom Border Color Utilities */

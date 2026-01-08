@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useReviews } from "@/hooks/apis/reviews/use-reviews";
 import { useService } from "@/hooks/apis/services/use-service";
 import { Service } from "./service";
@@ -23,7 +24,35 @@ export const ServiceDetailPage = ({ serviceId }: Props) => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="app-container py-24">
+      <div className="app-container py-12 md:py-16">
+        <div className="block md:hidden">
+          <div className="relative">
+            <div className="aspect-w-16 aspect-h-9 w-full overflow-hidden">
+              <div>
+                {service.coverVideoUrl && (
+                  <video
+                    tabIndex={-1}
+                    loop
+                    muted
+                    autoPlay
+                    playsInline
+                    src={service.coverVideoUrl}
+                  />
+                )}
+                {service.coverImageUrl && (
+                  <Image
+                    className="object-cover"
+                    src={service.coverImageUrl}
+                    alt="service"
+                    width={824}
+                    height={464}
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="flex flex-col-reverse gap-10 md:flex-row">
           <Service
             videoUrl={service.coverVideoUrl}
@@ -38,7 +67,6 @@ export const ServiceDetailPage = ({ serviceId }: Props) => {
                 date: new Date(r.createdAt).toLocaleDateString("ko-KR"),
               })) || []
             }
-            activeTab="intro"
             reviewCount={reviews?.length || 0}
           />
           <ServicePayment

@@ -3,8 +3,9 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 import { ReviewCard } from "./review-card";
+import { ServicePlanCardExample } from "./service-plan-card.example";
 
 type Review = {
   id: string;
@@ -21,13 +22,48 @@ type Props = {
   imageUrl?: string | null;
   detailImages: string;
   reviews: Review[];
-  activeTab: "intro" | "review" | "payment";
   reviewCount: number;
-  onTabChange?: (tab: "intro" | "review" | "payment") => void;
 };
 
 export function Service(props: Props) {
+  const [activeTab, setActiveTab] = useState<"intro" | "review" | "plan">(
+    "intro",
+  );
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+
+  const handleTabChange = (tab: "intro" | "review" | "plan") => {
+    window.location.hash = `#service-${tab}`;
+  };
+
+  useEffect(() => {
+    window.location.hash = `#service-${activeTab}`;
+  }, [activeTab]);
+
+  const handleScroll = useEffectEvent(() => {
+    const scrollPosition = window.scrollY + 200;
+
+    const introElement = document.getElementById("service-intro");
+    const reviewElement = document.getElementById("service-review");
+    const planElement = document.getElementById("service-plan");
+
+    if (planElement && scrollPosition >= planElement.offsetTop) {
+      setActiveTab("plan");
+    } else if (reviewElement && scrollPosition >= reviewElement.offsetTop) {
+      setActiveTab("review");
+    } else if (introElement && scrollPosition >= introElement.offsetTop) {
+      setActiveTab("intro");
+    }
+  });
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: useEffectEvent를 사용하기 때문에 의존성 배열에 넣지 않음
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // 초기 로드 시 실행
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <div className="flex flex-col gap-12 md:min-w-[824px] md:gap-16">
@@ -86,89 +122,42 @@ export function Service(props: Props) {
       )}
 
       {/* Tab Navigation */}
-      <div className="top-20 sticky z-[25] -mx-4 flex w-screen flex-col justify-center gap-2 bg-white md:top-gnb-height md:mx-0 md:w-full">
+      <div className="top-20 sticky z-25 -mx-4 flex w-screen flex-col justify-center gap-2 bg-white md:top-gnb-height md:mx-0 md:w-full">
         <div className="h-1 w-screen bg-taling-gray-100 md:hidden" />
         <div className="flex flex-row">
-          <div className="flex grow flex-col items-center justify-center">
-            <div
-              className={`flex basis-1 cursor-pointer items-center rounded-md p-2 py-3 text-sm font-semibold text-taling-gray-800 md:p-4 md:py-5 lg:text-base ${
-                props.activeTab === "intro" ? "text-taling-pink" : "black"
-              }`}
-              onClick={() => props.onTabChange?.("intro")}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  props.onTabChange?.("intro");
-                }
-              }}
-            >
-              클래스 소개
-              <div />
-            </div>
-            <div
-              className={
-                props.activeTab === "intro"
-                  ? "mx-auto w-full border-b-2 border-taling-pink"
-                  : ""
-              }
-            />
-          </div>
-          <div className="flex grow flex-col items-center justify-center">
-            <div
-              className={`flex basis-1 cursor-pointer items-center rounded-md p-2 py-3 text-sm font-semibold text-taling-gray-800 md:p-4 md:py-5 lg:text-base ${
-                props.activeTab === "review" ? "text-taling-pink" : "black"
-              }`}
-              onClick={() => props.onTabChange?.("review")}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  props.onTabChange?.("review");
-                }
-              }}
-            >
-              리뷰
-              <div>
-                <div className="ml-1 text-xs text-taling-pink">
+          <TabButton
+            label="클래스 소개"
+            tab="intro"
+            activeTab={activeTab}
+            onTabChange={handleTabChange}
+          />
+          <TabButton
+            label={
+              <div className="flex items-center gap-1">
+                리뷰{" "}
+                <div className="text-xs text-taling-pink">
                   {props.reviewCount}
                 </div>
               </div>
-            </div>
-            <div
-              className={
-                props.activeTab === "review"
-                  ? "mx-auto w-full border-b-2 border-taling-pink"
-                  : ""
-              }
-            />
-          </div>
-          <div className="flex grow flex-col items-center justify-center">
-            <div
-              className={`flex basis-1 cursor-pointer items-center rounded-md p-2 py-3 text-sm font-semibold text-taling-gray-800 md:p-4 md:py-5 lg:text-base ${
-                props.activeTab === "payment" ? "text-taling-pink" : "black"
-              }`}
-              onClick={() => props.onTabChange?.("payment")}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  props.onTabChange?.("payment");
-                }
-              }}
-            >
-              결제
-            </div>
-            <div
-              className={
-                props.activeTab === "payment"
-                  ? "mx-auto w-full border-b-2 border-taling-pink"
-                  : ""
-              }
-            />
-          </div>
+            }
+            tab="review"
+            activeTab={activeTab}
+            onTabChange={handleTabChange}
+          />
+          <TabButton
+            label="결제하러가기"
+            tab="plan"
+            activeTab={activeTab}
+            onTabChange={handleTabChange}
+          />
         </div>
       </div>
 
       {/* Detail Images Section */}
-      <div>
+      <div id="service-intro">
         <div
           className="overflow-hidden"
-          data-component="service-description"
+          data-component="service-intro"
           style={isDescriptionExpanded ? undefined : { maxHeight: "2000px" }}
         >
           <div className="flex flex-col">
@@ -194,7 +183,7 @@ export function Service(props: Props) {
       </div>
 
       {/* Student Reviews Section */}
-      <div>
+      <div id="service-review">
         <section className="flex flex-col gap-4">
           <div className="h-1 -mx-4 bg-taling-gray-100 md:hidden" />
           <div>
@@ -218,20 +207,65 @@ export function Service(props: Props) {
                 />
               ))}
           </div>
-          <div className="mt-8 flex justify-center text-sm">
+          {/* <div className="mt-8 flex justify-center text-sm">
             <button
               type="button"
               className="flex items-center justify-center gap-1 rounded-md px-4 py-2 text-taling-gray-700 hover:bg-taling-gray-200"
             >
-              더보기
+              리뷰 더보기
               <ChevronDown className="h-5 w-5" />
             </button>
-          </div>
+          </div> */}
+        </section>
+      </div>
+
+      <div>
+        {" "}
+        <section className="mt-12" id="service-plan">
+          <ServicePlanCardExample />
         </section>
       </div>
     </div>
   );
 }
+
+const TabButton = ({
+  label,
+  tab,
+  activeTab,
+  onTabChange,
+}: {
+  label: React.ReactNode;
+  tab: "intro" | "review" | "plan";
+  activeTab: "intro" | "review" | "plan";
+  onTabChange: (tab: "intro" | "review" | "plan") => void;
+}) => {
+  return (
+    <div className="flex grow flex-col items-center justify-center">
+      <div
+        className={`flex basis-1 cursor-pointer items-center rounded-md p-2 py-3 text-sm font-semibold text-taling-gray-800 md:p-4 md:py-5 lg:text-base ${
+          activeTab === tab ? "text-taling-pink" : "black"
+        }`}
+        onClick={() => onTabChange(tab)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            onTabChange(tab);
+          }
+        }}
+      >
+        {label}
+        <div />
+      </div>
+      <div
+        className={
+          activeTab === tab
+            ? "mx-auto w-full border-b-2 border-taling-pink"
+            : ""
+        }
+      />
+    </div>
+  );
+};
 
 const DescriptionContent = ({ description }: { description: string }) => {
   const editor = useEditor({
