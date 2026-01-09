@@ -107,10 +107,10 @@ export const ServicesDataTable = () => {
 
         {/* Summary & Pagination */}
         <div className="flex items-center justify-between border shadow-sm rounded-b-lg bg-card px-6 py-4">
-          <div className="text-sm text-muted-foreground font-medium">
+          <div className="text-sm text-muted-foreground font-medium whitespace-nowrap">
             총 {services?.pagination.total || 0}개 서비스
           </div>
-          
+
           {services && services.pagination.totalPages > 1 && (
             <Pagination>
               <PaginationContent>
@@ -125,42 +125,40 @@ export const ServicesDataTable = () => {
                   />
                 </PaginationItem>
 
-                {Array.from({ length: services.pagination.totalPages }, (_, i) => i + 1).map(
-                  (pageNum) => {
-                    // Show first page, last page, current page, and pages around current
-                    const showPage =
-                      pageNum === 1 ||
-                      pageNum === services.pagination.totalPages ||
-                      Math.abs(pageNum - page) <= 1;
+                {Array.from(
+                  { length: services.pagination.totalPages },
+                  (_, i) => i + 1,
+                ).map((pageNum) => {
+                  // Show first page, last page, current page, and pages around current
+                  const showPage =
+                    pageNum === 1 ||
+                    pageNum === services.pagination.totalPages ||
+                    Math.abs(pageNum - page) <= 1;
 
-                    if (!showPage) {
-                      // Show ellipsis for gaps
-                      if (
-                        pageNum === page - 2 ||
-                        pageNum === page + 2
-                      ) {
-                        return (
-                          <PaginationItem key={pageNum}>
-                            <PaginationEllipsis />
-                          </PaginationItem>
-                        );
-                      }
-                      return null;
+                  if (!showPage) {
+                    // Show ellipsis for gaps
+                    if (pageNum === page - 2 || pageNum === page + 2) {
+                      return (
+                        <PaginationItem key={pageNum}>
+                          <PaginationEllipsis />
+                        </PaginationItem>
+                      );
                     }
+                    return null;
+                  }
 
-                    return (
-                      <PaginationItem key={pageNum}>
-                        <PaginationLink
-                          onClick={() => setPage(pageNum)}
-                          isActive={pageNum === page}
-                          className="cursor-pointer"
-                        >
-                          {pageNum}
-                        </PaginationLink>
-                      </PaginationItem>
-                    );
-                  },
-                )}
+                  return (
+                    <PaginationItem key={pageNum}>
+                      <PaginationLink
+                        onClick={() => setPage(pageNum)}
+                        isActive={pageNum === page}
+                        className="cursor-pointer"
+                      >
+                        {pageNum}
+                      </PaginationLink>
+                    </PaginationItem>
+                  );
+                })}
 
                 <PaginationItem>
                   <PaginationNext
