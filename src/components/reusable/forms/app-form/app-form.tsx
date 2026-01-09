@@ -1,4 +1,5 @@
 import { createFormHook, createFormHookContexts } from "@tanstack/react-form";
+import { CheckboxField } from "./field-components/checkbox-field";
 import { ColorPickerField } from "./field-components/color-picker-field";
 import { DateField } from "./field-components/date-field";
 import { ImageField } from "./field-components/image-field";
@@ -6,6 +7,7 @@ import { NumberField } from "./field-components/number-field";
 import { PasswordField } from "./field-components/password-field";
 import { SelectField } from "./field-components/select-field";
 import { TextField } from "./field-components/text-field";
+import { TextareaField } from "./field-components/textarea-field";
 import { TiptapField } from "./field-components/tiptap-field";
 import { VideoField } from "./field-components/video-field";
 import { Fieldset } from "./form-components/fieldset";
@@ -19,6 +21,7 @@ const { fieldContext, formContext, useFieldContext, useFormContext } =
 const { useAppForm, withForm, withFieldGroup } = createFormHook({
   fieldComponents: {
     TextField,
+    TextareaField,
     NumberField,
     PasswordField,
     SelectField,
@@ -27,6 +30,7 @@ const { useAppForm, withForm, withFieldGroup } = createFormHook({
     TiptapField,
     VideoField,
     ColorPickerField,
+    CheckboxField,
   },
   formComponents: {
     SubmitButton,

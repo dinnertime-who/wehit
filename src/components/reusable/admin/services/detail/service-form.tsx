@@ -31,6 +31,17 @@ const CATEGORY_OPTIONS = [
   { label: "기타", value: "etc" },
 ];
 
+const CLASS_TYPE_OPTIONS = [
+  { label: "그룹 클래스", value: "group" },
+  { label: "1:1 클래스", value: "individual" },
+  { label: "원데이 클래스", value: "oneday" },
+];
+
+const DURATION_UNIT_OPTIONS = [
+  { label: "시간", value: "시간" },
+  { label: "개월", value: "개월" },
+];
+
 const serviceFormSchema = z.object({
   title: z.string().min(1, "제목은 필수입니다"),
   subtitle: z.string().optional(),
@@ -61,8 +72,11 @@ const serviceFormSchema = z.object({
     .nullable()
     .optional(),
   description: z.string().min(1, "설명은 필수입니다"),
-  price: z.number().int().positive("정가는 양수여야 합니다"),
-  salePrice: z.number().int().positive().optional().or(z.literal(0)),
+  // 클래스 정보
+  classType: z.enum(["group", "individual", "oneday"]),
+  maxParticipants: z.number().int().positive("최대 인원은 양수여야 합니다"),
+  duration: z.number().int().positive("기간은 양수여야 합니다"),
+  durationUnit: z.enum(["시간", "개월"]),
 });
 
 type ServiceFormValues = z.infer<typeof serviceFormSchema>;
@@ -88,8 +102,10 @@ export const ServiceForm = ({ mode, service }: Props) => {
       coverImage: null,
       coverVideo: null,
       description: service?.description || "",
-      price: service?.price || 0,
-      salePrice: service?.salePrice || undefined,
+      classType: (service?.classType as "group" | "individual" | "oneday") || "group",
+      maxParticipants: service?.maxParticipants || 2,
+      duration: service?.duration || 2,
+      durationUnit: (service?.durationUnit as "시간" | "개월") || "시간",
     } as ServiceFormValues,
     validators: {
       onSubmit: serviceFormSchema,
@@ -123,11 +139,15 @@ export const ServiceForm = ({ mode, service }: Props) => {
             coverImageUrl,
             coverVideoUrl: coverVideoUrl || undefined,
             description: value.description,
-            price: value.price,
-            salePrice: value.salePrice,
+            classType: value.classType,
+            maxParticipants: value.maxParticipants,
+            duration: value.duration,
+            durationUnit: value.durationUnit,
           };
-          await createMutation.mutateAsync(payload);
-          toast.success("서비스가 생성되었습니다");
+          const createdService = await createMutation.mutateAsync(payload);
+          toast.success("서비스가 생성되었습니다. 플랜과 스케줄을 추가해주세요");
+          router.push(`/admin/services/${createdService.id}`);
+          router.refresh();
         } else {
           const payload: UpdateServiceDTO = {
             title: value.title,
@@ -137,15 +157,15 @@ export const ServiceForm = ({ mode, service }: Props) => {
             coverImageUrl,
             coverVideoUrl: coverVideoUrl || undefined,
             description: value.description,
-            price: value.price,
-            salePrice: value.salePrice,
+            classType: value.classType,
+            maxParticipants: value.maxParticipants,
+            duration: value.duration,
+            durationUnit: value.durationUnit,
           };
           await updateMutation.mutateAsync(payload);
           toast.success("서비스가 수정되었습니다");
+          router.refresh();
         }
-
-        router.push("/admin/services");
-        router.refresh();
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "오류가 발생했습니다";
@@ -269,26 +289,47 @@ export const ServiceForm = ({ mode, service }: Props) => {
                 </form.AppField>
               </div>
 
-              {/* 가격 정보 섹션 */}
+              {/* 클래스 정보 섹션 */}
               <div className="space-y-4">
-                <h3 className="text-sm font-semibold">가격 정보</h3>
+                <h3 className="text-sm font-semibold">클래스 정보</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <form.AppField name="price">
+                  <form.AppField name="classType">
+                    {(field) => (
+                      <field.SelectField
+                        label="클래스 타입"
+                        options={CLASS_TYPE_OPTIONS}
+                        disabled={isLoading}
+                      />
+                    )}
+                  </form.AppField>
+
+                  <form.AppField name="maxParticipants">
                     {(field) => (
                       <field.NumberField
-                        label="정가"
-                        min={100}
+                        label="최대 인원"
+                        min={1}
                         required
                         disabled={isLoading}
                       />
                     )}
                   </form.AppField>
 
-                  <form.AppField name="salePrice">
+                  <form.AppField name="duration">
                     {(field) => (
                       <field.NumberField
-                        label="할인가 (선택)"
-                        min={100}
+                        label="기간"
+                        min={1}
+                        required
+                        disabled={isLoading}
+                      />
+                    )}
+                  </form.AppField>
+
+                  <form.AppField name="durationUnit">
+                    {(field) => (
+                      <field.SelectField
+                        label="기간 단위"
+                        options={DURATION_UNIT_OPTIONS}
                         disabled={isLoading}
                       />
                     )}
