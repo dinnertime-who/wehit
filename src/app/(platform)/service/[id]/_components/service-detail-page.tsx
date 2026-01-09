@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { PaymentDialog } from "@/components/reusable/platform/payment-dialog";
 import { useReviews } from "@/hooks/apis/reviews/use-reviews";
 import { useService } from "@/hooks/apis/services/use-service";
 import { Service } from "./service";
@@ -97,6 +98,8 @@ export const ServiceDetailPage = ({ serviceId }: Props) => {
           />
         </div>
       </div>
+
+      <PaymentDialog service={service} />
     </div>
   );
 };

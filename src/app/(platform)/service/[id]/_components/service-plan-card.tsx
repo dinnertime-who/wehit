@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { FaInfoCircle } from "react-icons/fa";
+import { usePaymentDialog } from "@/components/reusable/platform/payment-dialog";
 
 type PlanType = "STANDARD" | "DELUXE" | "PREMIUM";
 
@@ -35,6 +36,7 @@ type Props = {
 
 export function ServicePlanCard({ plans, onInquiry, onPurchase }: Props) {
   const [selectedPlan, setSelectedPlan] = useState<PlanType>("STANDARD");
+  const { setOpen, setTotalPrice } = usePaymentDialog();
 
   const currentPlan = plans[selectedPlan];
 
@@ -182,7 +184,11 @@ export function ServicePlanCard({ plans, onInquiry, onPurchase }: Props) {
         </button>
         <button
           type="button"
-          onClick={() => onPurchase?.(selectedPlan)}
+          onClick={() => {
+            setOpen(true);
+            setTotalPrice(currentPlan.price);
+            onPurchase?.(selectedPlan);
+          }}
           className="flex-1 rounded-lg bg-taling-pink px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-taling-pink-600"
         >
           구매하기
