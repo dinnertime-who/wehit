@@ -1,12 +1,12 @@
+import { and, eq, inArray, sql } from "drizzle-orm";
 import { type NextRequest, NextResponse } from "next/server";
-import { createServiceSchema } from "@/features/service/schemas/service.schema";
 import {
-  ServiceRepository,
   type ServiceListParams,
+  ServiceRepository,
 } from "@/features/service/repositories/service.repository";
+import { createServiceSchema } from "@/features/service/schemas/service.schema";
 import { db } from "@/infrastructure/db/drizzle";
-import { service, review, servicePlan } from "@/infrastructure/db/schema";
-import { sql, inArray, eq, and } from "drizzle-orm";
+import { review, servicePlan } from "@/infrastructure/db/schema";
 import type { ServiceWithReviewStats } from "@/shared/types/display.type";
 
 export async function POST(request: NextRequest) {
@@ -48,25 +48,29 @@ export async function GET(request: NextRequest) {
 
     // Get STANDARD plan prices for all services
     const serviceIds = services.map((s) => s.id);
-    const standardPlans = serviceIds.length > 0
-      ? await db
-          .select({
-            serviceId: servicePlan.serviceId,
-            price: servicePlan.price,
-            salePrice: servicePlan.salePrice,
-          })
-          .from(servicePlan)
-          .where(
-            and(
-              inArray(servicePlan.serviceId, serviceIds),
-              eq(servicePlan.planType, "STANDARD"),
-            ),
-          )
-      : [];
+    const standardPlans =
+      serviceIds.length > 0
+        ? await db
+            .select({
+              serviceId: servicePlan.serviceId,
+              price: servicePlan.price,
+              salePrice: servicePlan.salePrice,
+            })
+            .from(servicePlan)
+            .where(
+              and(
+                inArray(servicePlan.serviceId, serviceIds),
+                eq(servicePlan.planType, "STANDARD"),
+              ),
+            )
+        : [];
 
     // Create price map
     const priceMap = new Map(
-      standardPlans.map((plan) => [plan.serviceId, { price: plan.price, salePrice: plan.salePrice }]),
+      standardPlans.map((plan) => [
+        plan.serviceId,
+        { price: plan.price, salePrice: plan.salePrice },
+      ]),
     );
 
     // Add prices to services
@@ -128,12 +132,14 @@ export async function GET(request: NextRequest) {
     );
 
     // Service 정보, 가격, 리뷰 통계 결합
-    const servicesWithStats: ServiceWithReviewStats[] = servicesWithPrice.map((svc) => ({
-      ...svc,
-      reviewCount: statsMap.get(svc.id)?.reviewCount ?? 0,
-      rating: statsMap.get(svc.id)?.rating ?? 0,
-      order: 0, // 목록에서는 order가 필요 없지만 타입을 맞추기 위해
-    }));
+    const servicesWithStats: ServiceWithReviewStats[] = servicesWithPrice.map(
+      (svc) => ({
+        ...svc,
+        reviewCount: statsMap.get(svc.id)?.reviewCount ?? 0,
+        rating: statsMap.get(svc.id)?.rating ?? 0,
+        order: 0, // 목록에서는 order가 필요 없지만 타입을 맞추기 위해
+      }),
+    );
 
     return NextResponse.json({
       data: servicesWithStats,

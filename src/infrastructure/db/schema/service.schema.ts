@@ -12,10 +12,14 @@ export const service = pgTable("service", {
   coverVideoUrl: text("cover_video_url"), // 선택
   description: text("description").notNull(), // HTML content from Tiptap
   // 클래스 정보
-  classType: text("class_type").notNull().default("group"), // group, individual, oneday
+  classType: text("class_type", { enum: ["group", "individual", "oneday"] })
+    .notNull()
+    .default("group"),
   maxParticipants: integer("max_participants").notNull().default(2), // 최대 참여 인원
   duration: integer("duration").notNull().default(2), // 시간/기간
-  durationUnit: text("duration_unit").notNull().default("시간"), // 시간, 개월 등
+  durationUnit: text("duration_unit", { enum: ["시간", "개월"] })
+    .notNull()
+    .default("시간"),
   createdAt: createdAt(),
   updatedAt: updatedAt(),
 });

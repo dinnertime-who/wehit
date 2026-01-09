@@ -63,7 +63,12 @@ export function ServicePlanCard({ plans, onInquiry, onPurchase }: Props) {
                 {currentPlan.price.toLocaleString()}원
               </span>
               <span className="rounded bg-taling-pink-50 px-2 py-0.5 text-sm font-semibold text-taling-pink-600">
-                {Math.round(((currentPlan.price - currentPlan.salePrice) / currentPlan.price) * 100)}% 할인
+                {Math.round(
+                  ((currentPlan.price - currentPlan.salePrice) /
+                    currentPlan.price) *
+                    100,
+                )}
+                % 할인
               </span>
             </div>
             <div className="mt-1 flex items-baseline gap-1">
@@ -71,7 +76,9 @@ export function ServicePlanCard({ plans, onInquiry, onPurchase }: Props) {
                 {currentPlan.salePrice.toLocaleString()}원
               </span>
               {currentPlan.hasVAT && (
-                <span className="text-sm text-taling-gray-500">(VAT 포함가)</span>
+                <span className="text-sm text-taling-gray-500">
+                  (VAT 포함가)
+                </span>
               )}
             </div>
           </div>

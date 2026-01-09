@@ -18,6 +18,8 @@ export type ServiceWithReviewStats = Service & {
   reviewCount: number;
   rating: number; // 평균 평점
   order: number; // display_service의 order
+  price: number;
+  salePrice: number | null;
 };
 
 export type DisplayWithServiceDetails = Display & {

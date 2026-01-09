@@ -7,6 +7,7 @@ import {
   displayService,
   review,
   service,
+  servicePlan,
 } from "@/infrastructure/db/schema";
 import type {
   AddServiceToDisplayInput,
@@ -157,7 +158,7 @@ export class DisplayRepository implements IDisplayRepository {
       .where(eq(displayService.displayId, displayData.id))
       .orderBy(displayService.order);
 
-    // 3. 각 Service의 리뷰 통계 계산
+    // 3. 각 Service의 리뷰 통계 및 가격 정보 계산
     const serviceIds = displayServices.map((ds) => ds.service.id);
 
     if (serviceIds.length === 0) {
@@ -178,6 +179,21 @@ export class DisplayRepository implements IDisplayRepository {
       .where(inArray(review.serviceId, serviceIds))
       .groupBy(review.serviceId);
 
+    // STANDARD 플랜 가격 조회
+    const standardPlans = await db
+      .select({
+        serviceId: servicePlan.serviceId,
+        price: servicePlan.price,
+        salePrice: servicePlan.salePrice,
+      })
+      .from(servicePlan)
+      .where(
+        and(
+          inArray(servicePlan.serviceId, serviceIds),
+          eq(servicePlan.planType, "STANDARD"),
+        ),
+      );
+
     // ServiceId를 키로 하는 맵 생성
     const statsMap = new Map(
       reviewStats.map((stat) => {
@@ -194,12 +210,21 @@ export class DisplayRepository implements IDisplayRepository {
       }),
     );
 
-    // 4. Service 정보와 리뷰 통계 결합
+    const priceMap = new Map(
+      standardPlans.map((plan) => [
+        plan.serviceId,
+        { price: plan.price, salePrice: plan.salePrice },
+      ]),
+    );
+
+    // 4. Service 정보, 리뷰 통계, 가격 정보 결합
     const servicesWithStats: ServiceWithReviewStats[] = displayServices.map(
       ({ service: svc, displayService: ds }) => ({
         ...svc,
         reviewCount: statsMap.get(svc.id)?.reviewCount ?? 0,
         rating: statsMap.get(svc.id)?.rating ?? 0,
+        price: priceMap.get(svc.id)?.price ?? 0,
+        salePrice: priceMap.get(svc.id)?.salePrice ?? null,
         order: ds.order,
       }),
     );

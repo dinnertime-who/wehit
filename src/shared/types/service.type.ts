@@ -79,7 +79,9 @@ export type CreateServicePlanDTO = {
   details: PlanDetails;
 };
 
-export type UpdateServicePlanDTO = Partial<Omit<CreateServicePlanDTO, "serviceId" | "planType">>;
+export type UpdateServicePlanDTO = Partial<
+  Omit<CreateServicePlanDTO, "serviceId" | "planType">
+>;
 
 // Frontend-friendly format (flattened)
 export type ServicePlanFormatted = {
@@ -120,4 +122,6 @@ export type CreateServiceScheduleDTO = {
   locationDetail?: string;
 };
 
-export type UpdateServiceScheduleDTO = Partial<Omit<CreateServiceScheduleDTO, "serviceId">>;
+export type UpdateServiceScheduleDTO = Partial<
+  Omit<CreateServiceScheduleDTO, "serviceId">
+>;
