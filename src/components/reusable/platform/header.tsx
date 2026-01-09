@@ -73,19 +73,39 @@ export const Header = () => {
         {/* 우측 액션 버튼 */}
         <div className="flex items-center text-[15px] font-medium gap-x-5 break-keep">
           <div className={cn("hidden md:flex")}>엔터프라이즈</div>
-          <div className={cn("hidden md:flex")}>마이페이지</div>
-          <Link href="/sign-in" className={cn("hidden md:flex")}>
-            로그인
-          </Link>
-          <Link
-            href="/sign-up"
-            className={cn(
-              buttonVariants({ variant: "default" }),
-              "hidden md:flex rounded-full font-bold py-1.5 h-auto text-[14px]",
-            )}
-          >
-            회원가입
-          </Link>
+          <div className={cn("hidden md:flex")}>
+            <Link href="/mypage">마이페이지</Link>
+          </div>
+          {session ? (
+            <div className={cn("hidden md:flex")}>
+              <Button
+                className={cn(
+                  "hidden md:flex rounded-full font-bold py-1.5 h-auto text-[14px]",
+                )}
+                onClick={async () => {
+                  await signOut.mutateAsync();
+                  window.location.href = "/";
+                }}
+              >
+                로그아웃
+              </Button>
+            </div>
+          ) : (
+            <>
+              <Link href="/sign-in" className={cn("hidden md:flex")}>
+                로그인
+              </Link>
+              <Link
+                href="/sign-up"
+                className={cn(
+                  buttonVariants({ variant: "default" }),
+                  "hidden md:flex rounded-full font-bold py-1.5 h-auto text-[14px]",
+                )}
+              >
+                회원가입
+              </Link>
+            </>
+          )}
 
           <Button
             variant="ghost"

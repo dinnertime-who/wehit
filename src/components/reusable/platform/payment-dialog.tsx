@@ -1,6 +1,7 @@
 "use client";
 
 import { Check, Copy } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { create } from "zustand";
@@ -12,6 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useSession } from "@/hooks/apis/auth/use-session";
 import { useSiteSetting } from "@/hooks/apis/site-settings/use-site-setting";
 import type { Service } from "@/shared/types/service.type";
 
@@ -28,6 +30,8 @@ export const usePaymentDialog = create<{
 }));
 
 export const PaymentDialog = ({ service }: { service: Service }) => {
+  const { data: session } = useSession();
+  const router = useRouter();
   const { open, setOpen, totalPrice } = usePaymentDialog();
   const { data: siteSetting, isLoading } = useSiteSetting("site-account");
   const [copied, setCopied] = useState(false);
@@ -117,8 +121,16 @@ export const PaymentDialog = ({ service }: { service: Service }) => {
             <Button
               variant="default"
               onClick={() => {
+                if (session?.user) {
+                  setOpen(false);
+                  return router.push(
+                    `/sign-in?redirectTo=/service/${service.id}`,
+                  );
+                }
+
                 window.alert("신청이 완료되었습니다.");
                 setOpen(false);
+                router.push(`/mypage/purchase-history`);
               }}
               className="w-full bg-taling-pink text-white hover:bg-taling-pink-600"
             >

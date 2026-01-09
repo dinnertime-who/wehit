@@ -25,6 +25,8 @@ export async function POST(request: NextRequest) {
       headers: request.headers,
     });
 
+    console.log("session", session);
+
     if (!session?.user) {
       return NextResponse.json({ error: "인증이 필요합니다" }, { status: 401 });
     }
