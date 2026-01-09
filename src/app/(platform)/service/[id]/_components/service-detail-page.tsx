@@ -81,7 +81,12 @@ export const ServiceDetailPage = ({ serviceId }: Props) => {
             }
             reviewCount={reviews?.length || 0}
             pricePerHour={(plans?.STANDARD?.price || 0) / 2}
-            totalAmount={plans?.STANDARD?.price || 0}
+            salePricePerHour={
+              plans?.STANDARD?.salePrice
+                ? plans.STANDARD.salePrice / 2
+                : undefined
+            }
+            totalAmount={plans?.STANDARD?.salePrice || plans?.STANDARD?.price || 0}
             totalHours={2}
             classInfo={{
               type: "group",

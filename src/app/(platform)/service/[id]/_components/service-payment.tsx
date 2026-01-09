@@ -24,6 +24,7 @@ type Props = {
   reviewRating: number;
   reviewCount: number;
   pricePerHour: number;
+  salePricePerHour?: number; // 할인가 (시간당)
   totalAmount: number;
   totalHours: number;
   classInfo: ClassInfo;
@@ -75,14 +76,37 @@ export function ServicePayment(props: Props) {
         </div>
       </div>
 
-      <div className="my-4 flex justify-between">
-        <div>
-          <p className="text-xl font-semibold text-taling-gray-800">
-            {props.pricePerHour.toLocaleString()}
-            <span className="text-sm">원</span>
-            <span className="text-xs">/시간</span>
-          </p>
-        </div>
+      <div className="my-4">
+        {props.salePricePerHour ? (
+          <div>
+            <div className="flex items-center gap-2">
+              <p className="text-base text-taling-gray-400 line-through">
+                {props.pricePerHour.toLocaleString()}원
+              </p>
+              <span className="rounded bg-taling-pink-50 px-2 py-0.5 text-xs font-semibold text-taling-pink-600">
+                {Math.round(
+                  ((props.pricePerHour - props.salePricePerHour) /
+                    props.pricePerHour) *
+                    100,
+                )}
+                % 할인
+              </span>
+            </div>
+            <p className="mt-1 text-xl font-semibold text-taling-pink-600">
+              {props.salePricePerHour.toLocaleString()}
+              <span className="text-sm">원</span>
+              <span className="text-xs">/시간</span>
+            </p>
+          </div>
+        ) : (
+          <div>
+            <p className="text-xl font-semibold text-taling-gray-800">
+              {props.pricePerHour.toLocaleString()}
+              <span className="text-sm">원</span>
+              <span className="text-xs">/시간</span>
+            </p>
+          </div>
+        )}
       </div>
 
       <div className="flex flex-col gap-4">
@@ -90,7 +114,9 @@ export function ServicePayment(props: Props) {
           <p className="text-sm text-taling-gray-700">
             총 {props.totalHours}시간
           </p>
-          <p className="">{props.totalAmount.toLocaleString()}원</p>
+          <p className={props.salePricePerHour ? "text-taling-pink-600" : ""}>
+            {props.totalAmount.toLocaleString()}원
+          </p>
         </div>
 
         <div className="mx-2 flex flex-col gap-4 border-y border-taling-gray-200 py-4 text-taling-gray-700">
