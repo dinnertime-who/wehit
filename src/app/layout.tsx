@@ -8,6 +8,8 @@ import { DialogService } from "@/components/reusable/dialog-service";
 import { publicEnv } from "@/config/env/public";
 import { ReactQueryProvider } from "@/config/react-query/provider";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: {
     default: publicEnv.NEXT_PUBLIC_SITE_NAME,
