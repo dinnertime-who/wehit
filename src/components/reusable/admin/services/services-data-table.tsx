@@ -7,7 +7,17 @@ import {
 } from "@tanstack/react-table";
 import { Plus } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import {
   Table,
   TableBody,
@@ -21,7 +31,9 @@ import { cn } from "@/lib/utils";
 import { columns } from "./columns";
 
 export const ServicesDataTable = () => {
-  const { data: services } = useServices();
+  const [page, setPage] = useState(1);
+  const limit = 12;
+  const { data: services } = useServices(page, limit);
 
   console.log(services);
 
@@ -93,11 +105,80 @@ export const ServicesDataTable = () => {
           </Table>
         </div>
 
-        {/* Summary */}
+        {/* Summary & Pagination */}
         <div className="flex items-center justify-between border shadow-sm rounded-b-lg bg-card px-6 py-4">
           <div className="text-sm text-muted-foreground font-medium">
             총 {services?.pagination.total || 0}개 서비스
           </div>
+          
+          {services && services.pagination.totalPages > 1 && (
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    className={cn(
+                      page === 1
+                        ? "pointer-events-none opacity-50"
+                        : "cursor-pointer",
+                    )}
+                  />
+                </PaginationItem>
+
+                {Array.from({ length: services.pagination.totalPages }, (_, i) => i + 1).map(
+                  (pageNum) => {
+                    // Show first page, last page, current page, and pages around current
+                    const showPage =
+                      pageNum === 1 ||
+                      pageNum === services.pagination.totalPages ||
+                      Math.abs(pageNum - page) <= 1;
+
+                    if (!showPage) {
+                      // Show ellipsis for gaps
+                      if (
+                        pageNum === page - 2 ||
+                        pageNum === page + 2
+                      ) {
+                        return (
+                          <PaginationItem key={pageNum}>
+                            <PaginationEllipsis />
+                          </PaginationItem>
+                        );
+                      }
+                      return null;
+                    }
+
+                    return (
+                      <PaginationItem key={pageNum}>
+                        <PaginationLink
+                          onClick={() => setPage(pageNum)}
+                          isActive={pageNum === page}
+                          className="cursor-pointer"
+                        >
+                          {pageNum}
+                        </PaginationLink>
+                      </PaginationItem>
+                    );
+                  },
+                )}
+
+                <PaginationItem>
+                  <PaginationNext
+                    onClick={() =>
+                      setPage((p) =>
+                        Math.min(services.pagination.totalPages, p + 1),
+                      )
+                    }
+                    className={cn(
+                      page === services.pagination.totalPages
+                        ? "pointer-events-none opacity-50"
+                        : "cursor-pointer",
+                    )}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          )}
         </div>
       </div>
     </div>

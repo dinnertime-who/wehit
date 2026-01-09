@@ -2,12 +2,17 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { kyClient } from "@/lib/fetch/client";
 import type { Service } from "@/shared/types/service.type";
 
-export const servicesQueryOptions = () =>
+export const servicesQueryOptions = (page: number = 1, limit: number = 12) =>
   queryOptions({
-    queryKey: ["services"] as const,
+    queryKey: ["services", page, limit] as const,
     queryFn: async () => {
       return kyClient
-        .get("services")
+        .get("services", {
+          searchParams: {
+            page: page.toString(),
+            limit: limit.toString(),
+          },
+        })
         .json<{
           data: Service[];
           pagination: {
@@ -20,6 +25,6 @@ export const servicesQueryOptions = () =>
     },
   });
 
-export const useServices = () => {
-  return useSuspenseQuery(servicesQueryOptions());
+export const useServices = (page: number = 1, limit: number = 12) => {
+  return useSuspenseQuery(servicesQueryOptions(page, limit));
 };

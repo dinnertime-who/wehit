@@ -102,7 +102,8 @@ export const ServiceForm = ({ mode, service }: Props) => {
       coverImage: null,
       coverVideo: null,
       description: service?.description || "",
-      classType: (service?.classType as "group" | "individual" | "oneday") || "group",
+      classType:
+        (service?.classType as "group" | "individual" | "oneday") || "group",
       maxParticipants: service?.maxParticipants || 2,
       duration: service?.duration || 2,
       durationUnit: (service?.durationUnit as "시간" | "개월") || "시간",
@@ -145,7 +146,9 @@ export const ServiceForm = ({ mode, service }: Props) => {
             durationUnit: value.durationUnit,
           };
           const createdService = await createMutation.mutateAsync(payload);
-          toast.success("서비스가 생성되었습니다. 플랜과 스케줄을 추가해주세요");
+          toast.success(
+            "서비스가 생성되었습니다. 플랜과 스케줄을 추가해주세요",
+          );
           router.push(`/admin/services/${createdService.id}`);
           router.refresh();
         } else {
@@ -260,8 +263,8 @@ export const ServiceForm = ({ mode, service }: Props) => {
                   <form.AppField name="coverImage">
                     {(field) => (
                       <field.ImageField
-                        label="커버 이미지 ( 640x360 )"
-                        aspectRatio="640/360"
+                        label="커버 이미지 ( 820/460 )"
+                        aspectRatio="820/460"
                         required={mode === "create"}
                         disabled={isLoading}
                         defaultPreview={service?.coverImageUrl}
