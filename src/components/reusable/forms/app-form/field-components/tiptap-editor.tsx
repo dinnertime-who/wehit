@@ -1,12 +1,12 @@
 "use client";
 
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import { ImageIcon } from "lucide-react";
 import { useRef } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { ImageIcon } from "lucide-react";
 
 type TiptapEditorProps = {
   value: string;
@@ -148,7 +148,7 @@ export const TiptapEditor = ({
       </div>
 
       {/* 에디터 */}
-      <div className="p-4 min-h-80 max-h-96 overflow-y-auto prose prose-sm dark:prose-invert max-w-none">
+      <div className="p-4 min-h-80 h-[60vh] overflow-y-auto prose prose-sm dark:prose-invert max-w-none">
         <EditorContent editor={editor} />
       </div>
     </div>

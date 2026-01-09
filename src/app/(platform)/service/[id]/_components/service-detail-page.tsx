@@ -1,10 +1,14 @@
 "use client";
 
+import { PencilIcon } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { PaymentDialog } from "@/components/reusable/platform/payment-dialog";
+import { useSession } from "@/hooks/apis/auth/use-session";
 import { useReviews } from "@/hooks/apis/reviews/use-reviews";
 import { useService } from "@/hooks/apis/services/use-service";
 import { useServicePlans } from "@/hooks/apis/use-service-plans";
+import { useServiceSchedules } from "@/hooks/apis/use-service-schedules";
 import { Service } from "./service";
 import { ServicePayment } from "./service-payment";
 
@@ -13,9 +17,11 @@ type Props = {
 };
 
 export const ServiceDetailPage = ({ serviceId }: Props) => {
+  const { data: session } = useSession();
   const { data: service } = useService(serviceId);
   const { data: reviews } = useReviews(serviceId);
   const { data: plans } = useServicePlans(serviceId);
+  const { data: schedules } = useServiceSchedules(serviceId);
 
   if (!service) {
     return (
@@ -28,6 +34,19 @@ export const ServiceDetailPage = ({ serviceId }: Props) => {
   return (
     <div className="min-h-screen bg-background">
       <div className="app-container py-12 md:py-16">
+        {session && session.user.role === "admin" && (
+          <div className="flex justify-end mb-4">
+            <Link
+              href={`/admin/services/${service.id}`}
+              className="flex items-center gap-2"
+              target="_blank"
+            >
+              <PencilIcon className="w-4 h-4" />
+              서비스 수정하러 가기
+            </Link>
+          </div>
+        )}
+
         <div className="block md:hidden">
           <div className="relative">
             <div className="aspect-w-16 aspect-h-9 w-full overflow-hidden">
@@ -58,6 +77,7 @@ export const ServiceDetailPage = ({ serviceId }: Props) => {
 
         <div className="flex flex-col-reverse gap-10 md:flex-row">
           <Service
+            id={service.id}
             videoUrl={service.coverVideoUrl}
             imageUrl={service.coverImageUrl}
             detailImages={service.description}
@@ -92,20 +112,20 @@ export const ServiceDetailPage = ({ serviceId }: Props) => {
             }
             totalHours={2}
             classInfo={{
-              type: "group",
-              maxParticipants: 2,
-              duration: 2,
-              durationUnit: "시간",
+              type: service.classType || "group",
+              maxParticipants: service.maxParticipants || undefined,
+              duration: service.duration || 0,
+              durationUnit: service.durationUnit || "시간",
             }}
-            schedules={[
-              {
-                id: "1",
-                scheduleType: "flexible",
-                scheduleDescription: "메세지로 조율해요",
-                location: "강남",
-                locationDetail: "",
-              },
-            ]}
+            schedules={
+              schedules?.map((s) => ({
+                id: s.id,
+                scheduleType: s.scheduleType,
+                scheduleDescription: s.scheduleDescription || "",
+                location: s.location,
+                locationDetail: s.locationDetail || "",
+              })) || []
+            }
           />
         </div>
       </div>

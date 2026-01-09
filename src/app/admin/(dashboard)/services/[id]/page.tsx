@@ -1,9 +1,9 @@
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
 import { ServiceForm } from "@/components/reusable/admin/services/detail/service-form";
+import { ServiceIdProvider } from "@/components/reusable/admin/services/detail/service-id-provider";
 import { ServicePlanManager } from "@/components/reusable/admin/services/detail/service-plan-manager";
 import { ServiceScheduleManager } from "@/components/reusable/admin/services/detail/service-schedule-manager";
-import { ServiceIdProvider } from "@/components/reusable/admin/services/detail/service-id-provider";
 import { makeQueryClient } from "@/config/react-query/query-client";
 import { serviceQueryOptions } from "@/hooks/apis/services/use-service";
 import { tryCatch } from "@/lib/try-catch";
@@ -27,7 +27,7 @@ export default async function AdminServiceDetailPage(
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <ServiceIdProvider serviceId={id}>
-        <section className="space-y-8">
+        <section className="space-y-24">
           <ServiceForm mode="edit" service={service} />
           <ServicePlanManager serviceId={id} />
           <ServiceScheduleManager serviceId={id} />

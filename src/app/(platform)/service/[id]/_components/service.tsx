@@ -4,6 +4,7 @@ import { StarterKit } from "@tiptap/starter-kit";
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useEffectEvent, useState } from "react";
+import { useSession } from "@/hooks/apis/auth/use-session";
 import type {
   PlanType,
   ServicePlanFormatted,
@@ -22,6 +23,7 @@ type Review = {
 };
 
 type Props = {
+  id: string;
   videoUrl?: string | null;
   imageUrl?: string | null;
   detailImages: string;
@@ -31,6 +33,7 @@ type Props = {
 };
 
 export function Service(props: Props) {
+  const { data: session } = useSession();
   const [activeTab, setActiveTab] = useState<
     "intro" | "review" | "plan" | null
   >(null);
