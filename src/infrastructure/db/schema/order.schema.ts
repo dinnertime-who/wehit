@@ -27,6 +27,7 @@ export const orderItem = pgTable("order_item", {
   serviceId: text("service_id")
     .notNull()
     .references(() => service.id, { onDelete: "cascade" }),
+  planType: text("plan_type"), // STANDARD, DELUXE, PREMIUM (nullable for backward compatibility)
   quantity: integer("quantity").notNull().default(1), // 수량
   price: integer("price").notNull(), // 주문 시점 가격
   salePrice: integer("sale_price"), // 주문 시점 할인가

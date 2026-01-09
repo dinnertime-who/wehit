@@ -4,6 +4,7 @@ import Image from "next/image";
 import { PaymentDialog } from "@/components/reusable/platform/payment-dialog";
 import { useReviews } from "@/hooks/apis/reviews/use-reviews";
 import { useService } from "@/hooks/apis/services/use-service";
+import { useServicePlans } from "@/hooks/apis/use-service-plans";
 import { Service } from "./service";
 import { ServicePayment } from "./service-payment";
 
@@ -14,6 +15,7 @@ type Props = {
 export const ServiceDetailPage = ({ serviceId }: Props) => {
   const { data: service } = useService(serviceId);
   const { data: reviews } = useReviews(serviceId);
+  const { data: plans } = useServicePlans(serviceId);
 
   if (!service) {
     return (
@@ -69,6 +71,7 @@ export const ServiceDetailPage = ({ serviceId }: Props) => {
               })) || []
             }
             reviewCount={reviews?.length || 0}
+            plans={plans}
           />
           <ServicePayment
             title={service.title}

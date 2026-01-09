@@ -1,4 +1,5 @@
-import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, integer, jsonb, pgTable, text } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 import { createdAt, cuidPrimaryKey, updatedAt } from "./_core";
 
 export const service = pgTable("service", {
@@ -10,8 +11,33 @@ export const service = pgTable("service", {
   coverImageUrl: text("cover_image_url").notNull(),
   coverVideoUrl: text("cover_video_url"), // 선택
   description: text("description").notNull(), // HTML content from Tiptap
-  price: integer("price").notNull(),
-  salePrice: integer("sale_price"), // 할인가 (선택)
   createdAt: createdAt(),
   updatedAt: updatedAt(),
 });
+
+export const servicePlan = pgTable("service_plan", {
+  id: cuidPrimaryKey(),
+  serviceId: text("service_id")
+    .notNull()
+    .references(() => service.id, { onDelete: "cascade" }),
+  planType: text("plan_type").notNull(), // STANDARD, DELUXE, PREMIUM
+  price: integer("price").notNull(),
+  title: text("title"), // nullable
+  description: text("description"), // nullable
+  hasVAT: boolean("has_vat").notNull().default(true),
+  details: jsonb("details").notNull(), // features, shootingTime, imageCount, workingDays, revisionCount
+  createdAt: createdAt(),
+  updatedAt: updatedAt(),
+});
+
+// Relations
+export const serviceRelations = relations(service, ({ many }) => ({
+  plans: many(servicePlan),
+}));
+
+export const servicePlanRelations = relations(servicePlan, ({ one }) => ({
+  service: one(service, {
+    fields: [servicePlan.serviceId],
+    references: [service.id],
+  }),
+}));

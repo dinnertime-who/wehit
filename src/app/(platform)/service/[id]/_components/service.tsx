@@ -4,8 +4,12 @@ import { StarterKit } from "@tiptap/starter-kit";
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useEffectEvent, useState } from "react";
+import type {
+  PlanType,
+  ServicePlanFormatted,
+} from "@/shared/types/service.type";
 import { ReviewCard } from "./review-card";
-import { ServicePlanCardExample } from "./service-plan-card.example";
+import { ServicePlanCard } from "./service-plan-card";
 
 type Review = {
   id: string;
@@ -23,6 +27,7 @@ type Props = {
   detailImages: string;
   reviews: Review[];
   reviewCount: number;
+  plans?: Record<PlanType, ServicePlanFormatted>;
 };
 
 export function Service(props: Props) {
@@ -222,7 +227,17 @@ export function Service(props: Props) {
       <div>
         {" "}
         <section className="mt-12" id="service-plan">
-          <ServicePlanCardExample />
+          {props.plans && (
+            <ServicePlanCard
+              plans={props.plans}
+              onInquiry={() => {
+                console.log("문의하기 클릭");
+              }}
+              onPurchase={(planType) => {
+                console.log(`${planType} 플랜 구매하기 클릭`);
+              }}
+            />
+          )}
         </section>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { ServiceRepository } from "@/features/service/repositories/service.repository";
+import { ServicePlanRepository } from "@/features/service/repositories/service-plan.repository";
 import { updateServiceSchema } from "@/features/service/schemas/service.schema";
 
 export async function GET(
@@ -17,7 +18,20 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(service);
+    // Get STANDARD plan price
+    const standardPlan = await ServicePlanRepository.getByServiceIdAndPlanType(
+      id,
+      "STANDARD",
+    );
+
+    // Return service with price from STANDARD plan
+    const serviceWithPrice = {
+      ...service,
+      price: standardPlan?.price ?? 0,
+      salePrice: null, // Can be extended later if needed
+    };
+
+    return NextResponse.json(serviceWithPrice);
   } catch (error) {
     console.error("Service fetch error:", error);
     return NextResponse.json({ error: "서비스 조회 실패" }, { status: 500 });

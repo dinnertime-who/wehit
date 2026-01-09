@@ -383,8 +383,6 @@ function generateServiceData() {
     tutorInfo: string;
     coverImageUrl: string;
     description: string;
-    price: number;
-    salePrice?: number;
   }> = [];
 
   // 각 카테고리별로 8개씩 생성
@@ -400,8 +398,6 @@ function generateServiceData() {
         tutorInfo: template.tutorInfo,
         coverImageUrl: template.coverImageUrl,
         description,
-        price: template.price,
-        salePrice: template.salePrice,
       });
     });
   });

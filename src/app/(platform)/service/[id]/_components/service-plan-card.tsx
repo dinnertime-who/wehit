@@ -11,25 +11,13 @@ import { useState } from "react";
 import { FaInfoCircle } from "react-icons/fa";
 import { usePaymentDialog } from "@/components/reusable/platform/payment-dialog";
 
-type PlanType = "STANDARD" | "DELUXE" | "PREMIUM";
-
-type PlanDetails = {
-  price: number;
-  hasVAT: boolean;
-  title: string;
-  description: string;
-  features: {
-    canRetouch: boolean;
-    canPostprocess: boolean;
-  };
-  shootingTime: number; // 분
-  imageCount: number; // 장
-  workingDays: number; // 일
-  revisionCount: number; // 회
-};
+import type {
+  PlanType,
+  ServicePlanFormatted,
+} from "@/shared/types/service.type";
 
 type Props = {
-  plans: Record<PlanType, PlanDetails>;
+  plans: Record<PlanType, ServicePlanFormatted>;
   onInquiry?: () => void;
   onPurchase?: (planType: PlanType) => void;
 };
@@ -83,14 +71,20 @@ export function ServicePlanCard({ plans, onInquiry, onPurchase }: Props) {
       </div>
 
       {/* Plan Title & Description */}
-      <div className="mt-6">
-        <h3 className="text-lg font-bold text-taling-gray-900">
-          {currentPlan.title}
-        </h3>
-        <p className="mt-2 text-sm leading-relaxed text-taling-gray-600">
-          {currentPlan.description}
-        </p>
-      </div>
+      {(currentPlan.title || currentPlan.description) && (
+        <div className="mt-6">
+          {currentPlan.title && (
+            <h3 className="text-lg font-bold text-taling-gray-900">
+              {currentPlan.title}
+            </h3>
+          )}
+          {currentPlan.description && (
+            <p className="mt-2 text-sm leading-relaxed text-taling-gray-600">
+              {currentPlan.description}
+            </p>
+          )}
+        </div>
+      )}
 
       {/* Features */}
       <div className="mt-6 space-y-3">
