@@ -35,35 +35,30 @@ export async function seedServiceSchedules() {
     const services = await db.query.service.findMany();
     console.log(`✓ Found ${services.length} services`);
 
-    // 3. Create schedules for each service
+    // 3. Create schedules for each service (1개만 생성)
     const scheduleData = [];
     for (const svc of services) {
-      // 각 서비스당 1-3개의 스케줄 생성
-      const scheduleCount = Math.floor(Math.random() * 3) + 1;
+      const scheduleType = Math.random() > 0.5 ? "flexible" : "fixed";
+      const location = locations[Math.floor(Math.random() * locations.length)];
+      const locationDetail = locationDetails[Math.floor(Math.random() * locationDetails.length)];
       
-      for (let i = 0; i < scheduleCount; i++) {
-        const scheduleType = Math.random() > 0.5 ? "flexible" : "fixed";
-        const location = locations[Math.floor(Math.random() * locations.length)];
-        const locationDetail = locationDetails[Math.floor(Math.random() * locationDetails.length)];
-        
-        let scheduleDescription = "";
-        if (scheduleType === "flexible") {
-          scheduleDescription = "메세지로 조율해요";
-        } else {
-          const days = ["월", "화", "수", "목", "금", "토", "일"];
-          const randomDays = days.sort(() => 0.5 - Math.random()).slice(0, 2);
-          const hour = Math.floor(Math.random() * 12) + 9; // 9-20시
-          scheduleDescription = `매주 ${randomDays.join(", ")} ${hour}:00`;
-        }
-
-        scheduleData.push({
-          serviceId: svc.id,
-          scheduleType,
-          scheduleDescription,
-          location,
-          locationDetail: locationDetail || null,
-        });
+      let scheduleDescription = "";
+      if (scheduleType === "flexible") {
+        scheduleDescription = "메세지로 조율해요";
+      } else {
+        const days = ["월", "화", "수", "목", "금", "토", "일"];
+        const randomDays = days.sort(() => 0.5 - Math.random()).slice(0, 2);
+        const hour = Math.floor(Math.random() * 12) + 9; // 9-20시
+        scheduleDescription = `매주 ${randomDays.join(", ")} ${hour}:00`;
       }
+
+      scheduleData.push({
+        serviceId: svc.id,
+        scheduleType,
+        scheduleDescription,
+        location,
+        locationDetail: locationDetail || null,
+      });
     }
 
     // 4. Insert all schedules

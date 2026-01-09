@@ -19,12 +19,11 @@ const planTemplates: Record<
     basePrice: 89000,
     saleRate: 0.2, // 20% 할인
     details: {
-      canRetouch: true,
-      canPostprocess: false,
-      shootingTime: 30,
-      imageCount: 1,
-      workingDays: 7,
-      revisionCount: 1,
+      "촬영 시간": "30분",
+      "이미지 개수": 1,
+      "작업 일수": 7,
+      "수정 횟수": 1,
+      "보정 작업": "기본 보정",
     },
   },
   DELUXE: {
@@ -33,12 +32,12 @@ const planTemplates: Record<
     basePrice: 129000,
     saleRate: 0.25, // 25% 할인
     details: {
-      canRetouch: true,
-      canPostprocess: true,
-      shootingTime: 60,
-      imageCount: 3,
-      workingDays: 5,
-      revisionCount: 2,
+      "촬영 시간": "1시간",
+      "이미지 개수": 3,
+      "작업 일수": 5,
+      "수정 횟수": 2,
+      "보정 작업": "전문 보정",
+      "추가 옵션": "배경 합성",
     },
   },
   PREMIUM: {
@@ -47,12 +46,13 @@ const planTemplates: Record<
     basePrice: 179000,
     saleRate: 0.3, // 30% 할인
     details: {
-      canRetouch: true,
-      canPostprocess: true,
-      shootingTime: 120,
-      imageCount: 5,
-      workingDays: 3,
-      revisionCount: 5,
+      "촬영 시간": "2시간",
+      "이미지 개수": 5,
+      "작업 일수": 3,
+      "수정 횟수": 5,
+      "보정 작업": "고급 보정",
+      "추가 옵션": "배경 합성 + 색감 보정",
+      "원본 제공": "고해상도 원본",
     },
   },
 };
