@@ -114,85 +114,53 @@ export function ServicePlanCard({ plans, onInquiry, onPurchase }: Props) {
         </div>
       )}
 
-      {/* Features */}
+      {/* Plan Details (Dynamic Key-Value) */}
       <div className="mt-6 space-y-3">
-        {/* 누끼작업 */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Check
-              className={`h-5 w-5 ${
-                currentPlan.features.canRetouch
-                  ? "text-taling-pink-600"
-                  : "text-taling-gray-300"
+        {Object.entries(currentPlan.details).map(([key, value], index) => {
+          const isBoolean = typeof value === "boolean";
+          const isNumber = typeof value === "number";
+          
+          return (
+            <div
+              key={key}
+              className={`flex items-center justify-between ${
+                index > 0 && index % 3 === 0
+                  ? "border-t border-taling-gray-100 pt-3"
+                  : ""
               }`}
-            />
-            <span className="text-sm text-taling-gray-700">누끼작업</span>
-          </div>
-          <span className="text-2xl">
-            {currentPlan.features.canRetouch ? "👍" : ""}
-          </span>
-        </div>
-
-        {/* 보정작업 */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Check
-              className={`h-5 w-5 ${
-                currentPlan.features.canPostprocess
-                  ? "text-taling-pink-600"
-                  : "text-taling-gray-300"
-              }`}
-            />
-            <span className="text-sm text-taling-gray-700">보정작업</span>
-          </div>
-          <span className="text-2xl">
-            {currentPlan.features.canPostprocess ? "👍" : ""}
-          </span>
-        </div>
-
-        {/* 촬영 시간 */}
-        <div className="flex items-center justify-between border-t border-taling-gray-100 pt-3">
-          <div className="flex items-center gap-2">
-            <Clock className="h-5 w-5 text-taling-gray-400" />
-            <span className="text-sm text-taling-gray-700">촬영 시간 (분)</span>
-          </div>
-          <span className="text-sm font-semibold text-taling-gray-900">
-            {currentPlan.shootingTime}분
-          </span>
-        </div>
-
-        {/* 이미지 첫 수 */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <ImageIcon className="h-5 w-5 text-taling-gray-400" />
-            <span className="text-sm text-taling-gray-700">이미지 첫 수</span>
-          </div>
-          <span className="text-sm font-semibold text-taling-gray-900">
-            {currentPlan.imageCount}첫
-          </span>
-        </div>
-
-        {/* 작업일 */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Calendar className="h-5 w-5 text-taling-gray-400" />
-            <span className="text-sm text-taling-gray-700">작업일</span>
-          </div>
-          <span className="text-sm font-semibold text-taling-gray-900">
-            {currentPlan.workingDays}일
-          </span>
-        </div>
-
-        {/* 수정 횟수 */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <RefreshCw className="h-5 w-5 text-taling-gray-400" />
-            <span className="text-sm text-taling-gray-700">수정 횟수</span>
-          </div>
-          <span className="text-sm font-semibold text-taling-gray-900">
-            {currentPlan.revisionCount}회
-          </span>
-        </div>
+            >
+              <div className="flex items-center gap-2">
+                {isBoolean ? (
+                  <Check
+                    className={`h-5 w-5 ${
+                      value
+                        ? "text-taling-pink-600"
+                        : "text-taling-gray-300"
+                    }`}
+                  />
+                ) : (
+                  <div className="h-5 w-5 rounded-full bg-taling-gray-100 flex items-center justify-center">
+                    <span className="text-xs text-taling-gray-600">
+                      {isNumber ? "#" : "T"}
+                    </span>
+                  </div>
+                )}
+                <span className="text-sm text-taling-gray-700 capitalize">
+                  {key.replace(/([A-Z])/g, " $1").trim()}
+                </span>
+              </div>
+              <span
+                className={`text-sm ${
+                  isBoolean
+                    ? "text-2xl"
+                    : "font-semibold text-taling-gray-900"
+                }`}
+              >
+                {isBoolean ? (value ? "👍" : "") : value.toString()}
+              </span>
+            </div>
+          );
+        })}
       </div>
 
       {/* Action Buttons */}

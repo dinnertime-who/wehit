@@ -43,16 +43,8 @@ export type UpdateServiceDTO = Partial<CreateServiceDTO>;
 // Service Plan Types
 export type PlanType = "STANDARD" | "DELUXE" | "PREMIUM";
 
-export type PlanDetails = {
-  features: {
-    canRetouch: boolean;
-    canPostprocess: boolean;
-  };
-  shootingTime: number; // 분
-  imageCount: number; // 장
-  workingDays: number; // 일
-  revisionCount: number; // 회
-};
+// Key-value 형태로 자유롭게 플랜 상세 정보 관리
+export type PlanDetails = Record<string, string | number | boolean>;
 
 export type ServicePlan = {
   id: string;
@@ -83,21 +75,14 @@ export type UpdateServicePlanDTO = Partial<
   Omit<CreateServicePlanDTO, "serviceId" | "planType">
 >;
 
-// Frontend-friendly format (flattened)
+// Frontend-friendly format (flattened with dynamic details)
 export type ServicePlanFormatted = {
   price: number;
   salePrice: number | null;
   title: string | null;
   description: string | null;
   hasVAT: boolean;
-  features: {
-    canRetouch: boolean;
-    canPostprocess: boolean;
-  };
-  shootingTime: number;
-  imageCount: number;
-  workingDays: number;
-  revisionCount: number;
+  details: PlanDetails; // key-value 형태
 };
 
 // Service Schedule Types

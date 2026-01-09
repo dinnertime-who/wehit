@@ -24,11 +24,7 @@ export async function GET(
         title: plan.title,
         description: plan.description,
         hasVAT: plan.hasVAT,
-        features: plan.details.features,
-        shootingTime: plan.details.shootingTime,
-        imageCount: plan.details.imageCount,
-        workingDays: plan.details.workingDays,
-        revisionCount: plan.details.revisionCount,
+        details: plan.details, // key-value 형태 그대로 반환
       };
     }
 

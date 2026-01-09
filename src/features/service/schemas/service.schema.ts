@@ -23,16 +23,11 @@ export type CreateServiceSchema = z.infer<typeof createServiceSchema>;
 export type UpdateServiceSchema = z.infer<typeof updateServiceSchema>;
 
 // Service Plan Schemas
-export const planDetailsSchema = z.object({
-  features: z.object({
-    canRetouch: z.boolean(),
-    canPostprocess: z.boolean(),
-  }),
-  shootingTime: z.number().int().positive("촬영 시간은 0보다 커야 합니다"),
-  imageCount: z.number().int().positive("이미지 수는 0보다 커야 합니다"),
-  workingDays: z.number().int().positive("작업일은 0보다 커야 합니다"),
-  revisionCount: z.number().int().nonnegative("수정 횟수는 0 이상이어야 합니다"),
-});
+// Key-value 형태로 자유롭게 플랜 상세 정보 관리
+export const planDetailsSchema = z.record(
+  z.string(),
+  z.union([z.string(), z.number(), z.boolean()]),
+);
 
 export const planTypeSchema = z.enum(["STANDARD", "DELUXE", "PREMIUM"]);
 

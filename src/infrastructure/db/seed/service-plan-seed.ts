@@ -19,10 +19,8 @@ const planTemplates: Record<
     basePrice: 89000,
     saleRate: 0.2, // 20% 할인
     details: {
-      features: {
-        canRetouch: true,
-        canPostprocess: false,
-      },
+      canRetouch: true,
+      canPostprocess: false,
       shootingTime: 30,
       imageCount: 1,
       workingDays: 7,
@@ -35,10 +33,8 @@ const planTemplates: Record<
     basePrice: 129000,
     saleRate: 0.25, // 25% 할인
     details: {
-      features: {
-        canRetouch: true,
-        canPostprocess: true,
-      },
+      canRetouch: true,
+      canPostprocess: true,
       shootingTime: 60,
       imageCount: 3,
       workingDays: 5,
@@ -51,10 +47,8 @@ const planTemplates: Record<
     basePrice: 179000,
     saleRate: 0.3, // 30% 할인
     details: {
-      features: {
-        canRetouch: true,
-        canPostprocess: true,
-      },
+      canRetouch: true,
+      canPostprocess: true,
       shootingTime: 120,
       imageCount: 5,
       workingDays: 3,
