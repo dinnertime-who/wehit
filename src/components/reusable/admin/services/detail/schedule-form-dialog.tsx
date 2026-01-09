@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { useAppForm } from "@/components/reusable/forms/app-form/app-form";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -53,7 +52,8 @@ export const ScheduleFormDialog = ({
 
   const form = useAppForm({
     defaultValues: {
-      scheduleType: (schedule?.scheduleType as "flexible" | "fixed") || "flexible",
+      scheduleType:
+        (schedule?.scheduleType as "flexible" | "fixed") || "flexible",
       scheduleDescription: schedule?.scheduleDescription || "",
       location: schedule?.location || "",
       locationDetail: schedule?.locationDetail || "",
@@ -168,20 +168,8 @@ export const ScheduleFormDialog = ({
             </div>
 
             <DialogFooter>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => onOpenChange(false)}
-                disabled={isLoading}
-              >
-                취소
-              </Button>
               <form.SubmitButton>
-                {isLoading
-                  ? "저장 중..."
-                  : isEditing
-                    ? "수정"
-                    : "생성"}
+                {isLoading ? "저장 중..." : isEditing ? "수정" : "생성"}
               </form.SubmitButton>
             </DialogFooter>
           </form.AppForm>
