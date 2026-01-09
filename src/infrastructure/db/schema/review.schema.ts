@@ -1,4 +1,4 @@
-import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { createdAt, cuidPrimaryKey, updatedAt } from "./_core";
 import { service } from "./service.schema";
 import { user } from "./auth.schema";
@@ -12,6 +12,7 @@ export const review = pgTable("review", {
   writerName: text("writer_name").notNull(), // 리뷰 작성자 이름
   rating: integer("rating").notNull(), // 1-5
   content: text("content").notNull(),
+  isBest: boolean("is_best").notNull().default(false), // 베스트 리뷰 여부
   createdAt: createdAt(),
   updatedAt: updatedAt(),
 });

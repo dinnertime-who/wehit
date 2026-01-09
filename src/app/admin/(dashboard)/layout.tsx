@@ -1,4 +1,5 @@
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { redirect } from "next/navigation";
 import { AdminHeader } from "@/components/reusable/admin/header";
 import { AdminSidebar } from "@/components/reusable/admin/sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
@@ -12,7 +13,11 @@ export default async function AdminDashboardLayout({
 }) {
   // TODO: 세션 체크 및 권한 검증 추가 (admin role 확인)
   const queryClient = makeQueryClient();
-  await queryClient.prefetchQuery(sessionQueryOptions);
+  const session = await queryClient.fetchQuery(sessionQueryOptions);
+
+  if (session?.user?.role !== "admin") {
+    return redirect("/admin/sign-in");
+  }
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

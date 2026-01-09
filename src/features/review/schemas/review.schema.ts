@@ -10,6 +10,7 @@ export const createReviewSchema = z.object({
     .min(1, "평점은 1 이상이어야 합니다")
     .max(5, "평점은 5 이하여야 합니다"),
   content: z.string().min(1, "리뷰 내용을 입력해주세요"),
+  isBest: z.boolean().default(false),
 });
 
 export const updateReviewSchema = createReviewSchema

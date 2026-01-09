@@ -5,6 +5,7 @@ export type Review = {
   writerName: string;
   rating: number; // 1-5
   content: string;
+  isBest: boolean; // 베스트 리뷰 여부
   createdAt: Date;
   updatedAt: Date;
 };
@@ -15,6 +16,7 @@ export type CreateReviewDTO = {
   writerName: string;
   rating: number;
   content: string;
+  isBest?: boolean;
 };
 
 export type UpdateReviewDTO = Partial<Omit<CreateReviewDTO, "serviceId">>;
