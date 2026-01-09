@@ -262,7 +262,7 @@ export const ServiceForm = ({ mode, service }: Props) => {
                       <field.ImageField
                         label="커버 이미지 ( 640x360 )"
                         aspectRatio="640/360"
-                        required
+                        required={mode === "create"}
                         disabled={isLoading}
                         defaultPreview={service?.coverImageUrl}
                       />
