@@ -9,6 +9,7 @@ const planTemplates: Record<
     title: string;
     description: string;
     basePrice: number;
+    saleRate: number; // 할인율 (0.0 ~ 1.0)
     details: PlanDetails;
   }
 > = {
@@ -16,6 +17,7 @@ const planTemplates: Record<
     title: "스탠다드 플랜",
     description: "기본적인 서비스를 제공하는 플랜입니다.",
     basePrice: 89000,
+    saleRate: 0.2, // 20% 할인
     details: {
       features: {
         canRetouch: true,
@@ -31,6 +33,7 @@ const planTemplates: Record<
     title: "디럭스 플랜",
     description: "고품질 서비스와 전문 보정을 제공하는 플랜입니다.",
     basePrice: 129000,
+    saleRate: 0.25, // 25% 할인
     details: {
       features: {
         canRetouch: true,
@@ -46,6 +49,7 @@ const planTemplates: Record<
     title: "프리미엄 플랜",
     description: "최상의 서비스와 무제한 보정을 제공하는 플랜입니다.",
     basePrice: 179000,
+    saleRate: 0.3, // 30% 할인
     details: {
       features: {
         canRetouch: true,
@@ -85,10 +89,14 @@ export async function seedServicePlans() {
           priceVariation = 30000;
         }
 
+        const price = template.basePrice + priceVariation;
+        const salePrice = Math.round(price * (1 - template.saleRate));
+
         planData.push({
           serviceId: svc.id,
           planType: planType,
-          price: template.basePrice + priceVariation,
+          price: price,
+          salePrice: salePrice,
           title: template.title,
           description: template.description,
           hasVAT: true,

@@ -28,7 +28,7 @@ export async function GET(
     const serviceWithPrice = {
       ...service,
       price: standardPlan?.price ?? 0,
-      salePrice: null, // Can be extended later if needed
+      salePrice: standardPlan?.salePrice ?? null,
     };
 
     return NextResponse.json(serviceWithPrice);

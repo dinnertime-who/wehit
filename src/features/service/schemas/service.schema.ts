@@ -40,6 +40,7 @@ export const createServicePlanSchema = z.object({
   serviceId: z.string().min(1, "서비스 ID를 입력해주세요"),
   planType: planTypeSchema,
   price: z.number().int().positive("가격은 0보다 커야 합니다"),
+  salePrice: z.number().int().positive().optional(),
   title: z.string().optional(),
   description: z.string().optional(),
   hasVAT: z.boolean().default(true),

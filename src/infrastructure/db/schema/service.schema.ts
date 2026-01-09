@@ -27,6 +27,7 @@ export const servicePlan = pgTable("service_plan", {
     .references(() => service.id, { onDelete: "cascade" }),
   planType: text("plan_type").notNull(), // STANDARD, DELUXE, PREMIUM
   price: integer("price").notNull(),
+  salePrice: integer("sale_price"), // 할인가 (nullable)
   title: text("title"), // nullable
   description: text("description"), // nullable
   hasVAT: boolean("has_vat").notNull().default(true),

@@ -1,3 +1,5 @@
+import { seedReview } from "./review-seed";
+
 async function main() {
   console.log("\n🚀 Starting database seed...\n");
 
@@ -6,7 +8,7 @@ async function main() {
     // await seedService();
     // await seedServicePlans(); // Run after seedService
     // await seedServiceSchedules(); // Run after seedService
-    // await seedReview();
+    await seedReview();
     // await seedDisplay();
     // await seedCategoryBanner();
     // await seedLogoBanner();

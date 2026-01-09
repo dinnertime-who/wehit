@@ -56,14 +56,35 @@ export function ServicePlanCard({ plans, onInquiry, onPurchase }: Props) {
 
       {/* Price Section */}
       <div className="mt-6">
-        <div className="flex items-baseline gap-1">
-          <span className="text-3xl font-bold text-taling-gray-900">
-            {currentPlan.price.toLocaleString()}원
-          </span>
-          {currentPlan.hasVAT && (
-            <span className="text-sm text-taling-gray-500">(VAT 포함가)</span>
-          )}
-        </div>
+        {currentPlan.salePrice ? (
+          <div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-lg text-taling-gray-400 line-through">
+                {currentPlan.price.toLocaleString()}원
+              </span>
+              <span className="rounded bg-taling-pink-50 px-2 py-0.5 text-sm font-semibold text-taling-pink-600">
+                {Math.round(((currentPlan.price - currentPlan.salePrice) / currentPlan.price) * 100)}% 할인
+              </span>
+            </div>
+            <div className="mt-1 flex items-baseline gap-1">
+              <span className="text-3xl font-bold text-taling-pink-600">
+                {currentPlan.salePrice.toLocaleString()}원
+              </span>
+              {currentPlan.hasVAT && (
+                <span className="text-sm text-taling-gray-500">(VAT 포함가)</span>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className="flex items-baseline gap-1">
+            <span className="text-3xl font-bold text-taling-gray-900">
+              {currentPlan.price.toLocaleString()}원
+            </span>
+            {currentPlan.hasVAT && (
+              <span className="text-sm text-taling-gray-500">(VAT 포함가)</span>
+            )}
+          </div>
+        )}
         <div className="mt-2 flex items-center gap-1 text-sm text-taling-pink-600">
           <FaInfoCircle className="h-4 w-4" />
           <span className="font-medium">무이자 할부 혜택</span>
@@ -180,7 +201,7 @@ export function ServicePlanCard({ plans, onInquiry, onPurchase }: Props) {
           type="button"
           onClick={() => {
             setOpen(true);
-            setTotalPrice(currentPlan.price);
+            setTotalPrice(currentPlan.salePrice || currentPlan.price);
             onPurchase?.(selectedPlan);
           }}
           className="flex-1 rounded-lg bg-taling-pink px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-taling-pink-600"

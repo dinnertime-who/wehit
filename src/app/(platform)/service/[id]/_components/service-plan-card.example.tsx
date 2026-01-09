@@ -5,6 +5,7 @@ export function ServicePlanCardExample() {
   const plans = {
     STANDARD: {
       price: 15000,
+      salePrice: 12000,
       hasVAT: true,
       title: "누끼짓 (1첫 기타)",
       description: "다음도도 활용가능한\n고화질 누끼시진.",
@@ -19,6 +20,7 @@ export function ServicePlanCardExample() {
     },
     DELUXE: {
       price: 25000,
+      salePrice: 18750,
       hasVAT: true,
       title: "누끼짓 (3첫 기타)",
       description: "고품질 누끼 작업과\n전문 보정 서비스.",
@@ -33,6 +35,7 @@ export function ServicePlanCardExample() {
     },
     PREMIUM: {
       price: 45000,
+      salePrice: 31500,
       hasVAT: true,
       title: "누끼짓 (5첫 기타)",
       description: "프리미엄 누끼 작업과\n무제한 보정 서비스.",

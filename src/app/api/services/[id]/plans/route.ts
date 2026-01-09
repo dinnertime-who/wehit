@@ -20,6 +20,7 @@ export async function GET(
     for (const plan of plans) {
       formattedPlans[plan.planType as PlanType] = {
         price: plan.price,
+        salePrice: plan.salePrice,
         title: plan.title,
         description: plan.description,
         hasVAT: plan.hasVAT,

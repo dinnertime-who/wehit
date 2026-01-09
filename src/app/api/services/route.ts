@@ -53,6 +53,7 @@ export async function GET(request: NextRequest) {
           .select({
             serviceId: servicePlan.serviceId,
             price: servicePlan.price,
+            salePrice: servicePlan.salePrice,
           })
           .from(servicePlan)
           .where(
@@ -65,14 +66,14 @@ export async function GET(request: NextRequest) {
 
     // Create price map
     const priceMap = new Map(
-      standardPlans.map((plan) => [plan.serviceId, plan.price]),
+      standardPlans.map((plan) => [plan.serviceId, { price: plan.price, salePrice: plan.salePrice }]),
     );
 
     // Add prices to services
     const servicesWithPrice = services.map((svc) => ({
       ...svc,
-      price: priceMap.get(svc.id) ?? 0,
-      salePrice: null,
+      price: priceMap.get(svc.id)?.price ?? 0,
+      salePrice: priceMap.get(svc.id)?.salePrice ?? null,
     }));
 
     if (!withStats) {
@@ -88,8 +89,6 @@ export async function GET(request: NextRequest) {
     }
 
     // 리뷰 통계 포함
-    const serviceIds = services.map((s) => s.id);
-
     if (serviceIds.length === 0) {
       return NextResponse.json({
         data: [],

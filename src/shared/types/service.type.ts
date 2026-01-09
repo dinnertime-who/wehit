@@ -59,6 +59,7 @@ export type ServicePlan = {
   serviceId: string;
   planType: PlanType;
   price: number;
+  salePrice: number | null;
   title: string | null;
   description: string | null;
   hasVAT: boolean;
@@ -71,6 +72,7 @@ export type CreateServicePlanDTO = {
   serviceId: string;
   planType: PlanType;
   price: number;
+  salePrice?: number;
   title?: string;
   description?: string;
   hasVAT?: boolean;
@@ -82,6 +84,7 @@ export type UpdateServicePlanDTO = Partial<Omit<CreateServicePlanDTO, "serviceId
 // Frontend-friendly format (flattened)
 export type ServicePlanFormatted = {
   price: number;
+  salePrice: number | null;
   title: string | null;
   description: string | null;
   hasVAT: boolean;
