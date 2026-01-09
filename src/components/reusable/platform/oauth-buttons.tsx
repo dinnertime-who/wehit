@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { RiKakaoTalkFill } from "react-icons/ri";
@@ -16,6 +16,9 @@ export function OAuthButtons() {
   const { data: session, refetch: refetchSession } = useSession();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirectTo");
+
   // OAuth 로그인 후 세션 체크
   useEffect(() => {
     const checkProfileAfterOAuth = async () => {
@@ -30,11 +33,15 @@ export function OAuthButtons() {
         if (!isProfileCompleted(user) && user.role !== "admin") {
           router.push("/additional-info");
         }
+
+        if (redirectTo) {
+          router.push((redirectTo as any) || "/");
+        }
       }
     };
 
     checkProfileAfterOAuth();
-  }, [session, router]);
+  }, [session, router, redirectTo]);
 
   // 컴포넌트 언마운트 시 클린업
   useEffect(() => {
@@ -61,6 +68,10 @@ export function OAuthButtons() {
         | undefined;
       if (user && !isProfileCompleted(user)) {
         router.push("/additional-info");
+      }
+
+      if (redirectTo) {
+        router.push((redirectTo as any) || "/");
       }
     }, 1000);
   };

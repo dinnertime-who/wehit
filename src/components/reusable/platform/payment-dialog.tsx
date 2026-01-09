@@ -121,7 +121,7 @@ export const PaymentDialog = ({ service }: { service: Service }) => {
             <Button
               variant="default"
               onClick={() => {
-                if (session?.user) {
+                if (!session?.user) {
                   setOpen(false);
                   return router.push(
                     `/sign-in?redirectTo=/service/${service.id}`,

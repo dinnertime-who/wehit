@@ -31,26 +31,35 @@ type Props = {
 };
 
 export function Service(props: Props) {
-  const [activeTab, setActiveTab] = useState<"intro" | "review" | "plan">(
-    "intro",
-  );
+  const [activeTab, setActiveTab] = useState<
+    "intro" | "review" | "plan" | null
+  >(null);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
   const handleTabChange = (tab: "intro" | "review" | "plan") => {
+    setActiveTab(tab);
     window.location.hash = `#service-${tab}`;
   };
 
   useEffect(() => {
-    window.location.hash = `#service-${activeTab}`;
+    if (activeTab) {
+      window.location.hash = `#service-${activeTab}`;
+    } else {
+      window.location.hash = "";
+    }
   }, [activeTab]);
 
   const handleScroll = useEffectEvent(() => {
     const scrollPosition = window.scrollY + 200;
 
+    const videoElement = document.getElementById("service-video");
     const introElement = document.getElementById("service-intro");
     const reviewElement = document.getElementById("service-review");
     const planElement = document.getElementById("service-plan");
 
+    if (videoElement && scrollPosition >= videoElement.offsetTop) {
+      setActiveTab(null);
+    }
     if (planElement && scrollPosition >= planElement.offsetTop) {
       setActiveTab("plan");
     } else if (reviewElement && scrollPosition >= reviewElement.offsetTop) {
@@ -63,7 +72,6 @@ export function Service(props: Props) {
   // biome-ignore lint/correctness/useExhaustiveDependencies: useEffectEvent를 사용하기 때문에 의존성 배열에 넣지 않음
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
-    handleScroll(); // 초기 로드 시 실행
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
@@ -73,7 +81,7 @@ export function Service(props: Props) {
   return (
     <div className="flex flex-col gap-12 md:min-w-[824px] md:gap-16">
       {/* Video Section */}
-      <div className="hidden md:block">
+      <div className="hidden md:block" id="service-video">
         <div className="relative">
           <div className="aspect-w-16 aspect-h-9 w-full overflow-hidden">
             <div>
@@ -195,22 +203,20 @@ export function Service(props: Props) {
             <h2 className="text-lg font-semibold">수강생 리뷰</h2>
           </div>
           <div className="flex flex-col gap-4 text-sm">
-            {props.reviews
-              .filter((r) => !r.isBest)
-              .map((review) => (
-                <ReviewCard
-                  key={review.id}
-                  id={review.id}
-                  author={review.author}
-                  rating={review.rating}
-                  content={review.content}
-                  date={review.date}
-                  images={review.images}
-                  showDate
-                  showMoreButton
-                  contentClassName="mt-4 whitespace-pre-wrap break-all text-sm leading-relaxed sm:text-base line-clamp-4 max-h-24 sm:max-h-28"
-                />
-              ))}
+            {props.reviews.map((review) => (
+              <ReviewCard
+                key={review.id}
+                id={review.id}
+                author={review.author}
+                rating={review.rating}
+                content={review.content}
+                date={review.date}
+                images={review.images}
+                showDate
+                showMoreButton
+                contentClassName="mt-4 whitespace-pre-wrap break-all text-sm leading-relaxed sm:text-base line-clamp-4 max-h-24 sm:max-h-28"
+              />
+            ))}
           </div>
           {/* <div className="mt-8 flex justify-center text-sm">
             <button
@@ -252,14 +258,16 @@ const TabButton = ({
 }: {
   label: React.ReactNode;
   tab: "intro" | "review" | "plan";
-  activeTab: "intro" | "review" | "plan";
+  activeTab: "intro" | "review" | "plan" | null;
   onTabChange: (tab: "intro" | "review" | "plan") => void;
 }) => {
   return (
     <div className="flex grow flex-col items-center justify-center">
       <div
         className={`flex basis-1 cursor-pointer items-center rounded-md p-2 py-3 text-sm font-semibold text-taling-gray-800 md:p-4 md:py-5 lg:text-base ${
-          activeTab === tab ? "text-taling-pink" : "black"
+          activeTab === tab || (activeTab === null && tab === "intro")
+            ? "text-taling-pink"
+            : "black"
         }`}
         onClick={() => onTabChange(tab)}
         onKeyDown={(e) => {
@@ -273,7 +281,7 @@ const TabButton = ({
       </div>
       <div
         className={
-          activeTab === tab
+          activeTab === tab || (activeTab === null && tab === "intro")
             ? "mx-auto w-full border-b-2 border-taling-pink"
             : ""
         }

@@ -67,6 +67,7 @@ export const ServiceDetailPage = ({ serviceId }: Props) => {
                 author: r.writerName,
                 rating: r.rating,
                 content: r.content,
+                isBest: r.isBest,
                 date: new Date(r.createdAt).toLocaleDateString("ko-KR"),
               })) || []
             }
@@ -86,7 +87,9 @@ export const ServiceDetailPage = ({ serviceId }: Props) => {
                 ? plans.STANDARD.salePrice / 2
                 : undefined
             }
-            totalAmount={plans?.STANDARD?.salePrice || plans?.STANDARD?.price || 0}
+            totalAmount={
+              plans?.STANDARD?.salePrice || plans?.STANDARD?.price || 0
+            }
             totalHours={2}
             classInfo={{
               type: "group",

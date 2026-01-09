@@ -113,8 +113,8 @@ export async function seedReview() {
       // 각 서비스당 3-4개의 리뷰를 랜덤하게 생성
       const reviewCount = 3 + Math.floor(Math.random() * 2); // 3 or 4
 
-      // 베스트 리뷰 개수 결정 (0-2개)
-      const bestReviewCount = Math.floor(Math.random() * 3); // 0, 1, or 2
+      // 베스트 리뷰 개수 결정 (1-2개)
+      const bestReviewCount = 1 + Math.floor(Math.random() * 2); // 1 or 2
       const bestReviewIndices = new Set<number>();
 
       // 베스트 리뷰 인덱스를 랜덤하게 선택
