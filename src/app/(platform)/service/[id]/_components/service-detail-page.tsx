@@ -80,8 +80,8 @@ export const ServiceDetailPage = ({ serviceId }: Props) => {
                 reviews?.length || 0
             }
             reviewCount={reviews?.length || 0}
-            pricePerHour={service.price}
-            totalAmount={service.price * 2}
+            pricePerHour={(plans?.STANDARD?.price || 0) / 2}
+            totalAmount={plans?.STANDARD?.price || 0}
             totalHours={2}
             classInfo={{
               type: "group",

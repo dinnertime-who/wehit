@@ -1,4 +1,5 @@
 import { seedServicePlans } from "./service-plan-seed";
+import { seedServiceSchedules } from "./service-schedule-seed";
 
 async function main() {
   console.log("\n🚀 Starting database seed...\n");
@@ -7,6 +8,7 @@ async function main() {
     // await seedBanner();
     // await seedService();
     // await seedServicePlans(); // Run after seedService
+    // await seedServiceSchedules(); // Run after seedService
     // await seedReview();
     // await seedDisplay();
     // await seedCategoryBanner();
@@ -17,6 +19,7 @@ async function main() {
     // await seedExampleInfluencersBanner();
 
     await seedServicePlans();
+    await seedServiceSchedules();
 
     console.log("\n✨ Database seed completed!\n");
     process.exit(0);

@@ -11,6 +11,11 @@ export const service = pgTable("service", {
   coverImageUrl: text("cover_image_url").notNull(),
   coverVideoUrl: text("cover_video_url"), // 선택
   description: text("description").notNull(), // HTML content from Tiptap
+  // 클래스 정보
+  classType: text("class_type"), // group, individual, oneday
+  maxParticipants: integer("max_participants"), // 최대 참여 인원
+  duration: integer("duration"), // 시간/기간
+  durationUnit: text("duration_unit"), // 시간, 개월 등
   createdAt: createdAt(),
   updatedAt: updatedAt(),
 });
@@ -30,14 +35,35 @@ export const servicePlan = pgTable("service_plan", {
   updatedAt: updatedAt(),
 });
 
+export const serviceSchedule = pgTable("service_schedule", {
+  id: cuidPrimaryKey(),
+  serviceId: text("service_id")
+    .notNull()
+    .references(() => service.id, { onDelete: "cascade" }),
+  scheduleType: text("schedule_type").notNull(), // flexible, fixed
+  scheduleDescription: text("schedule_description"), // 스케줄 설명
+  location: text("location").notNull(), // 위치
+  locationDetail: text("location_detail"), // 상세 위치
+  createdAt: createdAt(),
+  updatedAt: updatedAt(),
+});
+
 // Relations
 export const serviceRelations = relations(service, ({ many }) => ({
   plans: many(servicePlan),
+  schedules: many(serviceSchedule),
 }));
 
 export const servicePlanRelations = relations(servicePlan, ({ one }) => ({
   service: one(service, {
     fields: [servicePlan.serviceId],
+    references: [service.id],
+  }),
+}));
+
+export const serviceScheduleRelations = relations(serviceSchedule, ({ one }) => ({
+  service: one(service, {
+    fields: [serviceSchedule.serviceId],
     references: [service.id],
   }),
 }));

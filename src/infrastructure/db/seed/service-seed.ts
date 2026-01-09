@@ -383,6 +383,10 @@ function generateServiceData() {
     tutorInfo: string;
     coverImageUrl: string;
     description: string;
+    classType: "group" | "individual" | "oneday";
+    maxParticipants: number;
+    duration: number;
+    durationUnit: "시간" | "개월";
   }> = [];
 
   // 각 카테고리별로 8개씩 생성
@@ -391,6 +395,18 @@ function generateServiceData() {
       // description을 이미지 기반 HTML로 생성
       const description = `<div style="text-align: center;"><img src="${template.descriptionImageUrl}" alt="${template.title}" style="max-width: 100%; height: auto; border-radius: 8px;" /></div>`;
 
+      // 클래스 타입을 랜덤하게 설정
+      const classTypes: Array<"group" | "individual" | "oneday"> = ["group", "individual", "oneday"];
+      const classType = classTypes[Math.floor(Math.random() * classTypes.length)];
+      
+      // 클래스 타입에 따라 인원 설정
+      const maxParticipants = classType === "group" ? Math.floor(Math.random() * 8) + 3 : classType === "individual" ? 1 : Math.floor(Math.random() * 15) + 5;
+      
+      // 기간 설정 (1-12개월 또는 1-8시간)
+      const isMonthly = Math.random() > 0.5;
+      const duration = isMonthly ? Math.floor(Math.random() * 12) + 1 : Math.floor(Math.random() * 8) + 1;
+      const durationUnit = isMonthly ? "개월" : "시간";
+
       services.push({
         title: template.title,
         subtitle: template.subtitle,
@@ -398,6 +414,10 @@ function generateServiceData() {
         tutorInfo: template.tutorInfo,
         coverImageUrl: template.coverImageUrl,
         description,
+        classType,
+        maxParticipants,
+        duration,
+        durationUnit,
       });
     });
   });

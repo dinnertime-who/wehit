@@ -1,3 +1,6 @@
+export type ClassType = "group" | "individual" | "oneday";
+export type DurationUnit = "시간" | "개월";
+
 export type Service = {
   id: string;
   title: string;
@@ -7,6 +10,10 @@ export type Service = {
   coverImageUrl: string;
   coverVideoUrl: string | null;
   description: string; // HTML content from Tiptap
+  classType: ClassType | null;
+  maxParticipants: number | null;
+  duration: number | null;
+  durationUnit: DurationUnit | null;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -25,6 +32,10 @@ export type CreateServiceDTO = {
   coverImageUrl: string;
   coverVideoUrl?: string;
   description: string;
+  classType?: ClassType;
+  maxParticipants?: number;
+  duration?: number;
+  durationUnit?: DurationUnit;
 };
 
 export type UpdateServiceDTO = Partial<CreateServiceDTO>;
@@ -83,3 +94,27 @@ export type ServicePlanFormatted = {
   workingDays: number;
   revisionCount: number;
 };
+
+// Service Schedule Types
+export type ScheduleType = "flexible" | "fixed";
+
+export type ServiceSchedule = {
+  id: string;
+  serviceId: string;
+  scheduleType: ScheduleType;
+  scheduleDescription: string | null;
+  location: string;
+  locationDetail: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type CreateServiceScheduleDTO = {
+  serviceId: string;
+  scheduleType: ScheduleType;
+  scheduleDescription?: string;
+  location: string;
+  locationDetail?: string;
+};
+
+export type UpdateServiceScheduleDTO = Partial<Omit<CreateServiceScheduleDTO, "serviceId">>;
