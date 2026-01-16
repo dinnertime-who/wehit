@@ -66,12 +66,38 @@ export function ServicePayment(props: Props) {
       <div className="mt-3">
         <div className="flex items-center gap-1">
           <div className="flex">
-            {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                className="h-5 w-5 fill-yellow-400 text-yellow-400"
-              />
-            ))}
+            {[...Array(5)].map((_, i) => {
+              const starIndex = i + 1;
+              const rating = props.reviewRating;
+
+              // 완전히 채워진 별
+              if (rating >= starIndex) {
+                return (
+                  <Star
+                    key={i}
+                    className="h-5 w-5 fill-yellow-400 text-yellow-400"
+                  />
+                );
+              }
+
+              // 반 별 (0.5 단위)
+              if (rating >= starIndex - 0.5) {
+                return (
+                  <div key={i} className="relative h-5 w-5">
+                    <Star className="absolute h-5 w-5 text-gray-200" />
+                    <div
+                      className="absolute overflow-hidden"
+                      style={{ width: "50%" }}
+                    >
+                      <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                    </div>
+                  </div>
+                );
+              }
+
+              // 빈 별
+              return <Star key={i} className="h-5 w-5 text-gray-200" />;
+            })}
           </div>
           <span className="ml-1 text-base font-medium text-gray-900">
             {props.reviewRating.toFixed(1)}
