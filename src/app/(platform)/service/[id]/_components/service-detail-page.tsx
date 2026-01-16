@@ -100,32 +100,25 @@ export const ServiceDetailPage = ({ serviceId }: Props) => {
               reviews?.reduce((acc, r) => acc + r.rating, 0) /
                 reviews?.length || 0
             }
+            originalPrice={plans?.STANDARD?.price || 0}
+            salePrice={plans?.STANDARD?.salePrice || 0}
             reviewCount={reviews?.length || 0}
-            pricePerHour={(plans?.STANDARD?.price || 0) / 2}
-            salePricePerHour={
-              plans?.STANDARD?.salePrice
-                ? plans.STANDARD.salePrice / 2
-                : undefined
-            }
             totalAmount={
               plans?.STANDARD?.salePrice || plans?.STANDARD?.price || 0
             }
-            totalHours={2}
-            classInfo={{
-              type: service.classType || "group",
-              maxParticipants: service.maxParticipants || undefined,
-              duration: service.duration || 0,
-              durationUnit: service.durationUnit || "시간",
+            // schedules={schedules?.map((s) => ({
+            //   id: s.id,
+            //   scheduleType: s.scheduleType,
+            //   scheduleDescription: s.scheduleDescription || "",
+            //   location: s.location,
+            //   locationDetail: s.locationDetail || "",
+            // }))}
+            vodInfo={{
+              totalLessons: 10,
+              totalDuration: "10시간",
+              hasQnA: true,
+              isLifetimeAccess: true,
             }}
-            schedules={
-              schedules?.map((s) => ({
-                id: s.id,
-                scheduleType: s.scheduleType,
-                scheduleDescription: s.scheduleDescription || "",
-                location: s.location,
-                locationDetail: s.locationDetail || "",
-              })) || []
-            }
           />
         </div>
       </div>

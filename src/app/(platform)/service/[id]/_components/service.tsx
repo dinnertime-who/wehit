@@ -4,7 +4,6 @@ import { StarterKit } from "@tiptap/starter-kit";
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useEffectEvent, useState } from "react";
-import { useSession } from "@/hooks/apis/auth/use-session";
 import type {
   PlanType,
   ServicePlanFormatted,
@@ -33,7 +32,6 @@ type Props = {
 };
 
 export function Service(props: Props) {
-  const { data: session } = useSession();
   const [activeTab, setActiveTab] = useState<
     "intro" | "review" | "plan" | null
   >(null);
@@ -82,7 +80,7 @@ export function Service(props: Props) {
   }, []);
 
   return (
-    <div className="flex flex-col gap-12 md:min-w-[824px] md:gap-16">
+    <div className="flex flex-col gap-12 md:min-w-[900px] md:gap-16">
       {/* Video Section */}
       <div className="hidden md:block" id="service-video">
         <div className="relative">
@@ -103,8 +101,8 @@ export function Service(props: Props) {
                   className="object-cover"
                   src={props.imageUrl}
                   alt="service"
-                  width={824}
-                  height={464}
+                  width={900}
+                  height={500}
                 />
               )}
             </div>
